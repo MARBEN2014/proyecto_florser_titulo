@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "617520824163",
+    "project_id": "florser-f7360",
+    "storage_bucket": "florser-f7360.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:617520824163:android:eec7c78253c734dfc4dd56",
+        "android_client_info": {
+          "package_name": "com.florser.diego"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWuFQG56310usH7fsm1dO58T5GrRlGxBg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
