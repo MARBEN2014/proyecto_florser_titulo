@@ -104,11 +104,11 @@ class BottomNavBar extends StatelessWidget {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.help),
-                  title: const Text('Ayuda'),
+                  leading: const Icon(Icons.insert_chart),
+                  title: const Text('Estadisticas'),
                   onTap: () {
                     Navigator.pop(context);
-                    Navigator.pushNamed(context, '/soporte');
+                    Navigator.pushNamed(context, '/ranking');
                   },
                 ),
                 ListTile(

@@ -7,6 +7,7 @@ import 'package:paraflorseer/themes/app_colors.dart'; // Colores personalizados 
 import 'package:paraflorseer/themes/app_text_styles.dart'; // Estilos de texto personalizados.
 import 'package:paraflorseer/utils/obtenerUserandNAme.dart'; // Utilidad para obtener el nombre del usuario.
 import 'package:paraflorseer/widgets/custom_app_bar.dart'; // Barra de navegación personalizada.
+//import 'package:intl/intl.dart'; // Importa intl para manejar la localización.
 
 class BookingScreen extends StatefulWidget {
   final String serviceName;
@@ -53,6 +54,49 @@ class _BookingScreenState extends State<BookingScreen> {
   }
 
   Future<void> _saveBookingToUserSubcollection() async {
+    if (selectedTherapist == null ||
+        selectedTime == null ||
+        selectedDate == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Por favor, selecciona todos los campos')),
+      );
+      return;
+    }
+
+    Future<bool> _isTimeSlotAvailable(
+        String therapist, DateTime selectedDate, String selectedTime) async {
+      try {
+        final appointmentsRef = FirebaseFirestore.instance
+            .collection('reservations')
+            .doc(therapist) // Documento del terapeuta
+            .collection('appointments'); // Subcolección de citas
+
+        final snapshot = await appointmentsRef
+            .where('date',
+                isEqualTo:
+                    Timestamp.fromDate(selectedDate)) // Fecha como Timestamp
+            .where('time', isEqualTo: selectedTime) // Hora como String
+            .get();
+
+        return snapshot.docs.isEmpty; // Retorna true si no hay citas
+      } catch (e) {
+        print('Error al verificar la disponibilidad: $e');
+        return false;
+      }
+    }
+
+    // Verificar disponibilidad del horario
+    bool isAvailable = await _isTimeSlotAvailable(
+        selectedTherapist!, selectedDate!, selectedTime!);
+
+    if (!isAvailable) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('El horario seleccionado no está disponible')),
+      );
+      return;
+    }
+
+    // Si el horario está disponible, guardar la reserva
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) throw Exception("Usuario no autenticado");
@@ -63,8 +107,9 @@ class _BookingScreenState extends State<BookingScreen> {
           .collection('Reservas');
 
       final formattedDate =
-          "${selectedDate?.day.toString().padLeft(2, '0')}/${selectedDate?.month.toString().padLeft(2, '0')}/${selectedDate?.year}";
+          "${selectedDate!.day.toString().padLeft(2, '0')}/${selectedDate?.month.toString().padLeft(2, '0')}/${selectedDate?.year}";
 
+      // Guardar en la subcolección del usuario
       await userReservationsRef.add({
         'service_name': widget.serviceName,
         'therapist': selectedTherapist,
@@ -74,6 +119,21 @@ class _BookingScreenState extends State<BookingScreen> {
         'created_at': FieldValue.serverTimestamp(),
       });
 
+      // Guardar también en la subcolección del terapeuta
+      final therapistAppointmentsRef = FirebaseFirestore.instance
+          .collection('reservations')
+          .doc(selectedTherapist) // Documento del terapeuta
+          .collection('appointments');
+
+      await therapistAppointmentsRef.add({
+        'service_name': widget.serviceName,
+        'user_id': user.uid,
+        'date': Timestamp.fromDate(selectedDate!),
+        'time': selectedTime,
+        'therapist': selectedTherapist,
+      });
+
+      // Mostrar mensaje de confirmación
       _showConfirmationDialog(context);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -170,19 +230,29 @@ class _BookingScreenState extends State<BookingScreen> {
             ),
             const SizedBox(height: 20),
 
-            // Calendario
             TableCalendar(
               focusedDay: _now,
               firstDay: _firstAvailableDay,
               lastDay: _lastAvailableDay,
               selectedDayPredicate: (day) => isSameDay(selectedDate, day),
               onDaySelected: (selectedDay, focusedDay) {
-                setState(() {
-                  selectedDate = selectedDay;
-                });
+                // No permitir seleccionar sábado o domingo
+                if (selectedDay.weekday != DateTime.saturday &&
+                    selectedDay.weekday != DateTime.sunday) {
+                  setState(() {
+                    selectedDate = selectedDay;
+                  });
+                }
               },
               calendarBuilders: CalendarBuilders(
                 defaultBuilder: (context, day, focusedDay) {
+                  // Deshabilitar sábado y domingo
+                  if (day.weekday == DateTime.saturday ||
+                      day.weekday == DateTime.sunday) {
+                    return null; // No se mostrará nada en estos días
+                  }
+
+                  // Mostrar días disponibles de lunes a viernes
                   if (day.weekday >= DateTime.monday &&
                       day.weekday <= DateTime.friday &&
                       day.isAfter(_now.subtract(const Duration(days: 1))) &&
@@ -221,6 +291,9 @@ class _BookingScreenState extends State<BookingScreen> {
                 },
               ),
             ),
+
+            // Calendario con idioma español
+
             const SizedBox(height: 20),
 
             // Horarios disponibles
