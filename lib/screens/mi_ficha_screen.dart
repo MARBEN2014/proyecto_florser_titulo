@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:paraflorseer/widgets/bottom_nav_bar.dart';
+import 'package:paraflorseer/widgets/custom_app_bar.dart';
 
 import '../descripcions_servicios/descriptions _test.dart';
 
@@ -40,9 +42,7 @@ class _MiFichaScreenState extends State<MiFichaScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Mi Ficha de Terapias'),
-      ),
+      appBar: const CustomAppBar(),
       body: _isLoading
           ? const Center(
               child: CircularProgressIndicator(),
@@ -77,6 +77,7 @@ class _MiFichaScreenState extends State<MiFichaScreen> {
                   : const Center(
                       child: Text('No se encontraron datos.'),
                     ),
+      bottomNavigationBar: const BottomNavBar(),
     );
   }
 }

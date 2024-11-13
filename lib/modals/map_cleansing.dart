@@ -47,7 +47,7 @@ Map<String, Map<String, dynamic>> servicesData = {
 
   'Terapia sanación + Flores de Bach': {
     'therapists': [
-      'pierina Gonzalez',
+      'Pierina Gonzalez',
     ],
     'availableTimes': ['13:00', '17:00', '19:00'],
     'availableDays': ['Martes', 'juevez', 'Sabado'],

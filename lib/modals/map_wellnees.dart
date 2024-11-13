@@ -57,7 +57,7 @@ Map<String, Map<String, dynamic>> servicesData = {
 
   'Yoga Adulto': {
     'therapists': [
-      'Karla Rbolledo',
+      'Karla Rebolledo',
     ],
     'availableTimes': ['10:00', '15:00', '17:00'],
     'availableDays': [

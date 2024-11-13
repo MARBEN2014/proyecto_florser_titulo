@@ -33,7 +33,7 @@ Map<String, Map<String, dynamic>> servicesData = {
     'price': 15000,
   },
   'Reiki con gemoterapia': {
-    'therapists': ['Lidia Orellana'],
+    'therapists': ['Lidia Beiza'],
     'availableTimes': ['9:00', '11:00', '3:00'],
     'availableDays': [
       'Miércoles',
