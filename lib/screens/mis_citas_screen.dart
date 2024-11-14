@@ -8,6 +8,7 @@ import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/screens/welcome_screen.dart';
 import 'package:intl/intl.dart';
 
+// Pantalla de "Mis Citas"
 class MisCitasScreen extends StatefulWidget {
   const MisCitasScreen({super.key});
 
@@ -16,38 +17,46 @@ class MisCitasScreen extends StatefulWidget {
 }
 
 class _MisCitasScreenState extends State<MisCitasScreen> {
-  String? userName;
-  bool isLoading = true;
-  bool citasMostradas = false;
-  List<Map<String, dynamic>> citas = [];
+  String? userName; // Nombre de usuario que se mostrará en la pantalla
+  bool isLoading = true; // Indica si los datos están cargando
+  bool citasMostradas = false; // Indica si las citas están mostradas
+  List<Map<String, dynamic>> citas =
+      []; // Lista para almacenar las citas obtenidas
 
+  // Método que se ejecuta al iniciar la pantalla
   @override
   void initState() {
     super.initState();
-    _getUserDetails();
-    _fetchReservas();
+    _getUserDetails(); // Obtener detalles del usuario
+    _fetchReservas(); // Obtener las reservas desde Firestore
   }
 
+  // Método para obtener el nombre de usuario de Firestore
   Future<void> _getUserDetails() async {
-    String? fetchedUserName = await fetchUserName();
+    String? fetchedUserName =
+        await fetchUserName(); // Llamada a función externa
     setState(() {
-      userName = fetchedUserName ?? '';
+      userName = fetchedUserName ?? ''; // Establecer el nombre de usuario
     });
   }
 
+  // Método para obtener las reservas desde Firestore
   Future<void> _fetchReservas() async {
     setState(() {
-      isLoading = true;
+      isLoading = true; // Activar el indicador de carga
     });
     try {
-      final user = FirebaseAuth.instance.currentUser;
+      final user =
+          FirebaseAuth.instance.currentUser; // Obtener el usuario actual
       if (user != null) {
+        // Obtener las reservas del usuario desde Firestore
         final reservasSnapshot = await FirebaseFirestore.instance
             .collection('user')
             .doc(user.uid)
             .collection('Reservas')
             .get();
 
+        // Lista para almacenar las nuevas citas
         List<Map<String, dynamic>> nuevasCitas = [];
         for (var doc in reservasSnapshot.docs) {
           final data = doc.data();
@@ -56,18 +65,20 @@ class _MisCitasScreenState extends State<MisCitasScreen> {
               data['day'] != null &&
               data['time'] != null &&
               data['created_at'] != null) {
-            nuevasCitas.add(data);
+            nuevasCitas.add({
+              ...data, // Agregar todos los datos de la cita
+              'docId': doc.id, // Agregar el ID del documento
+            });
           }
         }
 
         setState(() {
-          citas = nuevasCitas;
-          citasMostradas = citas.isNotEmpty;
+          citas = nuevasCitas; // Actualizar la lista de citas
+          citasMostradas = citas.isNotEmpty; // Comprobar si hay citas
         });
       }
     } catch (e) {
       print("Error al obtener las reservas: $e");
-      // Considera mostrar un mensaje al usuario
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
             content:
@@ -75,104 +86,103 @@ class _MisCitasScreenState extends State<MisCitasScreen> {
       );
     } finally {
       setState(() {
-        isLoading = false;
+        isLoading = false; // Desactivar el indicador de carga
       });
     }
   }
 
+  // Mostrar un cuadro de diálogo para confirmar la cancelación de una cita
+  Future<bool?> _showCancelDialog() async {
+    return showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Cancelar Cita'),
+          content:
+              const Text('¿Estás seguro de que deseas cancelar esta cita?'),
+          actions: <Widget>[
+            // Botón para cancelar la acción
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('No'),
+            ),
+            // Botón para confirmar la cancelación
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('Sí'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Cancelar una cita en Firestore
+  Future<void> _cancelCita(String docId) async {
+    try {
+      final user =
+          FirebaseAuth.instance.currentUser; // Obtener el usuario actual
+      if (user != null) {
+        await FirebaseFirestore.instance
+            .collection('user')
+            .doc(user.uid)
+            .collection('Reservas')
+            .doc(docId)
+            .delete(); // Eliminar la cita de Firestore
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Cita cancelada exitosamente.")),
+        );
+
+        // Actualizar las citas
+        _fetchReservas();
+      }
+    } catch (e) {
+      print("Error al cancelar la cita: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text("No se pudo cancelar la cita. Intente nuevamente.")),
+      );
+    }
+  }
+
+  // Método para construir la interfaz de la pantalla
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.secondary,
-      appBar: CustomAppBar(),
+      backgroundColor: AppColors.secondary, // Fondo de la pantalla
+      appBar: CustomAppBar(), // Barra de navegación personalizada
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding:
+            const EdgeInsets.all(16.0), // Espaciado alrededor de la pantalla
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 20),
+          children: <Widget>[
+            // Si las citas están cargando, mostrar el indicador de carga
             if (isLoading)
               const Center(child: CircularProgressIndicator())
-            else
-              Center(
-                child: Text(
-                  'Hola: $userName Tus citas',
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            const SizedBox(height: 10),
-            if (citas.isEmpty) ...[
-              Center(
-                child: Container(
-                  width: 150,
-                  height: 150,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/calendario.png'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
+            // Si no hay citas, mostrar un mensaje
+            else if (citas.isEmpty)
               const Center(
-                child: Text(
-                  "Usted no tiene citas agendadas",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ] else ...[
-              Center(
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/citas.png'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Center(
-                child: Text(
-                  "Usted tiene ${citas.length} citas agendadas",
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              const SizedBox(height: 20),
-              // ListView sin necesidad de envolver en SingleChildScrollView
+                child: Text('No tienes citas agendadas en este momento.'),
+              )
+            // Si hay citas, mostrar la lista de citas
+            else
               Expanded(
                 child: ListView.builder(
-                  itemCount: citas.length,
+                  itemCount: citas.length, // Número de citas a mostrar
                   itemBuilder: (context, index) {
-                    final cita = citas[index];
-
-                    // Formatear el campo 'created_at' si es un Timestamp
-                    DateTime createdAt =
-                        (cita['created_at'] as Timestamp).toDate();
-                    String formattedDate =
-                        DateFormat('dd/MM/yyyy').format(createdAt);
+                    final cita = citas[index]; // Obtener una cita de la lista
+                    DateTime createdAt = (cita['created_at'] as Timestamp)
+                        .toDate(); // Convertir timestamp
+                    String formattedDate = DateFormat('dd/MM/yyyy')
+                        .format(createdAt); // Formatear fecha
 
                     return Card(
-                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 8), // Margen entre las tarjetas
                       child: ListTile(
-                        title: Text('Servicio: ${cita['service_name']}'),
+                        title: Text(
+                            'Servicio: ${cita['service_name']}'), // Nombre del servicio
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -182,32 +192,58 @@ class _MisCitasScreenState extends State<MisCitasScreen> {
                             Text('Hora: ${cita['time']}'),
                           ],
                         ),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.highlight_off,
+                              color: Color.fromARGB(
+                                  255, 207, 76, 36)), // Botón de cancelación
+                          onPressed: () async {
+                            bool? confirm = await _showCancelDialog();
+                            if (confirm == true) {
+                              await _cancelCita(cita['docId']);
+                            }
+                          },
+                        ),
                       ),
                     );
                   },
                 ),
               ),
-            ],
             const SizedBox(height: 20),
+            // Botón para agendar cita o mostrar las citas
             Center(
               child: ElevatedButton(
                 onPressed: citasMostradas
                     ? () {
+                        // Si las citas están mostradas, navegar a la pantalla de bienvenida
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const WelcomeScreen()),
                         );
                       }
-                    : _fetchReservas,
-                child:
-                    Text(citasMostradas ? 'Agendar cita' : 'Mostrar las citas'),
+                    : _fetchReservas, // Si no, cargar las citas
+                style: ElevatedButton.styleFrom(
+                  foregroundColor:
+                      AppColors.secondary, // Color del texto dentro del botón
+                  backgroundColor:
+                      AppColors.primary, // Color de fondo del botón
+                ),
+                child: Text(
+                  citasMostradas
+                      ? 'Agendar cita'
+                      : 'Mostrar las citas', // Texto dinámico
+                  style: TextStyle(
+                    fontSize: 16, // Tamaño de la fuente
+                    fontWeight: FontWeight.bold, // Peso de la fuente
+                    color: Colors.white, // Color del texto
+                  ),
+                ),
               ),
             )
           ],
         ),
       ),
-      bottomNavigationBar: const BottomNavBar(),
+      bottomNavigationBar: const BottomNavBar(), // Barra de navegación inferior
     );
   }
 }
