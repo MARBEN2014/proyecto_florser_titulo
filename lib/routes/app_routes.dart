@@ -4,6 +4,7 @@ import 'package:paraflorseer/screens/TherapyRankingScreen.dart';
 //import 'package:paraflorseer/ruta_welcome_screen/agendar_screen.dart';
 //import 'package:paraflorseer/screens/register2_screen.dart';
 import 'package:paraflorseer/screens/screens.dart';
+import 'package:paraflorseer/screens/stadistic_screen.dart';
 import 'package:paraflorseer/screens/terminos_condiciones.dart';
 
 import 'package:paraflorseer/widgets/widgets.dart';
@@ -30,6 +31,7 @@ class AppRoutes {
       '/cleansing_screen': (context) => const CleansingScreen(),
       '/terminos_condiciones': (context) => const TermsAndConditionsScreen(),
       '/ranking': (context) => TherapyRankingScreen(),
+      '/estadisticas': (context) => EstadisticasScreen(),
       //'/estadisticas': (context) => const DemandStatsScreen(),
 
       // Ruta para la pantalla de citas

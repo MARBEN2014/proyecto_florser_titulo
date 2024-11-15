@@ -108,7 +108,7 @@ class BottomNavBar extends StatelessWidget {
                   title: const Text('Estadisticas'),
                   onTap: () {
                     Navigator.pop(context);
-                    Navigator.pushNamed(context, '/ranking');
+                    Navigator.pushNamed(context, '/estadisticas');
                   },
                 ),
                 ListTile(
