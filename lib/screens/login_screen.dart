@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_validator/form_validator.dart';
-//import 'package:paraflorseer/screens/screens.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/utils/auth.dart';
 import 'package:paraflorseer/utils/snackbar.dart';
@@ -19,6 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKeyPage1 = GlobalKey<FormBuilderState>();
   final AuthService _auth = AuthService();
   bool _isObscurePassword = true;
+  bool _isLoading = false;
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -112,46 +112,72 @@ class _LoginScreenState extends State<LoginScreen> {
                             .build(),
                       ),
                       const SizedBox(height: 30.0),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 12.0, horizontal: 30),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                        ),
-                        onPressed: () async {
-                          _formKeyPage1.currentState?.save();
-                          if (_formKeyPage1.currentState?.validate() == true) {
-                            final v = _formKeyPage1.currentState?.value;
-                            print(v?['email']);
-                            print(v?['password']);
-                            var result = await _auth.singInEmailAndPassword(
-                                v?['email'], v?['password']);
-                            print(
-                                'Resultado de la creación de cuenta: $result');
+                      _isLoading
+                          ? const CircularProgressIndicator()
+                          : ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors
+                                    .primary, // Color de fondo del botón
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16.0, // Altura del botón
+                                  horizontal: 40.0, // Ancho del botón
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      25.0), // Bordes redondeados
+                                ),
+                              ),
+                              onPressed: () async {
+                                _formKeyPage1.currentState?.save();
+                                if (_formKeyPage1.currentState?.validate() ==
+                                    true) {
+                                  setState(() {
+                                    _isLoading = true;
+                                  });
 
-                            //
-                            if (result == 1) {
-                              showSnackBar(
-                                  context, '¡Error en el usuario o contraseña');
-                            } else if (result == 2) {
-                              showSnackBar(
-                                  context, 'error en el usuario o contraseña');
-                            } else if (result != null) {
-                              Navigator.popAndPushNamed(
-                                  context, '/welcome_screen');
-                            }
-                          }
-                        },
+                                  final v = _formKeyPage1.currentState?.value;
+                                  final result =
+                                      await _auth.signInEmailAndPassword(
+                                    v?['email'],
+                                    v?['password'],
+                                    context,
+                                  );
 
-                        //
-                        child: const Text(
-                          'Iniciar Sesión',
-                          style: TextStyle(fontSize: 20, color: Colors.white),
-                        ),
-                      ),
+                                  setState(() {
+                                    _isLoading = false;
+                                  });
+
+                                  // Manejo de la respuesta según la estructura del método signInEmailAndPassword
+                                  if (result is Map &&
+                                      result['success'] == true) {
+                                    // Inicio de sesión exitoso, redirigir
+                                    Navigator.popAndPushNamed(
+                                        context, '/welcome_screen');
+                                  }
+
+                                  // else if (result is Map &&
+                                  //     result['message'] != null) {
+                                  //   // Mostrar mensaje de error específico
+                                  //   showSnackBar(context, result['message']);
+                                  // }
+
+                                  else {
+                                    // Error inesperado
+                                    showSnackBar(context,
+                                        'Error al iniciar sesión. Contraseña incorrecta. Intenlo nuevamente .');
+                                  }
+                                }
+                              },
+                              child: const Text(
+                                'Iniciar Sesión',
+                                style: TextStyle(
+                                  fontSize: 18, // Tamaño de fuente del texto
+                                  color: Colors.white, // Color del texto
+                                  fontWeight:
+                                      FontWeight.bold, // Estilo en negrita
+                                ),
+                              ),
+                            ),
                       const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -162,8 +188,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                             child: Image.asset(
                               'assets/facebook.png',
-                              width: 40,
-                              height: 40,
+                              width: 80,
+                              height: 80,
                             ),
                           ),
                           const SizedBox(width: 20),
@@ -173,8 +199,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                             child: Image.asset(
                               'assets/google.png',
-                              width: 40,
-                              height: 40,
+                              width: 80,
+                              height: 80,
                             ),
                           ),
                         ],
@@ -219,7 +245,8 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: const BottomNavBar(),
+
+      //bottomNavigationBar: const BottomNavBar(),
     );
   }
 }

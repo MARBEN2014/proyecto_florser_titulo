@@ -6,7 +6,7 @@ import 'package:paraflorseer/preferencias/pref_usuarios.dart';
 //import 'package:paraflorseer/screens/screens.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/utils/auth.dart';
-import 'package:paraflorseer/utils/snackbar.dart';
+//import 'package:paraflorseer/utils/snackbar.dart';
 import 'package:paraflorseer/widgets/custom_app_bar.dart';
 import '../widgets/bottom_nav_bar.dart';
 
@@ -81,6 +81,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       const SizedBox(height: 16.0),
 
                       //
+
                       FormBuilderTextField(
                         name: 'password',
                         controller: _passwordController,
@@ -110,8 +111,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             },
                           ),
                         ),
-
-                        //
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'La contraseña es obligatoria';
@@ -119,10 +118,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           if (value.length < 6) {
                             return 'La contraseña debe tener al menos 6 caracteres';
                           }
-                          // Verificación adicional: debe contener al menos una letra y un número
-                          if (!RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$')
+                          // Verificación adicional para incluir mayúsculas, minúsculas, símbolos y números
+                          if (!RegExp(
+                                  r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_-])[A-Za-z\d@$!%*?&_-]{6,}$')
                               .hasMatch(value)) {
-                            return 'La contraseña debe contener al menos una letra\n y un número';
+                            return 'La contraseña debe contener al menos:\n'
+                                '- Una letra minúscula\n'
+                                '- Una letra mayúscula\n'
+                                '- Un número\n'
+                                '- Un símbolo especial (@, \$, !, %, *, ?, &,_,-)';
                           }
                           return null; // Si pasa todas las validaciones
                         },
@@ -153,38 +157,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             print(v?['email']);
                             print(v?['password']);
 
-                            // con esta linea se crea el usuario enviando correo y contraseña
                             // la respuesta se almacena en resultado
                             var result = await _auth.createAccount(
-                                v?['email'], v?['password']);
+                                v?['email'], v?['password'], context);
                             print(
                                 'Resultado de la creación de cuenta: $result');
-                            if (result == 1) {
-                              showSnackBar(context,
-                                  '¡Error, password demasiado debil, favor cambiar');
-                            } else if (result == 2) {
-                              showSnackBar(
-                                  context, 'Error, email ya esta en uso');
-                            } else if (result != null) {
-                              // Obtener el UID del usuario recién creado
 
-                              // movimento de traspaso de informacion al crear
-                              prefs.ultimouid = result;
-                              FirebaseFirestore.instance
-                                  .collection('user')
-                                  .doc(result)
-                                  .set({
-                                // sentencia para guradar el usario en la base de datos de firebase
-                                'email': v?['email'],
-                                'password': v?['password']
-                              });
-                              Navigator.popAndPushNamed(context, '/user');
-                            }
+                            // Obtener el UID del usuario recién creado
+
+                            // movimento de traspaso de informacion al crear
+                            prefs.ultimouid = result;
+                            FirebaseFirestore.instance
+                                .collection('user')
+                                .doc(result)
+                                .set({
+                              // sentencia para guradar el usario en la base de datos de firebase
+                              'email': v?['email'],
+                              'password': v?['password']
+                            });
+                            Navigator.pushReplacementNamed(context, '/user');
                           }
                         },
                         child: const Text(
                           '¡Registrarse!',
-                          style: TextStyle(fontSize: 20, color: Colors.white),
+                          style: TextStyle(
+                              fontSize: 20, color: AppColors.secondary),
                         ),
                       ),
 
@@ -197,7 +194,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: const BottomNavBar(),
+      //bottomNavigationBar: const BottomNavBar(),
     );
   }
 }

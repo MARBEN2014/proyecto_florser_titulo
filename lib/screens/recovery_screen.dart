@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:paraflorseer/widgets/custom_app_bar.dart'; // Import del AppBar personalizado
-import 'package:paraflorseer/widgets/bottom_nav_bar.dart'; // Import del Bottom Navigation Bar
+import 'package:paraflorseer/widgets/custom_app_bar.dart';
+import 'package:paraflorseer/widgets/bottom_nav_bar.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
-import 'package:email_validator/email_validator.dart'; // Paquete para validar correos electrónicos
+import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RecoveryScreen extends StatefulWidget {
   const RecoveryScreen({super.key});
@@ -15,11 +16,11 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
   final TextEditingController _emailController = TextEditingController();
   String _errorMessage = '';
   bool _isEmailSent = false;
-// Controla el tamaño y estado del label
-  bool _isFocused = false; // Controla el estado de enfoque del TextField
+  bool _isFocused = false;
 
-  // Función para validar y enviar el correo de recuperación
-  void _sendRecoveryEmail() {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  void _sendRecoveryEmail() async {
     final String email = _emailController.text.trim();
 
     if (email.isEmpty) {
@@ -33,23 +34,23 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
         _isEmailSent = false;
       });
     } else {
-      // Simular envío de correo
-      if (email == 'diegovasquez21@gmail.com') {
+      try {
+        await _auth.sendPasswordResetEmail(email: email);
         setState(() {
           _errorMessage = '';
           _isEmailSent = true;
         });
         _showConfirmationDialog();
-      } else {
+      } catch (e) {
         setState(() {
-          _errorMessage = 'El correo no coincide con la cuenta.';
+          _errorMessage =
+              'Hubo un error al enviar el correo. Verifique su correo electrónico y vuelva a intentarlo.';
           _isEmailSent = false;
         });
       }
     }
   }
 
-  // Mostrar cuadro de diálogo flotante cuando el correo se envía correctamente
   void _showConfirmationDialog() {
     showDialog(
       context: context,
@@ -76,13 +77,12 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
     );
   }
 
-  // Función para refrescar la pantalla
   Future<void> _refreshScreen() async {
     await Future.delayed(const Duration(seconds: 1));
     setState(() {
-      _emailController.clear(); // Restablecer el campo de correo
-      _errorMessage = ''; // Limpiar el mensaje de error
-      _isEmailSent = false; // Restablecer el estado de correo enviado
+      _emailController.clear();
+      _errorMessage = '';
+      _isEmailSent = false;
     });
   }
 
@@ -90,9 +90,9 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.secondary,
-      appBar: const CustomAppBar(), // Uso del AppBar personalizado
+      appBar: const CustomAppBar(),
       body: RefreshIndicator(
-        onRefresh: _refreshScreen, // Refrescar pantalla al deslizar
+        onRefresh: _refreshScreen,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
@@ -117,46 +117,41 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
               ),
               const SizedBox(height: 20),
 
-              // Campo de correo electrónico con borde redondeado y cambio de color dinámico
+              // Campo de correo electrónico mejorado
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 40, vertical: 25),
                 child: SizedBox(
-                  width: 350,
-                  height: 60,
+                  width: double
+                      .infinity, // Para que ocupe todo el ancho disponible
                   child: Focus(
                     onFocusChange: (hasFocus) {
                       setState(() {
-                        _isFocused = hasFocus; // Controla el enfoque del campo
-// Cambia el tamaño del label
+                        _isFocused = hasFocus;
                       });
                     },
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(25),
                         border: Border.all(
-                          color: _isFocused
-                              ? AppColors
-                                  .primary // Borde primario si está enfocado
-                              : Colors.black, // Borde negro si no está enfocado
+                          color: _isFocused ? AppColors.primary : Colors.black,
                         ),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
                         child: TextField(
                           controller: _emailController,
                           decoration: InputDecoration(
-                            labelText: 'Correo electrónico',
+                            labelText: 'correo',
                             labelStyle: TextStyle(
-                              color: _isFocused
-                                  ? AppColors
-                                      .primary // Texto primario si está enfocado
-                                  : Colors
-                                      .black, // Texto negro si no está enfocado
+                              color: _isFocused ? AppColors.text : Colors.black,
+                              fontSize: 20,
                             ),
                             border: InputBorder.none,
-                            floatingLabelBehavior: FloatingLabelBehavior.auto,
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
                           ),
+                          style: TextStyle(fontSize: 20),
                           keyboardType: TextInputType.emailAddress,
                         ),
                       ),
@@ -165,7 +160,6 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
                 ),
               ),
 
-              // Mensaje de error justo debajo del campo de correo
               if (_errorMessage.isNotEmpty && !_isEmailSent) ...[
                 const SizedBox(height: 20),
                 Center(
@@ -182,7 +176,6 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
 
               const SizedBox(height: 40),
 
-              // Botón de Recuperar Contraseña
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: SizedBox(
@@ -207,15 +200,12 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
                 ),
               ),
 
-              const SizedBox(
-                  height:
-                      200), // Añadir más espacio al final para permitir scroll
+              const SizedBox(height: 200),
             ],
           ),
         ),
       ),
-      bottomNavigationBar:
-          const BottomNavBar(), // Uso del Bottom Navigation Bar
+      bottomNavigationBar: const BottomNavBar(),
     );
   }
 }

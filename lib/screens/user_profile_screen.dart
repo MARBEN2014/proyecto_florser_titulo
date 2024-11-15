@@ -353,6 +353,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
+                Navigator.pushReplacementNamed(context, '/welcome_screen');
               },
               child: const Text(
                 'Aceptar',
