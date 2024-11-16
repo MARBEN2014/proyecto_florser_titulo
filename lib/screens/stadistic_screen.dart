@@ -63,7 +63,7 @@ class EstadisticasScreen extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         // Navega a la página de ranking
-                        Navigator.pushNamed(context, '/ranking');
+                        Navigator.pushNamed(context, '/mi_ficha_screen');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,

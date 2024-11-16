@@ -5,7 +5,8 @@ import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/utils/auth.dart';
 import 'package:paraflorseer/utils/snackbar.dart';
 import 'package:paraflorseer/widgets/custom_app_bar.dart';
-import '../widgets/bottom_nav_bar.dart';
+//import 'package:paraflorseer/preferencias/pref_usuarios.dart';
+//import '../widgets/bottom_nav_bar.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -147,24 +148,34 @@ class _LoginScreenState extends State<LoginScreen> {
                                     _isLoading = false;
                                   });
 
-                                  // Manejo de la respuesta según la estructura del método signInEmailAndPassword
-                                  if (result is Map &&
-                                      result['success'] == true) {
-                                    // Inicio de sesión exitoso, redirigir
-                                    Navigator.popAndPushNamed(
-                                        context, '/welcome_screen');
-                                  }
-
-                                  // else if (result is Map &&
-                                  //     result['message'] != null) {
-                                  //   // Mostrar mensaje de error específico
-                                  //   showSnackBar(context, result['message']);
-                                  // }
-
-                                  else {
+                                  if (result['success'] == true) {
+                                    // Redirigir según el rol del usuario
+                                    if (context.mounted) {
+                                      switch (result['role']) {
+                                        case 'admin':
+                                          Navigator.pushReplacementNamed(
+                                              context, '/estadisticas');
+                                          break;
+                                        case 'therapist':
+                                          Navigator.pushReplacementNamed(
+                                              context, '/ranking');
+                                          break;
+                                        case 'user':
+                                          Navigator.pushReplacementNamed(
+                                              context, '/welcome_screen');
+                                          break;
+                                        default:
+                                          showSnackBar(context,
+                                              'Rol desconocido. Contacta al administrador.');
+                                      }
+                                    }
+                                  } else if (result['message'] != null) {
+                                    // Mostrar mensaje de error específico
+                                    showSnackBar(context, result['message']);
+                                  } else {
                                     // Error inesperado
                                     showSnackBar(context,
-                                        'Error al iniciar sesión. Contraseña incorrecta. Intenlo nuevamente .');
+                                        'Ocurrió un error inesperado.');
                                   }
                                 }
                               },

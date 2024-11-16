@@ -8,7 +8,7 @@ import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/utils/auth.dart';
 //import 'package:paraflorseer/utils/snackbar.dart';
 import 'package:paraflorseer/widgets/custom_app_bar.dart';
-import '../widgets/bottom_nav_bar.dart';
+//import '../widgets/bottom_nav_bar.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -173,7 +173,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 .set({
                               // sentencia para guradar el usario en la base de datos de firebase
                               'email': v?['email'],
-                              'password': v?['password']
+                              'password': v?['password'],
+                              'role':
+                                  'user', // campo donde se genra de forma predetreminada el rol de usario
                             });
                             Navigator.pushReplacementNamed(context, '/user');
                           }
