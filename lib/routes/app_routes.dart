@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:paraflorseer/screens/TherapyRankingScreen.dart';
+import 'package:paraflorseer/screens/screen_therapist.dart/horas_terapeutas_screen.dart';
+import 'package:paraflorseer/screens/screen_therapist.dart/terminos%20_condiciones_therapist.dart';
+import 'package:paraflorseer/screens/screen_therapist.dart/userprofile_therapist.dart';
 //import 'package:paraflorseer/screens/estadisticas.dart';
 //import 'package:paraflorseer/ruta_welcome_screen/agendar_screen.dart';
 //import 'package:paraflorseer/screens/register2_screen.dart';
 import 'package:paraflorseer/screens/screens.dart';
+import 'package:paraflorseer/screens/screen_therapist.dart/soporte_screen_therapist.dart';
 import 'package:paraflorseer/screens/stadistic_screen.dart';
 import 'package:paraflorseer/screens/terminos_condiciones.dart';
+import 'package:paraflorseer/screens/screen_therapist.dart/therapist_screen.dart';
 
 import 'package:paraflorseer/widgets/widgets.dart';
 import '../ruta_welcome_screen/ruta_welcome_screen.dart'; // Import de todas las pantallas
@@ -32,6 +37,11 @@ class AppRoutes {
       '/terminos_condiciones': (context) => const TermsAndConditionsScreen(),
       '/ranking': (context) => TherapyRankingScreen(),
       '/estadisticas': (context) => EstadisticasScreen(),
+      '/therapist': (context) => TherapistScreen(),
+      '/soporte_terapeuta': (context) => SoporteScreenTherapist(),
+      '/condiciones _terapeuta': (context) => TerminosCondicionesTherapist(),
+      '/user_terapeuta': (context) => UserprofileTherapist(),
+      '/horas_terapeuta': (context) => HorasTerapeutasScreen(),
       //'/estadisticas': (context) => const DemandStatsScreen(),
 
       // Ruta para la pantalla de citas

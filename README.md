@@ -16,3 +16,22 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 flutter pub run change_app_package_name:main com.nuevo.nombre.de.paquete
+
+Algunas ideas   son:
+
+Autenticación con múltiples proveedores (Google, Facebook, etc.) 
+
+Integración de notificaciones push (Firebase Cloud Messaging) para eventos importantes.
+
+Optimización del rendimiento mediante carga perezosa (lazy loading) y manejo avanzado del estado.
+
+Uso de animaciones avanzadas en Flutter para mejorar la experiencia del usuario.
+
+Seguridad: Añadir cifrado para datos sensibles y fortalecer las reglas de Firestore.
+
+Despliegue: Preparar tu aplicación para un lanzamiento en Google Play o App Store.
+
+Testing automatizado para asegurar la calidad del código.
+
+
+

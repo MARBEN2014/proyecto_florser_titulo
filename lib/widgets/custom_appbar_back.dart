@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({super.key, required bool showNotificationButton});
+class CustomAppbarBack extends StatelessWidget implements PreferredSizeWidget {
+  const CustomAppbarBack({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,20 +31,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           Navigator.pop(context); // Navegar atrás
         },
       ),
-      actions: [
-        IconButton(
-          icon: const Padding(
-            padding: EdgeInsets.only(
-                right: 20.0), // Padding solo al ícono de la derecha
-            child: Icon(Icons.notifications, size: 35),
-          ),
-          color: AppColors.primary,
-          onPressed: () {
-            Navigator.pushNamed(context,
-                '/notifications'); // Navegar a la pantalla de notificaciones
-          },
-        ),
-      ],
     );
   }
 

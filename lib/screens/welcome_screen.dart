@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/themes/app_text_styles.dart';
-import 'package:paraflorseer/widgets/bottom_nav_bar.dart';
+import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
 import 'package:paraflorseer/widgets/custom_appbar_welcome.dart';
 import 'package:flutter/widgets.dart';
 import 'package:paraflorseer/widgets/refresh.dart';

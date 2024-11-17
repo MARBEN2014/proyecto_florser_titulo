@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:paraflorseer/widgets/bottom_nav_bar.dart';
+import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
 import 'package:paraflorseer/widgets/custom_app_bar.dart';
 
 import '../descripcions_servicios/descriptions _test.dart';
@@ -42,7 +42,9 @@ class _MiFichaScreenState extends State<MiFichaScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: const CustomAppBar(
+        showNotificationButton: true,
+      ),
       body: _isLoading
           ? const Center(
               child: CircularProgressIndicator(),

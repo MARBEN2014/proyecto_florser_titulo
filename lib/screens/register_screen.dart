@@ -8,6 +8,7 @@ import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/utils/auth.dart';
 //import 'package:paraflorseer/utils/snackbar.dart';
 import 'package:paraflorseer/widgets/custom_app_bar.dart';
+import 'package:paraflorseer/widgets/custom_appbar_logo.dart';
 //import '../widgets/bottom_nav_bar.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -33,7 +34,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: const CustomAppBarLoggedOut(),
       body: RefreshIndicator(
         onRefresh: _refreshScreen,
         child: SingleChildScrollView(

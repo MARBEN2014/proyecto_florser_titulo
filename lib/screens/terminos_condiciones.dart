@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:paraflorseer/widgets/custom_app_bar.dart'; // Import del AppBar personalizado
-import 'package:paraflorseer/widgets/bottom_nav_bar.dart'; // Import del Bottom Navigation Bar
+//import 'package:paraflorseer/widgets/custom_app_bar.dart'; // Import del AppBar personalizado
+import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
+import 'package:paraflorseer/widgets/custom_appbar_back.dart'; // Import del Bottom Navigation Bar
 
 class TermsAndConditionsScreen extends StatelessWidget {
   const TermsAndConditionsScreen({super.key});
@@ -9,9 +10,9 @@ class TermsAndConditionsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBar(
-          // Título de la pantalla
-          ),
+      appBar: const CustomAppbarBack(),
+      // Título de la pantalla
+
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

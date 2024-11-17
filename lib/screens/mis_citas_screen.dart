@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:paraflorseer/utils/obtenerUserandNAme.dart';
 import 'package:paraflorseer/widgets/custom_app_bar.dart';
-import 'package:paraflorseer/widgets/bottom_nav_bar.dart';
+import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/screens/welcome_screen.dart';
 import 'package:intl/intl.dart';
@@ -151,7 +151,9 @@ class _MisCitasScreenState extends State<MisCitasScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.secondary, // Fondo de la pantalla
-      appBar: CustomAppBar(), // Barra de navegación personalizada
+      appBar: CustomAppBar(
+        showNotificationButton: false,
+      ), // Barra de navegación personalizada
       body: Padding(
         padding:
             const EdgeInsets.all(16.0), // Espaciado alrededor de la pantalla

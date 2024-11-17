@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paraflorseer/widgets/custom_app_bar.dart';
-import 'package:paraflorseer/widgets/bottom_nav_bar.dart';
+import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/body_service/custom_body_healing.dart'; // Asegúrate de importar el custom body de healing
 
@@ -27,7 +27,9 @@ class _HealingScreenState extends State<HealingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.secondary, // Color de fondo
-      appBar: const CustomAppBar(), // AppBar personalizado
+      appBar: const CustomAppBar(
+        showNotificationButton: true,
+      ), // AppBar personalizado
       body: RefreshIndicator(
         onRefresh: _refreshHealingScreen, // Función de actualización
         child: const CustomBodyHealing(), // Cuerpo de la pantalla de Healing

@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/utils/firestore_service.dart';
-import 'package:paraflorseer/widgets/custom_app_bar.dart';
-import 'package:paraflorseer/widgets/bottom_nav_bar.dart';
+import 'package:paraflorseer/widgets/custom_appbar_back.dart';
+//import 'package:paraflorseer/widgets/custom_app_bar.dart';
+//import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
+import 'package:paraflorseer/widgets/custom_appbar_logo.dart';
 import 'package:paraflorseer/widgets/refresh.dart';
 
 class TherapyRankingScreen extends StatefulWidget {
@@ -36,7 +38,7 @@ class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBar(),
+      appBar: const CustomAppbarBack(),
       body: RefreshableWidget(
         onRefresh: _handleRefresh,
         child: FutureBuilder<Map<String, Map<String, int>>>(
@@ -75,7 +77,7 @@ class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
           },
         ),
       ),
-      bottomNavigationBar: const BottomNavBar(),
+      //bottomNavigationBar: const BottomNavBar(),
     );
   }
 

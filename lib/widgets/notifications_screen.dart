@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
-import 'package:paraflorseer/widgets/bottom_nav_bar.dart';
-import 'package:paraflorseer/widgets/custom_app_bar.dart';
+import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
+//import 'package:paraflorseer/widgets/custom_app_bar.dart';
+import 'package:paraflorseer/widgets/custom_appbar_logo.dart';
 
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({super.key});
@@ -10,7 +11,7 @@ class NotificationsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar(), // Uso del AppBar personalizado
+      appBar: CustomAppBarLoggedOut(), // Uso del AppBar personalizado
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(

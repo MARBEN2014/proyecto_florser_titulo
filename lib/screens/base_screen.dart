@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paraflorseer/widgets/custom_app_bar.dart'; // Import del AppBar personalizado
-import 'package:paraflorseer/widgets/bottom_nav_bar.dart'; // Import del Bottom Navigation Bar
+import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart'; // Import del Bottom Navigation Bar
 import 'package:paraflorseer/widgets/refresh.dart';
 // Import del widget de refresco
 
@@ -17,7 +17,9 @@ class BaseScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBar(), // Uso del AppBar personalizado
+      appBar: const CustomAppBar(
+        showNotificationButton: true,
+      ), // Uso del AppBar personalizado
       body: RefreshableWidget(
         onRefresh: _handleRefresh, // Asigna la función de refresco
         child: const SingleChildScrollView(

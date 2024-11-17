@@ -5,17 +5,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:paraflorseer/themes/app_colors.dart';
+import 'package:paraflorseer/widgets/bottom_nav_bar_therapist.dart';
 import 'package:paraflorseer/widgets/custom_app_bar.dart';
 import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
+import 'package:paraflorseer/widgets/custom_appbar_back.dart';
 
-class UserProfileScreen extends StatefulWidget {
-  const UserProfileScreen({super.key});
+class UserprofileTherapist extends StatefulWidget {
+  const UserprofileTherapist({super.key});
 
   @override
   _UserProfileScreenState createState() => _UserProfileScreenState();
 }
 
-class _UserProfileScreenState extends State<UserProfileScreen> {
+class _UserProfileScreenState extends State<UserprofileTherapist> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController birthdateController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -88,9 +90,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.secondary,
-      appBar: const CustomAppBar(
-        showNotificationButton: true,
-      ),
+      appBar: const CustomAppbarBack(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -178,7 +178,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: const BottomNavBar(),
+      bottomNavigationBar: const BottomNavBarTherapist(),
     );
   }
 
