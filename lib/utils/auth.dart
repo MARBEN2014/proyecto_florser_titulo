@@ -8,7 +8,8 @@ class AuthService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // Método para la creación de la cuenta
-  Future createAccount(String correo, String pass, BuildContext context) async {
+  Future<bool> createAccount(
+      String correo, String pass, BuildContext context) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: correo, password: pass);
@@ -22,22 +23,29 @@ class AuthService {
 
         print("Correo de verificación enviado a $correo");
 
-        // Retornar el UID del usuario creado
-        return userCredential.user?.uid;
+        // Verificar continuamente si el correo fue verificado
+        bool isVerified = false;
+        while (!isVerified) {
+          await Future.delayed(const Duration(seconds: 5));
+          await FirebaseAuth.instance.currentUser
+              ?.reload(); // Forzar recarga del usuario
+          isVerified =
+              FirebaseAuth.instance.currentUser?.emailVerified ?? false;
+        }
+
+        return isVerified; // Devuelve true si el correo fue verificado
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak');
-        return 1; // Contraseña débil
+        showSnackBar(context, "La contraseña es demasiado débil.");
       } else if (e.code == 'email-already-in-use') {
-        showSnackBar(
-            context, " El correo ya está en uso. Intenta con uno diferente.");
-        print('The account already exists for that email');
-        return 2; // El correo ya está en uso
+        showSnackBar(context, "El correo ya está en uso.");
       }
     } catch (e) {
       print(e);
+      showSnackBar(context, "Ha ocurrido un error inesperado.");
     }
+    return false; // Retorna false en caso de error o si no se verificó
   }
 
   // Método para iniciar sesión con roles

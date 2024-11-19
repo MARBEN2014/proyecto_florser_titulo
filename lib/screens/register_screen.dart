@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_validator/form_validator.dart';
@@ -6,6 +7,7 @@ import 'package:paraflorseer/preferencias/pref_usuarios.dart';
 //import 'package:paraflorseer/screens/screens.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/utils/auth.dart';
+import 'package:paraflorseer/utils/snackbar.dart';
 //import 'package:paraflorseer/utils/snackbar.dart';
 import 'package:paraflorseer/widgets/custom_app_bar.dart';
 import 'package:paraflorseer/widgets/custom_appbar_logo.dart';
@@ -148,37 +150,45 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         onPressed: () async {
                           var prefs = PreferenciasUsuarios();
-                          //showSnackBar(context, 'Mensaje de prueba');
 
-                          //validar formulario, los datos son ingresados corectamenta
-                          //se inicia el proceso autenticaión
                           _formKeyPage1.currentState?.save();
                           if (_formKeyPage1.currentState?.validate() == true) {
                             final v = _formKeyPage1.currentState?.value;
                             print(v?['email']);
                             print(v?['password']);
 
-                            // la respuesta se almacena en resultado
-                            var result = await _auth.createAccount(
-                                v?['email'], v?['password'], context);
-                            print(
-                                'Resultado de la creación de cuenta: $result');
+                            // Llamar al servicio de autenticación
+                            bool isVerified = await _auth.createAccount(
+                              v?['email'],
+                              v?['password'],
+                              context,
+                            );
 
-                            // Obtener el UID del usuario recién creado
+                            if (isVerified) {
+                              // Guardar UID y datos en Firestore si se verificó el correo
+                              User? user = FirebaseAuth.instance.currentUser;
+                              if (user != null) {
+                                prefs.ultimouid = user.uid;
 
-                            // movimento de traspaso de informacion al crear
-                            prefs.ultimouid = result;
-                            FirebaseFirestore.instance
-                                .collection('user')
-                                .doc(result)
-                                .set({
-                              // sentencia para guradar el usario en la base de datos de firebase
-                              'email': v?['email'],
-                              'password': v?['password'],
-                              'role':
-                                  'user', // campo donde se genra de forma predetreminada el rol de usario
-                            });
-                            Navigator.pushReplacementNamed(context, '/user');
+                                await FirebaseFirestore.instance
+                                    .collection('user')
+                                    .doc(user.uid)
+                                    .set({
+                                  'email': v?['email'],
+                                  'password': v?['password'],
+                                  'role': 'user', // Rol predeterminado
+                                });
+
+                                // Navegar a la pantalla de usuario
+                                Navigator.pushReplacementNamed(
+                                    context, '/user');
+                              }
+                            } else {
+                              showSnackBar(context,
+                                  "El correo no fue verificado o hubo un error.");
+                              print(
+                                  'El correo no fue verificado o hubo un error.');
+                            }
                           }
                         },
                         child: const Text(
