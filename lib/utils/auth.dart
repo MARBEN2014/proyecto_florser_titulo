@@ -129,6 +129,25 @@ class AuthService {
       }
     }
   }
+
+  // Método para reenviar el correo de verificación
+  Future<void> resendVerificationEmail(BuildContext context) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null && !user.emailVerified) {
+      try {
+        await user.sendEmailVerification();
+        showSnackBar(context,
+            "Correo de verificación reenviado. Revisa tu bandeja de entrada.");
+        print("Correo de verificación reenviado a ${user.email}");
+      } catch (e) {
+        print(e);
+        showSnackBar(context, "Hubo un error al intentar reenviar el correo.");
+      }
+    } else {
+      showSnackBar(
+          context, "El correo ya está verificado o no hay usuario actual.");
+    }
+  }
 }
 
 

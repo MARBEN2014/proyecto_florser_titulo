@@ -37,6 +37,19 @@ class EstadisticasScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Column(
                   children: [
+                    // Texto "Página de administrador"
+                    const Text(
+                      'Página de administrador',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black, // Color negro para el texto
+                      ),
+                    ),
+                    const SizedBox(
+                        height: 20), // Espaciado entre el texto y el botón
+
                     ElevatedButton(
                       onPressed: () {
                         // Navega a la página de ranking
@@ -51,20 +64,18 @@ class EstadisticasScreen extends StatelessWidget {
                         ),
                       ),
                       child: const Text(
-                        'Recuperar Contraseña',
+                        'Crear usuario',
                         style: TextStyle(
                           fontSize: 16,
                           color: AppColors.secondary,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
-
-                    // Espaciado uniforme
+                    const SizedBox(height: 20), // Espaciado uniforme
 
                     ElevatedButton(
                       onPressed: () {
-                        // Navega a la página de ranking
+                        // Navega a la página de estadísticas
                         Navigator.pushNamed(context, '/mi_ficha_screen');
                       },
                       style: ElevatedButton.styleFrom(
@@ -76,7 +87,7 @@ class EstadisticasScreen extends StatelessWidget {
                         ),
                       ),
                       child: const Text(
-                        'Recuperar Contraseña',
+                        'Estadísticas',
                         style: TextStyle(
                           fontSize: 16,
                           color: AppColors.secondary,
@@ -87,7 +98,7 @@ class EstadisticasScreen extends StatelessWidget {
 
                     ElevatedButton(
                       onPressed: () {
-                        // Navega a la página de ranking
+                        // Navega al historial de citas
                         Navigator.pushNamed(context, '/ranking');
                       },
                       style: ElevatedButton.styleFrom(
@@ -99,7 +110,7 @@ class EstadisticasScreen extends StatelessWidget {
                         ),
                       ),
                       child: const Text(
-                        'Recuperar Contraseña',
+                        'Historial de citas',
                         style: TextStyle(
                           fontSize: 16,
                           color: AppColors.secondary,
@@ -110,9 +121,7 @@ class EstadisticasScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 150),
-
-              // Espacio final
+              const SizedBox(height: 150), // Espacio final
             ],
           ),
         ),

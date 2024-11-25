@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/widgets/bottom_nav_bar_therapist.dart';
-//import 'package:paraflorseer/widgets/custom_app_bar.dart'; // Import del AppBar personalizado
 import 'package:paraflorseer/widgets/custom_appbar_logo.dart';
-//import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart'; // Import del Bottom Navigation Bar
-import 'package:paraflorseer/widgets/refresh.dart';
-// Import del widget de refresco
+import 'package:paraflorseer/widgets/refresh.dart'; // Import del widget de refresco
 
 class TherapistScreen extends StatelessWidget {
   const TherapistScreen({super.key});
@@ -33,9 +30,23 @@ class TherapistScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Column(
                   children: [
+                    // Texto "Página de Terapeuta"
+                    const Text(
+                      'Página de Terapeuta',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black, // Color negro para el texto
+                      ),
+                    ),
+                    const SizedBox(
+                        height:
+                            20), // Espaciado entre el texto y el primer botón
+
                     ElevatedButton(
                       onPressed: () {
-                        // Navega a la página de ranking
+                        // Navega a la página de horas agendadas
                         Navigator.pushNamed(context, '/horas_terapeuta');
                       },
                       style: ElevatedButton.styleFrom(
@@ -54,13 +65,11 @@ class TherapistScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
-
-                    // Espaciado uniforme
+                    const SizedBox(height: 20), // Espaciado uniforme
 
                     ElevatedButton(
                       onPressed: () {
-                        // Navega a la página de ranking
+                        // Navega a la página de datos importantes
                         Navigator.pushNamed(context, '/ranking');
                       },
                       style: ElevatedButton.styleFrom(
@@ -72,20 +81,42 @@ class TherapistScreen extends StatelessWidget {
                         ),
                       ),
                       child: const Text(
-                        'Datos importanes',
+                        'Datos importantes',
                         style: TextStyle(
                           fontSize: 16,
                           color: AppColors.secondary,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20), // Espaciado uniforme
+                    const SizedBox(height: 20),
+
+                    ElevatedButton(
+                      onPressed: () {
+                        // Navega a la página de datos importantes
+                        Navigator.pushNamed(context, '/ranking');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 15, horizontal: 45),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                      ),
+                      child: const Text(
+                        'Historial del usuario',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: AppColors.secondary,
+                        ),
+                      ),
+                    ),
+
+                    // Espaciado uniforme
                   ],
                 ),
               ),
-              const SizedBox(height: 150),
-
-              // Espacio final
+              const SizedBox(height: 150), // Espacio final
             ],
           ),
         ),

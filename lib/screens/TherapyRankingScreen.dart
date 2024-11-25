@@ -6,7 +6,7 @@ import 'package:paraflorseer/utils/firestore_service.dart';
 import 'package:paraflorseer/widgets/custom_appbar_back.dart';
 //import 'package:paraflorseer/widgets/custom_app_bar.dart';
 //import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
-import 'package:paraflorseer/widgets/custom_appbar_logo.dart';
+//import 'package:paraflorseer/widgets/custom_appbar_logo.dart';
 import 'package:paraflorseer/widgets/refresh.dart';
 
 class TherapyRankingScreen extends StatefulWidget {

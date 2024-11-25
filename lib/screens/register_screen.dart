@@ -27,6 +27,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isEmailVerified = false;
 
   Future<void> _refreshScreen() async {
     _formKeyPage1.currentState?.reset();
@@ -197,6 +198,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               fontSize: 20, color: AppColors.secondary),
                         ),
                       ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+
+                      if (!_isEmailVerified)
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 12.0, horizontal: 30),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                          ),
+                          onPressed: () async {
+                            await _auth.resendVerificationEmail(context);
+                          },
+                          child: const Text(
+                            'Reenviar correo de verificación',
+                            style: TextStyle(
+                                fontSize: 18, color: AppColors.secondary),
+                          ),
+                        ),
 
                       ///
                     ],

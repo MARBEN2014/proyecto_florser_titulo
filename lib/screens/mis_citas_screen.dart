@@ -118,7 +118,7 @@ class _MisCitasScreenState extends State<MisCitasScreen> {
   }
 
   // Cancelar una cita en Firestore
-  Future<void> _cancelCita(String docId) async {
+  Future<void> _cancelCita(String docId, String therapist) async {
     try {
       final user =
           FirebaseAuth.instance.currentUser; // Obtener el usuario actual
@@ -129,6 +129,14 @@ class _MisCitasScreenState extends State<MisCitasScreen> {
             .collection('Reservas')
             .doc(docId)
             .delete(); // Eliminar la cita de Firestore
+
+        // Eliminar la cita de la colección principal "reservations"
+        await FirebaseFirestore.instance
+            .collection('reservations')
+            .doc(therapist) // Nombre del terapeuta
+            .collection('appointments')
+            .doc(docId) // Mismo ID de la cita
+            .delete();
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Cita cancelada exitosamente.")),
@@ -201,7 +209,8 @@ class _MisCitasScreenState extends State<MisCitasScreen> {
                           onPressed: () async {
                             bool? confirm = await _showCancelDialog();
                             if (confirm == true) {
-                              await _cancelCita(cita['docId']);
+                              await _cancelCita(
+                                  cita['docId'], cita['therapist']);
                             }
                           },
                         ),
