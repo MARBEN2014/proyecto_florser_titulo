@@ -29,12 +29,13 @@ class _HealingScreenState extends State<HealingScreen> {
       backgroundColor: AppColors.secondary, // Color de fondo
       appBar: const CustomAppBar(
         showNotificationButton: true,
+        title: '',
       ), // AppBar personalizado
       body: RefreshIndicator(
         onRefresh: _refreshHealingScreen, // Función de actualización
         child: const CustomBodyHealing(), // Cuerpo de la pantalla de Healing
       ),
-      bottomNavigationBar: const BottomNavBar(), // Bottom Navigation Bar
+      bottomNavigationBar: const BottomNavBarUser(), // Bottom Navigation Bar
     );
   }
 }

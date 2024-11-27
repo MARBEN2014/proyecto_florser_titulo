@@ -4,23 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:paraflorseer/preferencias/pref_usuarios.dart';
-//import 'package:paraflorseer/screens/screens.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/utils/auth.dart';
 import 'package:paraflorseer/utils/snackbar.dart';
-//import 'package:paraflorseer/utils/snackbar.dart';
-//import 'package:paraflorseer/widgets/custom_app_bar.dart';
+import 'package:paraflorseer/widgets/custom_appbar_back.dart';
 import 'package:paraflorseer/widgets/custom_appbar_logo.dart';
-//import '../widgets/bottom_nav_bar.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class CreateUserScreen extends StatefulWidget {
+  const CreateUserScreen({super.key});
 
   @override
-  _RegisterScreenState createState() => _RegisterScreenState();
+  _CreateUserScreenState createState() => _CreateUserScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _CreateUserScreenState extends State<CreateUserScreen> {
   final _formKeyPage1 = GlobalKey<FormBuilderState>();
   final AuthService _auth = AuthService();
   bool _isObscurePassword = true;
@@ -37,7 +34,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBarLoggedOut(),
+      appBar: const CustomAppbarBack(),
       body: RefreshIndicator(
         onRefresh: _refreshScreen,
         child: SingleChildScrollView(
@@ -50,19 +47,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 20),
                 const Center(
                   child: Text(
-                    'Regístrate',
+                    'Comienza Verificando al usuario',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(height: 20),
                 FormBuilder(
                   key: _formKeyPage1,
-                  autovalidateMode: AutovalidateMode
-                      .onUserInteraction, // Validación en tiempo real
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Column(
                     children: [
                       FormBuilderTextField(
-                        name: 'email', // nombre del campo correo electrónico
+                        name: 'email',
                         controller: _emailController,
                         decoration: const InputDecoration(
                           labelText: 'Correo electrónico',
@@ -83,9 +79,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             .build(),
                       ),
                       const SizedBox(height: 16.0),
-
-                      //
-
                       FormBuilderTextField(
                         name: 'password',
                         controller: _passwordController,
@@ -122,7 +115,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           if (value.length < 6) {
                             return 'La contraseña debe tener al menos 6 caracteres';
                           }
-                          // Verificación adicional para incluir mayúsculas, minúsculas, símbolos y números
                           if (!RegExp(
                                   r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_-])[A-Za-z\d@$!%*?&_-]{6,}$')
                               .hasMatch(value)) {
@@ -132,14 +124,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 '- Un número\n'
                                 '- Un símbolo especial (@, \$, !, %, *, ?, &,_,-)';
                           }
-                          return null; // Si pasa todas las validaciones
+                          return null;
                         },
                       ),
-
                       const SizedBox(height: 16.0),
                       const SizedBox(height: 30.0),
-
-                      //
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
@@ -155,10 +144,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           _formKeyPage1.currentState?.save();
                           if (_formKeyPage1.currentState?.validate() == true) {
                             final v = _formKeyPage1.currentState?.value;
-                            print(v?['email']);
-                            print(v?['password']);
 
-                            // Llamar al servicio de autenticación
                             bool isVerified = await _auth.createAccount(
                               v?['email'],
                               v?['password'],
@@ -166,7 +152,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             );
 
                             if (isVerified) {
-                              // Guardar UID y datos en Firestore si se verificó el correo
                               User? user = FirebaseAuth.instance.currentUser;
                               if (user != null) {
                                 prefs.ultimouid = user.uid;
@@ -177,23 +162,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     .set({
                                   'email': v?['email'],
                                   'password': v?['password'],
-                                  'role': 'user', // Rol predeterminado
+                                  'role': 'user',
                                 });
 
-                                // Navegar a la pantalla de usuario
                                 Navigator.pushReplacementNamed(
-                                    context, '/user');
+                                    context, '/register_userAdmin');
                               }
                             } else {
                               showSnackBar(context,
                                   "El correo no fue verificado o hubo un error.");
-                              print(
-                                  'El correo no fue verificado o hubo un error.');
                             }
                           }
                         },
                         child: const Text(
-                          '¡Registrarse!',
+                          'Verificar Correo Elcetrónico',
                           style: TextStyle(
                               fontSize: 20, color: AppColors.secondary),
                         ),
@@ -201,7 +183,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       const SizedBox(
                         height: 30,
                       ),
-
                       if (!_isEmailVerified)
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -221,8 +202,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 fontSize: 18, color: AppColors.secondary),
                           ),
                         ),
-
-                      ///
                     ],
                   ),
                 ),
@@ -231,7 +210,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ),
       ),
-      //bottomNavigationBar: const BottomNavBar(),
     );
   }
 }

@@ -54,7 +54,7 @@ class NotificationsScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: BottomNavBarUser(),
     );
   }
 

@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:paraflorseer/screens/TherapyRankingScreen.dart';
+import 'package:paraflorseer/screens/screen_admin/TherapyRankingScreen.dart';
+import 'package:paraflorseer/screens/screen_admin/createUserscreen.dart';
+import 'package:paraflorseer/screens/screen_admin/gestionterapeutas.dart';
+import 'package:paraflorseer/screens/screen_admin/indexCruduser.dart';
+import 'package:paraflorseer/screens/screen_admin/indexrolesadmin.dart';
+import 'package:paraflorseer/screens/screen_admin/phonescreen.dart';
+import 'package:paraflorseer/screens/screen_admin/registeruser_screen.dart';
+import 'package:paraflorseer/screens/screen_therapist.dart/datos_importantes.dart';
 import 'package:paraflorseer/screens/screen_therapist.dart/horas_terapeutas_screen.dart';
 import 'package:paraflorseer/screens/screen_therapist.dart/terminos%20_condiciones_therapist.dart';
 import 'package:paraflorseer/screens/screen_therapist.dart/userprofile_therapist.dart';
@@ -8,7 +15,7 @@ import 'package:paraflorseer/screens/screen_therapist.dart/userprofile_therapist
 //import 'package:paraflorseer/screens/register2_screen.dart';
 import 'package:paraflorseer/screens/screens.dart';
 import 'package:paraflorseer/screens/screen_therapist.dart/soporte_screen_therapist.dart';
-import 'package:paraflorseer/screens/stadistic_screen.dart';
+import 'package:paraflorseer/screens/screen_admin/stadistic_screen.dart';
 import 'package:paraflorseer/screens/terminos_condiciones.dart';
 import 'package:paraflorseer/screens/screen_therapist.dart/therapist_screen.dart';
 
@@ -42,6 +49,13 @@ class AppRoutes {
       '/condiciones _terapeuta': (context) => TerminosCondicionesTherapist(),
       '/user_terapeuta': (context) => UserprofileTherapist(),
       '/horas_terapeuta': (context) => HorasTerapeutasScreen(),
+      '/datos_terapeutas': (context) => TherapistProfileScreen(),
+      '/create_user': (context) => CreateUserScreen(),
+      '/register_userAdmin': (context) => RegisterUserScreen(),
+      '/indexCruduser': (context) => IndexCrudUser(),
+      '/gestion_roles': (context) => IndexRolesAdmin(),
+      '/gestion_terapeutas': (context) => GestionTerapeutasScreen(),
+      '/telefonos': (context) => Phonescreen(),
       //'/estadisticas': (context) => const DemandStatsScreen(),
 
       // Ruta para la pantalla de citas

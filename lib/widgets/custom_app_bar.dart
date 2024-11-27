@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({super.key, required bool showNotificationButton});
+  const CustomAppBar(
+      {super.key, required bool showNotificationButton, required String title});
 
   @override
   Widget build(BuildContext context) {

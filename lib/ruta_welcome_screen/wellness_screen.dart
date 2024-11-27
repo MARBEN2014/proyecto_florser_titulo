@@ -29,12 +29,13 @@ class _WellnessScreenState extends State<WellnessScreen> {
       backgroundColor: AppColors.secondary, // Color de fondo
       appBar: const CustomAppBar(
         showNotificationButton: true,
+        title: '',
       ), // AppBar personalizado
       body: RefreshIndicator(
         onRefresh: _refreshWellnessScreen, // Función de actualización
         child: const CustomBodyWellness(), // Cuerpo de la pantalla de Wellness
       ),
-      bottomNavigationBar: const BottomNavBar(), // Bottom Navigation Bar
+      bottomNavigationBar: const BottomNavBarUser(), // Bottom Navigation Bar
     );
   }
 }

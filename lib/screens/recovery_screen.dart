@@ -92,6 +92,7 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
       backgroundColor: AppColors.secondary,
       appBar: const CustomAppBar(
         showNotificationButton: false,
+        title: '',
       ),
       body: RefreshIndicator(
         onRefresh: _refreshScreen,
@@ -207,7 +208,7 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: const BottomNavBar(),
+      bottomNavigationBar: const BottomNavBarUser(),
     );
   }
 }

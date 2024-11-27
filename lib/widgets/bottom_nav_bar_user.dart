@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 //import 'package:paraflorseer/screens/user_profile_screen.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 
-class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({super.key});
+class BottomNavBarUser extends StatelessWidget {
+  const BottomNavBarUser({super.key});
 
   @override
   Widget build(BuildContext context) {

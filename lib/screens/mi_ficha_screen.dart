@@ -44,6 +44,7 @@ class _MiFichaScreenState extends State<MiFichaScreen> {
     return Scaffold(
       appBar: const CustomAppBar(
         showNotificationButton: true,
+        title: '',
       ),
       body: _isLoading
           ? const Center(
@@ -79,7 +80,7 @@ class _MiFichaScreenState extends State<MiFichaScreen> {
                   : const Center(
                       child: Text('No se encontraron datos.'),
                     ),
-      bottomNavigationBar: const BottomNavBar(),
+      bottomNavigationBar: const BottomNavBarUser(),
     );
   }
 }

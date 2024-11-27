@@ -161,6 +161,7 @@ class _MisCitasScreenState extends State<MisCitasScreen> {
       backgroundColor: AppColors.secondary, // Fondo de la pantalla
       appBar: CustomAppBar(
         showNotificationButton: false,
+        title: '',
       ), // Barra de navegación personalizada
       body: Padding(
         padding:
@@ -254,7 +255,8 @@ class _MisCitasScreenState extends State<MisCitasScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: const BottomNavBar(), // Barra de navegación inferior
+      bottomNavigationBar:
+          const BottomNavBarUser(), // Barra de navegación inferior
     );
   }
 }

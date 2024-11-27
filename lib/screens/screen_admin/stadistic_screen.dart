@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/widgets/custom_app_bar.dart'; // Import del AppBar personalizado
 import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart'; // Import del Bottom Navigation Bar
+import 'package:paraflorseer/widgets/custom_appbar_back.dart';
+import 'package:paraflorseer/widgets/custom_appbar_logo.dart';
 import 'package:paraflorseer/widgets/refresh.dart'; // Import del widget de refresco
 
 class EstadisticasScreen extends StatelessWidget {
@@ -22,9 +24,7 @@ class EstadisticasScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBar(
-        showNotificationButton: false,
-      ), // Uso del AppBar personalizado
+      appBar: const CustomAppBarLoggedOut(), // Uso del AppBar personalizado
       body: RefreshableWidget(
         onRefresh: _handleRefresh, // Asigna la función de refresco
         child: SingleChildScrollView(
@@ -53,7 +53,7 @@ class EstadisticasScreen extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         // Navega a la página de ranking
-                        Navigator.pushNamed(context, '/ranking');
+                        Navigator.pushNamed(context, '/indexCruduser');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
@@ -64,7 +64,7 @@ class EstadisticasScreen extends StatelessWidget {
                         ),
                       ),
                       child: const Text(
-                        'Crear usuario',
+                        'Gestión de Usuario',
                         style: TextStyle(
                           fontSize: 16,
                           color: AppColors.secondary,
@@ -76,7 +76,7 @@ class EstadisticasScreen extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         // Navega a la página de estadísticas
-                        Navigator.pushNamed(context, '/mi_ficha_screen');
+                        Navigator.pushNamed(context, '/ranking');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
@@ -99,10 +99,11 @@ class EstadisticasScreen extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         // Navega al historial de citas
-                        Navigator.pushNamed(context, '/ranking');
+                        Navigator.pushNamed(context, '/gestion_roles');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.secondary,
                         padding: const EdgeInsets.symmetric(
                             vertical: 15, horizontal: 45),
                         shape: RoundedRectangleBorder(
@@ -110,7 +111,7 @@ class EstadisticasScreen extends StatelessWidget {
                         ),
                       ),
                       child: const Text(
-                        'Historial de citas',
+                        'Gestión de roles',
                         style: TextStyle(
                           fontSize: 16,
                           color: AppColors.secondary,
@@ -127,7 +128,7 @@ class EstadisticasScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar:
-          const BottomNavBar(), // Uso del Bottom Navigation Bar
+          const BottomNavBarUser(), // Uso del Bottom Navigation Bar
     );
   }
 }

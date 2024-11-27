@@ -29,12 +29,13 @@ class _GuideScreenState extends State<GuideScreen> {
       backgroundColor: AppColors.secondary, // Color de fondo
       appBar: const CustomAppBar(
         showNotificationButton: true,
+        title: '',
       ), // AppBar personalizado
       body: RefreshIndicator(
         onRefresh: _refreshGuideScreen, // Función de actualización
         child: const CustomBodyGuide(), // Cuerpo de la pantalla
       ),
-      bottomNavigationBar: const BottomNavBar(), // Bottom Navigation Bar
+      bottomNavigationBar: const BottomNavBarUser(), // Bottom Navigation Bar
     );
   }
 }

@@ -14,6 +14,7 @@ class SoporteScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         appBar: const CustomAppBar(
           showNotificationButton: false,
+          title: '',
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 60.0),
@@ -62,7 +63,7 @@ class SoporteScreen extends StatelessWidget {
             ],
           ),
         ),
-        bottomNavigationBar: const BottomNavBarTherapist());
+        bottomNavigationBar: const BottomNavBarUser());
   }
 
   // Método para abrir WhatsApp

@@ -30,12 +30,13 @@ class _BeautyScreenState extends State<BeautyScreen> {
       backgroundColor: AppColors.secondary, // Color de fondo
       appBar: const CustomAppBar(
         showNotificationButton: true,
+        title: '',
       ), // AppBar personalizado
       body: RefreshIndicator(
         onRefresh: _refreshBeautyScreen, // Función de actualización
         child: const CustomBodyBeauty(), // Cuerpo de la pantalla
       ),
-      bottomNavigationBar: const BottomNavBar(), // Bottom Navigation Bar
+      bottomNavigationBar: const BottomNavBarUser(), // Bottom Navigation Bar
     );
   }
 }

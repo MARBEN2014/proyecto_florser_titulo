@@ -192,80 +192,82 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
               ),
               const SizedBox(height: 1),
+
               // Botón de Iniciar Sesión
-              SizedBox(
-                width: buttonWidth,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/login');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 50, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                  ),
-                  child: Text(
-                    'Iniciar Sesión',
-                    style: AppTextStyles.bodyTextStyle.copyWith(
-                      color: AppColors.secondary,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, '/recovery_screen');
-                },
-                child: Text(
-                  '¿Olvidaste tu contraseña?',
-                  style: AppTextStyles.bodyTextStyle.copyWith(
-                    color: AppColors.text,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 15),
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Si no eres usuario, ',
-                      style: AppTextStyles.bodyTextStyle.copyWith(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                    ),
-                    WidgetSpan(
-                      alignment: PlaceholderAlignment.middle,
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/register');
-                        },
-                        child: Text(
-                          'regístrate',
-                          style: AppTextStyles.bodyTextStyle.copyWith(
-                            color: AppColors.primary,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
+              // SizedBox(
+              //   width: buttonWidth,
+              //   child: ElevatedButton(
+              //     onPressed: () {
+              //       Navigator.pushNamed(context, '/login');
+              //     },
+              //     style: ElevatedButton.styleFrom(
+              //       backgroundColor: AppColors.primary,
+              //       padding: const EdgeInsets.symmetric(
+              //           horizontal: 50, vertical: 10),
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(25),
+              //       ),
+              //     ),
+              //     child: Text(
+              //       'Iniciar Sesión',
+              //       style: AppTextStyles.bodyTextStyle.copyWith(
+              //         color: AppColors.secondary,
+              //       ),
+              //     ),
+              //   ),
+
+              //),
+              // const SizedBox(height: 20),
+              // GestureDetector(
+              //   onTap: () {
+              //     Navigator.pushNamed(context, '/recovery_screen');
+              //   },
+              //   child: Text(
+              //     '¿Olvidaste tu contraseña?',
+              //     style: AppTextStyles.bodyTextStyle.copyWith(
+              //       color: AppColors.text,
+              //       fontWeight: FontWeight.bold,
+              //     ),
+              //   ),
+              // ),
+              // const SizedBox(height: 15),
+              // RichText(
+              //   textAlign: TextAlign.center,
+              //   text: TextSpan(
+              //     children: [
+              //       TextSpan(
+              //         text: 'Si no eres usuario, ',
+              //         style: AppTextStyles.bodyTextStyle.copyWith(
+              //           color: Colors.black,
+              //           fontWeight: FontWeight.bold,
+              //           fontSize: 14,
+              //         ),
+              //       ),
+              //       WidgetSpan(
+              //         alignment: PlaceholderAlignment.middle,
+              //         child: GestureDetector(
+              //           onTap: () {
+              //             Navigator.pushNamed(context, '/register');
+              //           },
+              //           child: Text(
+              //             'regístrate',
+              //             style: AppTextStyles.bodyTextStyle.copyWith(
+              //               color: AppColors.primary,
+              //               fontSize: 16,
+              //               fontWeight: FontWeight.bold,
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // const SizedBox(height: 10),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: const BottomNavBar(),
+      bottomNavigationBar: const BottomNavBarUser(),
     );
   }
 }

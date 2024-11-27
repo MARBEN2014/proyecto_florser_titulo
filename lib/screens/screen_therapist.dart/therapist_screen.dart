@@ -70,7 +70,7 @@ class TherapistScreen extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         // Navega a la página de datos importantes
-                        Navigator.pushNamed(context, '/ranking');
+                        Navigator.pushNamed(context, '/datos_terapeutas');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,

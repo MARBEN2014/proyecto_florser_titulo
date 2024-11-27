@@ -29,13 +29,14 @@ class _CleansingScreenState extends State<CleansingScreen> {
       backgroundColor: AppColors.secondary, // Color de fondo
       appBar: const CustomAppBar(
         showNotificationButton: true,
+        title: '',
       ), // AppBar personalizado
       body: RefreshIndicator(
         onRefresh: _refreshCleansingScreen, // Función de actualización
         child:
             const CustomBodyCleansing(), // Cuerpo de la pantalla de Cleansing
       ),
-      bottomNavigationBar: const BottomNavBar(), // Bottom Navigation Bar
+      bottomNavigationBar: const BottomNavBarUser(), // Bottom Navigation Bar
     );
   }
 }

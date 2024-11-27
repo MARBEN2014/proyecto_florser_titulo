@@ -54,7 +54,7 @@ Para cualquier consulta relacionada con estos términos de uso, puede ponerse en
           ),
         ),
       ),
-      bottomNavigationBar: const BottomNavBar(),
+      bottomNavigationBar: const BottomNavBarUser(),
     );
   }
 }

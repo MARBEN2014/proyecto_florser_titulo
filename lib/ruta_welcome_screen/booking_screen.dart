@@ -110,6 +110,10 @@ class _BookingScreenState extends State<BookingScreen> {
           "${selectedDate!.day.toString().padLeft(2, '0')}/${selectedDate?.month.toString().padLeft(2, '0')}/${selectedDate?.year}";
 
       // Guardar en la subcolección del usuario
+      // **Ajustar la fecha a UTC aquí**
+      DateTime selectedDateUtc = selectedDate!.toUtc();
+
+      // Guardar en la subcolección del usuario
       await userReservationsRef.add({
         'service_name': widget.serviceName,
         'therapist': selectedTherapist,
@@ -128,8 +132,9 @@ class _BookingScreenState extends State<BookingScreen> {
       await therapistAppointmentsRef.add({
         'service_name': widget.serviceName,
         'user_id': user.uid,
-        'date': Timestamp.fromDate(selectedDate!),
+        'date': Timestamp.fromDate(selectedDateUtc),
         'time': selectedTime,
+        'day': formattedDate,
         'therapist': selectedTherapist,
       });
 
@@ -207,6 +212,7 @@ class _BookingScreenState extends State<BookingScreen> {
     return Scaffold(
       appBar: const CustomAppBar(
         showNotificationButton: true,
+        title: '',
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

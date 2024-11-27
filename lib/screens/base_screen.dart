@@ -19,6 +19,7 @@ class BaseScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: const CustomAppBar(
         showNotificationButton: true,
+        title: '',
       ), // Uso del AppBar personalizado
       body: RefreshableWidget(
         onRefresh: _handleRefresh, // Asigna la función de refresco
@@ -37,7 +38,7 @@ class BaseScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar:
-          const BottomNavBar(), // Uso del Bottom Navigation Bar
+          const BottomNavBarUser(), // Uso del Bottom Navigation Bar
     );
   }
 }
