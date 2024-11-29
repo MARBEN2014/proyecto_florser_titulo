@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paraflorseer/preferencias/pref_usuarios.dart';
+import 'package:paraflorseer/services/bloc/notifications_bloc.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/themes/app_text_styles.dart';
 import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
 import 'package:paraflorseer/widgets/custom_appbar_welcome.dart';
-import 'package:flutter/widgets.dart';
+//import 'package:flutter/widgets.dart';
 import 'package:paraflorseer/widgets/refresh.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -18,7 +21,7 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   int _currentIndex = 0; // Para rastrear la imagen actual del carrusel
 
-  // Método para refrescar los datos (simulación)
+  // Método para refrescar los datos
   Future<void> _refreshData() async {
     await Future.delayed(const Duration(seconds: 1));
     // Aquí puedes incluir lógica para refrescar el contenido
@@ -96,7 +99,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context
+        .read<NotificationsBloc>()
+        .requestPermission(); // con esta linea se le pide si autoriza las notificaciones o no
     // Lista de imágenes (incluye una imagen local en assets)
+    var prefs = PreferenciasUsuarios();
+    prefs.ultimaPagina = 'welcome_screen';
+
+    print('TOKEN:' +
+        prefs
+            .token); // PRINT PARA MOSTRAR EL TOKEN DEL USUSRIO QUEW ESTA LOGEADO EN AL app
+
     final List<String> imgList = [
       'https://sesdermaskincenter.es/wp-content/uploads/2023/03/Lifting-Japones-Tratamiento-facial-2.jpg',
       'http://bienestaryser.com.mx/uploads/6/9/4/8/69487023/lectura-tarot_orig.jpg',

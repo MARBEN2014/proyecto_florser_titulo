@@ -12,7 +12,7 @@ class PreferenciasUsuarios {
   // hacer el get y el set
 
   String get ultimaPagina {
-    return _prefs.getString('ultimaPagina') ?? '/login';
+    return _prefs.getString('ultimaPagina') ?? '/index';
   }
 
   set ultimaPagina(String value) {
@@ -25,5 +25,13 @@ class PreferenciasUsuarios {
 
   set ultimouid(String value) {
     _prefs.setString('ultimouid', value);
+  }
+
+  String get token {
+    return _prefs.getString('token') ?? '';
+  }
+
+  set token(String value) {
+    _prefs.setString('token', value);
   }
 }

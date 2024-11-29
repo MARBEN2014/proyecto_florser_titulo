@@ -26,6 +26,7 @@ class AppRoutes {
   static Map<String, WidgetBuilder> getRoutes() {
     return {
       '/': (context) => const WelcomeScreen(),
+      '/index': (context) => const IndexScreen(),
       '/login': (context) => const LoginScreen(),
       '/register': (context) => const RegisterScreen(),
       //'/register2': (context) => const Register2Screen(),

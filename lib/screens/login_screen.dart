@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_validator/form_validator.dart';
+import 'package:paraflorseer/main.dart';
+import 'package:paraflorseer/services/bloc/notifications_bloc.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/utils/auth.dart';
 import 'package:paraflorseer/utils/snackbar.dart';
@@ -32,6 +35,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context
+        .read<NotificationsBloc>()
+        .requestPermission(); // con esta linea se le pide si autoriza las notificaciones o no
     return Scaffold(
       appBar: const CustomAppBarLoggedOut(),
       body: RefreshIndicator(
