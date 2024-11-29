@@ -1,48 +1,46 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class LocalNotification {
+  //solicitar permisos de notificaiones locales
   static Future<void> requestPermissionLocalNotifications() async {
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
-        ?.requestNotificationsPermission();
+        ?.requestExactAlarmsPermission();
   }
 
+  //metodo de inicializacion de notificaiones locales
   static Future<void> initializeLocalNotifications() async {
-    final flutterLocalnotificationsPlugin = FlutterLocalNotificationsPlugin();
-    const initializationSettingsAndroid =
-        AndroidInitializationSettings('launcher_icon');
-    const initializationSettingsDarwin = DarwinInitializationSettings();
+    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    const initializationSettingsAndroid = AndroidInitializationSettings(
+        'logoapp'); // este es el icono que se quieremostrar cuando llegue la notificaio local
 
-    const initializationsSettings = InitializationSettings(
-        android: initializationSettingsAndroid,
-        iOS: initializationSettingsDarwin);
+    // // para inicualizar con Ios
+    // const initializationSettingsDarwin = DarwinInitializationSettings(
+    //   onDidReceiveLocalNotification: iosShowNotification);
 
-    await flutterLocalnotificationsPlugin.initialize(initializationsSettings);
+    const initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
+
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  // await flutterLocalNotificationsPlugin.initialize(
-  //     initializationsSettings,
-  //     onSelectNotification: (String? payload) async {
-  //       // Manejar la selección de la notificación aquí
-  //       if (payload != null) {
-  //         // Realiza la acción que deseas al seleccionar la notificación
-  //         print('Notification payload: $payload');
-  //       }
-  //     },
-  //   );
-  // }
-
+// Metodo para inicilaizar IOs
   static void iosShowNotification(
       int id, String? title, String? body, String? data) {
     showLocalNotification(id: id, title: title, body: body, data: data);
   }
 
-  static void showLocalNotification(
-      {required int id, String? title, String? body, String? data}) {
+  // crear mostrar la notificaion
+  static void showLocalNotification({
+    required int id,
+    String? title,
+    String? body,
+    String? data,
+  }) {
     const androidDetails = AndroidNotificationDetails(
-        'channelId', 'channelName',
+        'ChannelID', 'channelName',
         playSound: true, importance: Importance.max, priority: Priority.high);
 
     const notificationDetails = NotificationDetails(
@@ -51,6 +49,8 @@ class LocalNotification {
 
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
+    // esto es lo que pide el local notifications y el metodo que permite mostrarla estos pararmetros se crean en
+    // static void showLocalNotification
     flutterLocalNotificationsPlugin.show(id, title, body, notificationDetails);
   }
 }

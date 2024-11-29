@@ -99,9 +99,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<NotificationsBloc>()
-        .requestPermission(); // con esta linea se le pide si autoriza las notificaciones o no
+    // context
+    //     .read<NotificationsBloc>()
+    //     .requestPermission(); // con esta linea se le pide si autoriza las notificaciones o no
     // Lista de imágenes (incluye una imagen local en assets)
     var prefs = PreferenciasUsuarios();
     prefs.ultimaPagina = 'welcome_screen';

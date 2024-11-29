@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paraflorseer/firebase_options.dart';
@@ -18,7 +19,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-// manejar las notificaciones
+// manejar la inicializacion de las notificaiones en segundo plano
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+// manejar la inicualizacion de las  notificaciones
   await LocalNotification.initializeLocalNotifications();
   runApp(MultiBlocProvider(
     providers: [

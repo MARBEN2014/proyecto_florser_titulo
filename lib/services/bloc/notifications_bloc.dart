@@ -1,11 +1,26 @@
+import 'dart:math';
+
 import 'package:bloc/bloc.dart';
 
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:paraflorseer/preferencias/pref_usuarios.dart';
+import 'package:paraflorseer/services/bloc/localNotification/local_notification.dart';
 
 part 'notifications_event.dart';
 part 'notifications_state.dart';
+
+// para mostarar la notificaiones en segundo plano se debe poner en el main
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  var mensaje = message.data;
+  var title = mensaje['title'];
+  var body = mensaje['body'];
+  // crear un avaloe superior a 1 para que entregue valores a leatorios sobre 1
+  Random random = Random();
+  var id = random.nextInt(100000);
+
+  LocalNotification.showLocalNotification(id: id, title: title, body: body);
+}
 
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   // crear la instancia cde firemessaging
@@ -25,6 +40,8 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
         criticalAlert: true,
         provisional: false,
         sound: true);
+    // prmiso para utilizar notificaiones locales
+    await LocalNotification.requestPermissionLocalNotifications();
 
     // saber si fue aceptada o no la autorizacion de las mnotificaciones
     settings.authorizationStatus;
@@ -57,12 +74,18 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
 // metodo para gestionar los mensajes
   void handleRemoteMessage(RemoteMessage message) {
+    // aca se hace la union con la localNotification
     var mensaje = message.data;
-    print(message); // esta es la instancia del mensaje
-    print(message.data); // aca va la imnformacion del mensaje
     var title = mensaje['title'];
     var body = mensaje['body'];
+    // crear un avaloe superior a 1 para que entregue valores a leatorios sobre 1
+    Random random = Random();
+    var id = random.nextInt(100000);
 
+    LocalNotification.showLocalNotification(id: id, title: title, body: body);
+    // estos print es para ver si la inofromacion esta llegando y visualizarla por consola
+    print(message); // esta es la instancia del mensaje
+    print(message.data); // aca va la imnformacion del mensaje
     print(title);
     print(body);
     // hasta este punto ya se sta recibiendo data desde firebase message , pero se debe mostrar en la local notifications
