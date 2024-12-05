@@ -1,21 +1,20 @@
 import 'dart:math';
-
 import 'package:bloc/bloc.dart';
-
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Importar para interactuar con Firestore
 import 'package:paraflorseer/preferencias/pref_usuarios.dart';
 import 'package:paraflorseer/services/bloc/localNotification/local_notification.dart';
 
 part 'notifications_event.dart';
 part 'notifications_state.dart';
 
-// para mostarar la notificaiones en segundo plano se debe poner en el main
+// para mostrar las notificaciones en segundo plano se debe poner en el main
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   var mensaje = message.data;
   var title = mensaje['title'];
   var body = mensaje['body'];
-  // crear un avaloe superior a 1 para que entregue valores a leatorios sobre 1
+  // Crear un valor superior a 1 para que entregue valores aleatorios sobre 1
   Random random = Random();
   var id = random.nextInt(100000);
 
@@ -23,14 +22,14 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
-  // crear la instancia cde firemessaging
+  // Crear la instancia de FirebaseMessaging
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   NotificationsBloc() : super(NotificationsInitial()) {
-    _onForegroundMessage(); // esta al pendiente de las notificaion push
-    // });
+    _onForegroundMessage(); // Estar al pendiente de las notificaciones push
   }
-  // primero se debe acxeptar los permisios de las notificaiones desde el usuario de notirifcaion push
+
+  // Primero se debe aceptar los permisos de las notificaciones desde el usuario de notificaciones push
   void requestPermission() async {
     NotificationSettings settings = await messaging.requestPermission(
         alert: true,
@@ -40,54 +39,87 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
         criticalAlert: true,
         provisional: false,
         sound: true);
-    // prmiso para utilizar notificaiones locales
+    // Permiso para utilizar notificaciones locales
     await LocalNotification.requestPermissionLocalNotifications();
 
-    // saber si fue aceptada o no la autorizacion de las mnotificaciones
+    // Saber si fue aceptada o no la autorización de las notificaciones
     settings.authorizationStatus;
-    _getToken(); // privada para que solo se puedda llamar desde aca
+    _getToken(); // Privada para que solo se pueda llamar desde acá
   }
 
-  // Metodo para obtener el token con una nueva
-
+  // Método para obtener el token con una nueva
   void _getToken() async {
     final settings = await messaging.getNotificationSettings();
-    if (settings.authorizationStatus != AuthorizationStatus.authorized)
-      return; // no devueklve el token ya que la autorizacion de recivir notificaiones no fue aceptada
+    if (settings.authorizationStatus != AuthorizationStatus.authorized) return;
+    // Si no está autorizado para recibir notificaciones no se devuelve el token
 
-    // si tengo un token lo guardo en prefs de usuarios
-    // el token se debe guardar por usuario en la base de datos
+    // Si tengo un token lo guardo en prefs de usuarios
     final token = await messaging.getToken();
     if (token != null) {
       final prefs = PreferenciasUsuarios();
       prefs.token =
-          token; //guardara este valor en la base de datos en un arraglo [array], desde el comienzo
+          token; // Guardará este valor en la base de datos en un arreglo [array], desde el comienzo
+
+      // Obtener el UID del usuario
+      final String uid = prefs
+          .ultimouid; // Asumiendo que tienes un método para obtener el UID del usuario desde preferencias.
+
+      // Guardar el token en Firestore, en la colección 'user' bajo el documento del usuario.
+      await _saveTokenToFirestore(uid, token);
     }
-    // para guardar los token de los usarios en la base de datos y crera un aareglo con ellos
-    // FirebaseFirestore.instance.doc('').update({'token':ArrayConfig.values})
   }
 
-// cuando la aplicacion esta en primer plano
+  // Método para guardar el token en Firestore
+  Future<void> _saveTokenToFirestore(String uid, String token) async {
+    try {
+      // Obtener la referencia del documento del usuario
+      DocumentReference userDocRef =
+          FirebaseFirestore.instance.collection('user').doc(uid);
+
+      // Actualizar el array `tokens` añadiendo el nuevo token
+      await userDocRef.update({
+        'tokens': FieldValue.arrayUnion([token]) // Agrega solo si no existe
+      });
+
+      print("Token guardado correctamente para el usuario $uid");
+    } catch (e) {
+      if (e.toString().contains("NOT_FOUND")) {
+        // Si el documento no existe, lo creamos con el token inicial
+        try {
+          await FirebaseFirestore.instance.collection('user').doc(uid).set({
+            'tokens': [token],
+          });
+          print("Documento creado para el usuario $uid con el token inicial.");
+        } catch (e) {
+          print("Error al crear el documento en Firestore: $e");
+        }
+      } else {
+        print("Error al guardar el token en Firestore: $e");
+      }
+    }
+  }
+
+  // Cuando la aplicación está en primer plano
   void _onForegroundMessage() {
     FirebaseMessaging.onMessage.listen(handleRemoteMessage);
   }
 
-// metodo para gestionar los mensajes
+  // Método para gestionar los mensajes
   void handleRemoteMessage(RemoteMessage message) {
-    // aca se hace la union con la localNotification
+    // Aquí se hace la unión con la localNotification
     var mensaje = message.data;
     var title = mensaje['title'];
     var body = mensaje['body'];
-    // crear un avaloe superior a 1 para que entregue valores a leatorios sobre 1
+    // Crear un valor aleatorio para el ID
     Random random = Random();
     var id = random.nextInt(100000);
 
     LocalNotification.showLocalNotification(id: id, title: title, body: body);
-    // estos print es para ver si la inofromacion esta llegando y visualizarla por consola
-    print(message); // esta es la instancia del mensaje
-    print(message.data); // aca va la imnformacion del mensaje
+    // Estos print son para ver si la información está llegando y visualizarla por consola
+    print(message); // Esta es la instancia del mensaje
+    print(message.data); // Aquí va la información del mensaje
     print(title);
     print(body);
-    // hasta este punto ya se sta recibiendo data desde firebase message , pero se debe mostrar en la local notifications
+    // Hasta este punto ya se está recibiendo data desde Firebase Messaging, pero se debe mostrar en la local notifications
   }
 }

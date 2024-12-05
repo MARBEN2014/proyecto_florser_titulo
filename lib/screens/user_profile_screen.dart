@@ -323,7 +323,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             'address': addressController.text,
             'gender': selectedGender,
             'profileImage': imageUrl, // Guardamos la URL de la imagen
-          }, SetOptions(merge: true)); // Merge para no sobrescribir otros datos
+            'tokens': [], // Campo tokens como array vacío
+          }, SetOptions(merge: true));
+
+          // Merge para no sobrescribir otros datos
 
           _showConfirmationDialog(context);
         }

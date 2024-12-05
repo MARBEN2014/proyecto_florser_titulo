@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:paraflorseer/widgets/bottom_nav_bar_therapist.dart';
 //import 'package:paraflorseer/widgets/custom_app_bar.dart'; // Import del AppBar personalizado
-import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
+//import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
 import 'package:paraflorseer/widgets/custom_appbar_back.dart'; // Import del Bottom Navigation Bar
 
 class TerminosCondicionesTherapist extends StatelessWidget {

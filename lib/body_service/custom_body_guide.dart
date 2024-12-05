@@ -48,7 +48,7 @@ class CustomBodyGuide extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'servivios de ',
+                        'servicios de ',
                         style: AppTextStyles.bodyTextStyle.copyWith(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,

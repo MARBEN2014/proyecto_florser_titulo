@@ -19,6 +19,12 @@ class PreferenciasUsuarios {
     _prefs.setString('ultimaPagina', value);
   }
 
+  // Getter y setter para el último UID
+  String get uid {
+    return _prefs.getString('ultimouid') ??
+        ''; // Se usa 'ultimouid' para consistencia con tu código actual
+  }
+
   String get ultimouid {
     return _prefs.getString('ultimouid') ?? '';
   }

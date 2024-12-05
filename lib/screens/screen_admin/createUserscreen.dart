@@ -8,7 +8,7 @@ import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/utils/auth.dart';
 import 'package:paraflorseer/utils/snackbar.dart';
 import 'package:paraflorseer/widgets/custom_appbar_back.dart';
-import 'package:paraflorseer/widgets/custom_appbar_logo.dart';
+//import 'package:paraflorseer/widgets/custom_appbar_logo.dart';
 
 class CreateUserScreen extends StatefulWidget {
   const CreateUserScreen({super.key});

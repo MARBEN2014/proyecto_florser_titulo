@@ -108,7 +108,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
     print('TOKEN:' +
         prefs
-            .token); // PRINT PARA MOSTRAR EL TOKEN DEL USUSRIO QUEW ESTA LOGEADO EN AL app
+            .token); // PRINT PARA MOSTRAR EL TOKEN DEL USUSRIO QUE ESTA LOGEADO EN AL app
 
     final List<String> imgList = [
       'https://sesdermaskincenter.es/wp-content/uploads/2023/03/Lifting-Japones-Tratamiento-facial-2.jpg',

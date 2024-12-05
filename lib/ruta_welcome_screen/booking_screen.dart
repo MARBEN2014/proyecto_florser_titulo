@@ -322,20 +322,21 @@ class _BookingScreenState extends State<BookingScreen> {
               },
             ),
             const SizedBox(height: 20),
-
-            // Botón confirmar
-            ElevatedButton(
-              onPressed: selectedTherapist != null &&
-                      selectedTime != null &&
-                      selectedDate != null
-                  ? _saveBookingToUserSubcollection
-                  : null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.secondary,
+            //boton de confirmar y enfiar notificaciones
+            Center(
+              child: ElevatedButton(
+                onPressed: selectedTherapist != null &&
+                        selectedTime != null &&
+                        selectedDate != null
+                    ? _saveBookingToUserSubcollection
+                    : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: AppColors.secondary,
+                ),
+                child: const Text('Confirmar Cita'),
               ),
-              child: const Text('Confirmar Cita'),
-            ),
+            )
           ],
         ),
       ),
