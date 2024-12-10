@@ -27,6 +27,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
   NotificationsBloc() : super(NotificationsInitial()) {
     _onForegroundMessage(); // Estar al pendiente de las notificaciones push
+    onTokenRefresh(); // Detectar cambios en el token
   }
 
   // Primero se debe aceptar los permisos de las notificaciones desde el usuario de notificaciones push
@@ -121,5 +122,33 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     print(title);
     print(body);
     // Hasta este punto ya se está recibiendo data desde Firebase Messaging, pero se debe mostrar en la local notifications
+  }
+
+  // Escucha cambios en el token y actualiza Firestore
+  void onTokenRefresh() {
+    messaging.onTokenRefresh.listen((newToken) async {
+      try {
+        print("Nuevo token recibido: $newToken");
+
+        // Actualizar token en Preferencias locales
+        final prefs = PreferenciasUsuarios();
+        prefs.token = newToken;
+
+        // Actualizar Firestore
+        final String uid = prefs.ultimouid;
+        if (uid.isNotEmpty) {
+          await FirebaseFirestore.instance.collection('user').doc(uid).update({
+            'tokens': FieldValue.arrayUnion([newToken])
+          });
+          print("Token actualizado correctamente en Firestore: $newToken");
+        } else {
+          print("UID vacío. No se puede guardar el token en Firestore.");
+        }
+      } catch (e) {
+        print("Error al actualizar el token en Firestore: $e");
+      }
+    }).onError((e) {
+      print("Error al escuchar el evento onTokenRefresh: $e");
+    });
   }
 }

@@ -2,15 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_validator/form_validator.dart';
-//import 'package:paraflorseer/main.dart';
 import 'package:paraflorseer/services/bloc/notifications_bloc.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/utils/auth.dart';
 import 'package:paraflorseer/utils/snackbar.dart';
-//import 'package:paraflorseer/widgets/custom_app_bar.dart';
 import 'package:paraflorseer/widgets/custom_appbar_logo.dart';
-//import 'package:paraflorseer/preferencias/pref_usuarios.dart';
-//import '../widgets/bottom_nav_bar.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -28,6 +24,15 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    final notificationsBloc = context.read<NotificationsBloc>();
+    notificationsBloc.requestPermission(); // Solicita permisos de notificación
+    notificationsBloc
+        .onTokenRefresh(); // Configura la escucha de cambios del token
+  }
+
   Future<void> _refreshScreen() async {
     _formKeyPage1.currentState?.reset();
     await Future.delayed(const Duration(seconds: 1));
@@ -35,9 +40,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<NotificationsBloc>()
-        .requestPermission(); // con esta linea se le pide si autoriza las notificaciones o no
     return Scaffold(
       appBar: const CustomAppBarLoggedOut(),
       body: RefreshIndicator(
@@ -124,15 +126,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           ? const CircularProgressIndicator()
                           : ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors
-                                    .primary, // Color de fondo del botón
+                                backgroundColor: AppColors.primary,
                                 padding: const EdgeInsets.symmetric(
-                                  vertical: 16.0, // Altura del botón
-                                  horizontal: 40.0, // Ancho del botón
+                                  vertical: 16.0,
+                                  horizontal: 40.0,
                                 ),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      25.0), // Bordes redondeados
+                                  borderRadius: BorderRadius.circular(25.0),
                                 ),
                               ),
                               onPressed: () async {
@@ -156,7 +156,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   });
 
                                   if (result['success'] == true) {
-                                    // Redirigir según el rol del usuario
                                     if (context.mounted) {
                                       switch (result['role']) {
                                         case 'admin':
@@ -177,10 +176,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       }
                                     }
                                   } else if (result['message'] != null) {
-                                    // Mostrar mensaje de error específico
                                     showSnackBar(context, result['message']);
                                   } else {
-                                    // Error inesperado
                                     showSnackBar(context,
                                         'Ocurrió un error inesperado.');
                                   }
@@ -189,10 +186,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: const Text(
                                 'Iniciar Sesión',
                                 style: TextStyle(
-                                  fontSize: 18, // Tamaño de fuente del texto
-                                  color: Colors.white, // Color del texto
-                                  fontWeight:
-                                      FontWeight.bold, // Estilo en negrita
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
@@ -201,9 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           GestureDetector(
-                            onTap: () {
-                              // Acción para iniciar sesión con Facebook
-                            },
+                            onTap: () {},
                             child: Image.asset(
                               'assets/facebook.png',
                               width: 80,
@@ -212,9 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           const SizedBox(width: 20),
                           GestureDetector(
-                            onTap: () {
-                              // Acción para iniciar sesión con Google
-                            },
+                            onTap: () {},
                             child: Image.asset(
                               'assets/google.png',
                               width: 80,
@@ -263,8 +255,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-
-      //bottomNavigationBar: const BottomNavBar(),
     );
   }
 }

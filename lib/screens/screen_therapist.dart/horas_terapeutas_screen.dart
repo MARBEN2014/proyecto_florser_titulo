@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:paraflorseer/screens/screen_therapist.dart/serviciosdeFIreestore.dart';
 import 'package:paraflorseer/utils/firestore_service.dart';
 import 'package:paraflorseer/widgets/custom_appbar_back.dart';
-//import 'package:paraflorseer/widgets/custom_appbar_logo.dart';
 import 'package:paraflorseer/widgets/refresh.dart';
-//import 'package:paraflorseer/services/reservations_service.dart'; // Asegúrate de tener el import correcto
 
 class HorasTerapeutasScreen extends StatefulWidget {
   const HorasTerapeutasScreen({super.key});
@@ -15,8 +13,7 @@ class HorasTerapeutasScreen extends StatefulWidget {
 
 class _TherapyRankingScreenState extends State<HorasTerapeutasScreen> {
   Future<Map<String, Map<String, int>>>? _rankingFuture;
-  final reservationsService =
-      ReservationsService(); // Instancia de ReservationsService
+  final reservationsService = ReservationsService();
 
   @override
   void initState() {
@@ -39,7 +36,7 @@ class _TherapyRankingScreenState extends State<HorasTerapeutasScreen> {
       body: RefreshableWidget(
         onRefresh: _handleRefresh,
         child: FutureBuilder<Map<String, Map<String, int>>>(
-          // FutureBuilder que obtiene los terapeutas y sus reservas
+          // Aqui se maneja la consulta a Firestore
           future: _rankingFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -86,7 +83,11 @@ class _TherapyRankingScreenState extends State<HorasTerapeutasScreen> {
         const SizedBox(height: 16),
         TextButton(
           onPressed: _handleRefresh,
-          child: const Text('Refrescar'),
+          style: TextButton.styleFrom(
+            foregroundColor: Theme.of(context).primaryColor,
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+          ),
+          child: const Text('Refrescar', style: TextStyle(fontSize: 16)),
         ),
       ],
     );
@@ -104,13 +105,17 @@ class _TherapyRankingScreenState extends State<HorasTerapeutasScreen> {
     );
   }
 
+  // Definicion del metodo _buildTherapyList
   Widget _buildTherapyList(Map<String, Map<String, int>> ranking) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ExpansionTile(
-        title: const Text(
+        title: Text(
           'Reservas por Terapia',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: Theme.of(context).primaryColor),
         ),
         children: ranking.entries.map((entry) {
           final therapyName = entry.key;
@@ -118,8 +123,17 @@ class _TherapyRankingScreenState extends State<HorasTerapeutasScreen> {
           final totalReservations =
               therapists.values.fold(0, (sum, count) => sum + count);
 
-          return ListTile(
-            title: Text('$therapyName ($totalReservations reservas)'),
+          return Card(
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            elevation: 4,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            child: ListTile(
+              title: Text('$therapyName ($totalReservations reservas)',
+                  style: TextStyle(fontSize: 16)),
+              subtitle: Text('Total de reservas: $totalReservations',
+                  style: TextStyle(fontSize: 14, color: Colors.grey)),
+            ),
           );
         }).toList(),
       ),
@@ -130,30 +144,32 @@ class _TherapyRankingScreenState extends State<HorasTerapeutasScreen> {
     Map<String, int> therapistData = {};
     ranking.forEach((_, therapists) {
       therapists.forEach((therapist, count) {
-        therapistData[therapist] =
-            (therapistData[therapist] ?? 0) + count; // Suma reservas
+        therapistData[therapist] = (therapistData[therapist] ?? 0) + count;
       });
     });
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ExpansionTile(
-        title: const Text(
+        title: Text(
           'Reservas por Terapeuta',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: Theme.of(context).primaryColor),
         ),
         children: therapistData.entries.map((entry) {
           final therapistName = entry.key;
           final reservationCount = entry.value;
 
           return ExpansionTile(
-            title: Text('$therapistName ($reservationCount reservas)'),
+            title: Text('$therapistName ($reservationCount reservas)',
+                style: TextStyle(fontSize: 16)),
             children: [
               FutureBuilder<List<Map<String, dynamic>>>(
-                // FutureBuilder para obtener las reservas de cada terapeuta
-                future: reservationsService.getReservationsForTherapist(
-                  therapistName, /* Aqui se pasa el ID de usuario si es necesario */
-                ),
+                // Consulta de reservas para cada terapeuta
+                future: reservationsService
+                    .getReservationsForTherapist(therapistName),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
@@ -178,40 +194,29 @@ class _TherapyRankingScreenState extends State<HorasTerapeutasScreen> {
                       final timestamp = reservation['date'];
                       final time = reservation['time'] ?? 'Hora no disponible';
 
-                      // Convertir Timestamp a DateTime
                       DateTime dateTime = timestamp.toDate();
                       String formattedDate =
                           '${dateTime.day} de ${_getMonthName(dateTime.month)} ${dateTime.year}';
-                      String formattedTime =
-                          '${time.substring(0, 5)}'; // Solo la hora (HH:MM)
+                      String formattedTime = '${time.substring(0, 5)}';
 
                       return Card(
                         margin: const EdgeInsets.symmetric(vertical: 8),
                         elevation: 4,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                            borderRadius: BorderRadius.circular(10)),
                         child: ListTile(
                           contentPadding: const EdgeInsets.all(16),
-                          title: Text(
-                            serviceName,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                          title: Text(serviceName,
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Usuario: $userName',
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                              Text(
-                                'Fecha: $formattedDate',
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                              Text(
-                                'Hora: $formattedTime',
-                                style: const TextStyle(fontSize: 14),
-                              ),
+                              Text('Usuario: $userName',
+                                  style: const TextStyle(fontSize: 14)),
+                              Text('Fecha: $formattedDate',
+                                  style: const TextStyle(fontSize: 14)),
+                              Text('Hora: $formattedTime',
+                                  style: const TextStyle(fontSize: 14)),
                             ],
                           ),
                         ),
@@ -226,23 +231,22 @@ class _TherapyRankingScreenState extends State<HorasTerapeutasScreen> {
       ),
     );
   }
-}
 
-// Función auxiliar para obtener el nombre del mes
-String _getMonthName(int month) {
-  const months = [
-    'Enero',
-    'Febrero',
-    'Marzo',
-    'Abril',
-    'Mayo',
-    'Junio',
-    'Julio',
-    'Agosto',
-    'Septiembre',
-    'Octubre',
-    'Noviembre',
-    'Diciembre'
-  ];
-  return months[month - 1];
+  String _getMonthName(int month) {
+    const months = [
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre'
+    ];
+    return months[month - 1];
+  }
 }

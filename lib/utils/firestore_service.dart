@@ -74,4 +74,20 @@ class FirestoreService {
       return {};
     }
   }
+
+  // // Obtener todos los terapeutas
+  // Future<List<String>> getAllTherapists() async {
+  //   try {
+  //     // Accediendo a la colección de terapeutas en Firestore
+  //     final snapshot = FirebaseFirestore.instance.collection('reservations').get();
+  //     // Extraer los nombres de los terapeutas
+  //     List<String> therapists = snapshot.docs.map((doc) {
+  //       return doc['name']; // Suponiendo que cada documento tiene un campo 'name' para el nombre del terapeuta
+  //     }).toList();
+
+  //     return therapists;
+  //   } catch (e) {
+  //     print("Error al obtener terapeutas: $e");
+  //     return [];
+  //   }
 }

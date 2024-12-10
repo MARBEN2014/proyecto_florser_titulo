@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/widgets/custom_app_bar.dart'; // Import del AppBar personalizado
 import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart'; // Import del Bottom Navigation Bar
 import 'package:paraflorseer/widgets/refresh.dart'; // Import del widget de refresco
@@ -14,39 +15,57 @@ class Phonescreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Lista de textos para cada rectángulo
-    final List<String> rectangleTexts = [
-      'Contacto 1: John Doe',
-      'Contacto 2: Jane Smith',
-      'Contacto 3: Michael Johnson',
-      'Contacto 4: Emily Davis',
-      'Contacto 5: Chris Brown',
-      'Contacto 6: Pat Taylor',
-      'Contacto 7: Alex Lee',
-      'Contacto 8: Kim Garcia',
-      'Contacto 9: Sam Wilson',
-      'Contacto 10: Casey White',
-    ];
-
-    // Lista de íconos para cada rectángulo
-    final List<IconData> rectangleIcons = [
-      Icons.phone,
-      Icons.email,
-      Icons.contact_page,
-      Icons.location_on,
-      Icons.access_time,
-      Icons.favorite,
-      Icons.share,
-      Icons.home,
-      Icons.business,
-      Icons.event,
+    // Lista de contactos de la empresa con nombre, teléfono y correo electrónico
+    final List<Map<String, String>> contacts = [
+      {
+        'name': 'Pedro Santivañez',
+        'role': 'Gerente General',
+        'phone': '+56 9 1234 5678',
+        'email': 'p.santivanez@florser.cl'
+      },
+      {
+        'name': 'María López',
+        'role': 'Administrador de Local',
+        'phone': '+56 9 2345 6789',
+        'email': 'm.lopez@florser.cl'
+      },
+      {
+        'name': 'Claudia Pérez',
+        'role': 'Secretaria Administrativa',
+        'phone': '+56 9 3456 7890',
+        'email': 'c.perez@florser.cl'
+      },
+      {
+        'name': 'Juan Torres',
+        'role': 'Jefe de Local',
+        'phone': '+56 9 4567 8901',
+        'email': 'j.torres@florser.cl'
+      },
+      {
+        'name': 'Carla Soto',
+        'role': 'Personal de Aseo',
+        'phone': '+56 9 5678 9012',
+        'email': 'c.soto@florser.cl'
+      },
+      {
+        'name': 'Luis Castro',
+        'role': 'Estafeta',
+        'phone': '+56 9 6789 0123',
+        'email': 'l.castro@florser.cl'
+      },
+      {
+        'name': 'Fernando Rojas',
+        'role': 'Guardia de Seguridad',
+        'phone': '+56 9 7890 1234',
+        'email': 'f.rojas@florser.cl'
+      },
     ];
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const CustomAppBar(
         showNotificationButton: true,
-        title: 'Pantalla de Contactos',
+        title: 'Contactos Telefónicos',
       ), // Uso del AppBar personalizado
       body: RefreshableWidget(
         onRefresh: _handleRefresh, // Asigna la función de refresco
@@ -57,15 +76,15 @@ class Phonescreen extends StatelessWidget {
               const SizedBox(height: 20),
               // Título de la sección
               Text(
-                'Lista de Contactos',
+                'Contactos Importantes',
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
               ),
               const SizedBox(height: 20),
-              // Columna con 10 Cards personalizadas
+              // Columna con Cards personalizadas para cada contacto
               Column(
-                children: List.generate(10, (index) {
+                children: contacts.map((contact) {
                   return Card(
                     elevation: 3,
                     margin:
@@ -74,28 +93,72 @@ class Phonescreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Container(
-                      height: 100,
+                      height: 140, // Altura ampliada para mayor espacio
                       padding: const EdgeInsets.all(16),
                       child: Row(
                         children: [
                           Icon(
-                            rectangleIcons[index], // Ícono dinámico
+                            Icons.phone, // Ícono de teléfono
                             size: 40,
-                            color: Colors.blueAccent,
+                            color: Colors.blueAccent, // Color llamativo
                           ),
                           const SizedBox(width: 16),
-                          Text(
-                            rectangleTexts[index], // Texto dinámico
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  contact['role']!, // Rol del contacto
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            18, // Tamaño de fuente ajustado
+                                        color: Colors.black87,
+                                      ),
+                                ),
+                                Text(
+                                  contact['name']!, // Nombre del contacto
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(
+                                        fontSize: 16, // Tamaño ajustado
+                                        color: Colors.black54,
+                                      ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  contact['phone']!, // Teléfono
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        fontSize: 16, // Tamaño ajustado
+                                        color: AppColors.primary,
+                                      ),
+                                ),
+                                Text(
+                                  contact['email']!, // Correo electrónico
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(
+                                        fontSize: 14, // Tamaño ajustado
+                                        color: AppColors.text,
+                                      ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
                   );
-                }),
+                }).toList(),
               ),
               const SizedBox(height: 40), // Espaciado adicional
             ],

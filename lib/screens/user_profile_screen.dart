@@ -9,7 +9,7 @@ import 'package:paraflorseer/widgets/custom_app_bar.dart';
 import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
 
 class UserProfileScreen extends StatefulWidget {
-  const UserProfileScreen({super.key});
+  const UserProfileScreen({super.key, required String userId});
 
   @override
   _UserProfileScreenState createState() => _UserProfileScreenState();

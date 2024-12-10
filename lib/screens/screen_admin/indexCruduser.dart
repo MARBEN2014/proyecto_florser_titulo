@@ -42,7 +42,7 @@ class IndexCrudUser extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 // Acción al presionar el botón Modificar Usuario
-                Navigator.pushNamed(context, '/modifyUser');
+                Navigator.pushNamed(context, '/searchUser');
               },
               child: const Text('Modificar Usuario'),
               style: ElevatedButton.styleFrom(

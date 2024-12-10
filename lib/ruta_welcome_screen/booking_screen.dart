@@ -7,7 +7,7 @@ import 'package:paraflorseer/themes/app_colors.dart'; // Colores personalizados 
 import 'package:paraflorseer/themes/app_text_styles.dart'; // Estilos de texto personalizados.
 import 'package:paraflorseer/utils/obtenerUserandNAme.dart'; // Utilidad para obtener el nombre del usuario.
 import 'package:paraflorseer/widgets/custom_app_bar.dart'; // Barra de navegación personalizada.
-//import 'package:intl/intl.dart'; // Importa intl para manejar la localización.
+import 'package:intl/intl.dart'; // Importa intl para manejar la localización.
 
 class BookingScreen extends StatefulWidget {
   final String serviceName;
@@ -53,93 +53,53 @@ class _BookingScreenState extends State<BookingScreen> {
     });
   }
 
-  Future<void> _saveBookingToUserSubcollection() async {
-    if (selectedTherapist == null ||
-        selectedTime == null ||
-        selectedDate == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Por favor, selecciona todos los campos')),
-      );
-      return;
-    }
-
-    Future<bool> _isTimeSlotAvailable(
-        String therapist, DateTime selectedDate, String selectedTime) async {
-      try {
-        final appointmentsRef = FirebaseFirestore.instance
-            .collection('reservations')
-            .doc(therapist) // Documento del terapeuta
-            .collection('appointments'); // Subcolección de citas
-
-        final snapshot = await appointmentsRef
-            .where('date',
-                isEqualTo:
-                    Timestamp.fromDate(selectedDate)) // Fecha como Timestamp
-            .where('time', isEqualTo: selectedTime) // Hora como String
-            .get();
-
-        return snapshot.docs.isEmpty; // Retorna true si no hay citas
-      } catch (e) {
-        print('Error al verificar la disponibilidad: $e');
-        return false;
-      }
-    }
-
-    // Verificar disponibilidad del horario
-    bool isAvailable = await _isTimeSlotAvailable(
-        selectedTherapist!, selectedDate!, selectedTime!);
-
-    if (!isAvailable) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('El horario seleccionado no está disponible')),
-      );
-      return;
-    }
-
-    // Si el horario está disponible, guardar la reserva
+  // Método para crear la cita
+  Future<void> _createCita(String serviceName, String therapist,
+      DateTime selectedDateUtc, String selectedTime) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
-      if (user == null) throw Exception("Usuario no autenticado");
+      if (user != null) {
+        final appointmentId = FirebaseFirestore.instance
+            .collection('user')
+            .doc()
+            .id; // Genera un ID único
 
-      final userReservationsRef = FirebaseFirestore.instance
-          .collection('user')
-          .doc(user.uid)
-          .collection('Reservas');
+        // Guardar en la colección 'user' -> 'Reservas'
+        await FirebaseFirestore.instance
+            .collection('user')
+            .doc(user.uid)
+            .collection('Reservas')
+            .doc(appointmentId) // Usar el mismo ID
+            .set({
+          'service_name': serviceName,
+          'therapist': therapist,
+          'day': DateFormat('dd/MM/yyyy').format(selectedDateUtc),
+          'time': selectedTime,
+          'appointmentId':
+              appointmentId, // Guardamos el ID para referenciarlo en ambas colecciones
+          'created_at': Timestamp.fromDate(DateTime.now()),
+        });
 
-      final formattedDate =
-          "${selectedDate!.day.toString().padLeft(2, '0')}/${selectedDate?.month.toString().padLeft(2, '0')}/${selectedDate?.year}";
+        // Guardar en la colección 'reservations' -> 'appointments'
+        await FirebaseFirestore.instance
+            .collection('reservations')
+            .doc(therapist)
+            .collection('appointments')
+            .doc(appointmentId) // Usar el mismo ID
+            .set({
+          'service_name': serviceName,
+          'user_id': user.uid,
+          'date': Timestamp.fromDate(selectedDateUtc),
+          'time': selectedTime,
+          'day': DateFormat('dd/MM/yyyy').format(selectedDateUtc),
+          'therapist': therapist,
+          'appointmentId':
+              appointmentId, // Guardamos el ID para referenciarlo en ambas colecciones
+        });
 
-      // Guardar en la subcolección del usuario
-      // **Ajustar la fecha a UTC aquí**
-      DateTime selectedDateUtc = selectedDate!.toUtc();
-
-      // Guardar en la subcolección del usuario
-      await userReservationsRef.add({
-        'service_name': widget.serviceName,
-        'therapist': selectedTherapist,
-        'time': selectedTime,
-        'day': formattedDate,
-        'user_name': userName,
-        'created_at': FieldValue.serverTimestamp(),
-      });
-
-      // Guardar también en la subcolección del terapeuta
-      final therapistAppointmentsRef = FirebaseFirestore.instance
-          .collection('reservations')
-          .doc(selectedTherapist) // Documento del terapeuta
-          .collection('appointments');
-
-      await therapistAppointmentsRef.add({
-        'service_name': widget.serviceName,
-        'user_id': user.uid,
-        'date': Timestamp.fromDate(selectedDateUtc),
-        'time': selectedTime,
-        'day': formattedDate,
-        'therapist': selectedTherapist,
-      });
-
-      // Mostrar mensaje de confirmación
-      _showConfirmationDialog(context);
+        // Mostrar mensaje de confirmación
+        _showConfirmationDialog(context);
+      }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error al guardar la cita: $e')),
@@ -207,6 +167,53 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
+  Future<void> _saveBookingToUserSubcollection() async {
+    if (selectedTherapist == null ||
+        selectedTime == null ||
+        selectedDate == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Por favor, selecciona todos los campos')),
+      );
+      return;
+    }
+
+    // Verificar disponibilidad
+    bool isAvailable = await _isTimeSlotAvailable(
+        selectedTherapist!, selectedDate!, selectedTime!);
+
+    if (!isAvailable) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('El horario seleccionado no está disponible')),
+      );
+      return;
+    }
+
+    // Guardar la cita
+    DateTime selectedDateUtc = selectedDate!.toUtc();
+    await _createCita(
+        widget.serviceName, selectedTherapist!, selectedDateUtc, selectedTime!);
+  }
+
+  Future<bool> _isTimeSlotAvailable(
+      String therapist, DateTime selectedDate, String selectedTime) async {
+    try {
+      final appointmentsRef = FirebaseFirestore.instance
+          .collection('reservations')
+          .doc(therapist) // Documento del terapeuta
+          .collection('appointments'); // Subcolección de citas
+
+      final snapshot = await appointmentsRef
+          .where('date', isEqualTo: Timestamp.fromDate(selectedDate))
+          .where('time', isEqualTo: selectedTime)
+          .get();
+
+      return snapshot.docs.isEmpty; // Retorna true si no hay citas
+    } catch (e) {
+      print('Error al verificar la disponibilidad: $e');
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -269,45 +276,28 @@ class _BookingScreenState extends State<BookingScreen> {
                     return Container(
                       margin: const EdgeInsets.all(4.0),
                       decoration: BoxDecoration(
-                        color: Colors.lightGreenAccent.shade100,
-                        borderRadius: BorderRadius.circular(8.0),
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       child: Center(
                         child: Text(
                           '${day.day}',
-                          style: const TextStyle(color: Colors.black),
+                          style: AppTextStyles.bodyTextStyle
+                              .copyWith(color: Colors.white),
                         ),
                       ),
                     );
                   }
                   return null;
                 },
-                selectedBuilder: (context, day, focusedDay) {
-                  return Container(
-                    margin: const EdgeInsets.all(4.0),
-                    decoration: BoxDecoration(
-                      color: Colors.lightBlueAccent.shade100,
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Center(
-                      child: Text(
-                        '${day.day}',
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  );
-                },
               ),
             ),
-
-            // Calendario con idioma español
-
             const SizedBox(height: 20),
 
-            // Horarios disponibles
+            // Selección de hora
             DropdownButton<String>(
               value: selectedTime,
-              hint: const Text("Selecciona un horario"),
+              hint: const Text("Selecciona una hora"),
               isExpanded: true,
               items: widget.availableTimes.map((time) {
                 return DropdownMenuItem<String>(
@@ -321,22 +311,24 @@ class _BookingScreenState extends State<BookingScreen> {
                 });
               },
             ),
-            const SizedBox(height: 20),
-            //boton de confirmar y enfiar notificaciones
+            const SizedBox(height: 80),
+
+            // Botón de reservar
             Center(
               child: ElevatedButton(
-                onPressed: selectedTherapist != null &&
-                        selectedTime != null &&
-                        selectedDate != null
-                    ? _saveBookingToUserSubcollection
-                    : null,
+                onPressed: _saveBookingToUserSubcollection,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.secondary,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 45),
                 ),
-                child: const Text('Confirmar Cita'),
+                child: const Text('Confirmar cita'),
               ),
-            )
+            ),
           ],
         ),
       ),

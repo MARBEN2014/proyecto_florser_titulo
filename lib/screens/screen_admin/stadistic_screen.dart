@@ -119,6 +119,29 @@ class EstadisticasScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20), // Espaciado uniforme
+
+                    ElevatedButton(
+                      onPressed: () {
+                        // Navega al historial de citas
+                        Navigator.pushNamed(context, '/Progreso de citas');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.secondary,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 15, horizontal: 45),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                      ),
+                      child: const Text(
+                        'información de citas',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: AppColors.secondary,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

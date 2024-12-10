@@ -8,14 +8,15 @@ import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/widgets/custom_app_bar.dart';
 import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
 
-class RegisterUserScreen extends StatefulWidget {
-  const RegisterUserScreen({super.key, required String userId});
+class EditUserProfileScreen extends StatefulWidget {
+  final String userId;
+  const EditUserProfileScreen({super.key, required this.userId});
 
   @override
-  _RegisterUserScreenState createState() => _RegisterUserScreenState();
+  _EditUserProfileScreenState createState() => _EditUserProfileScreenState();
 }
 
-class _RegisterUserScreenState extends State<RegisterUserScreen> {
+class _EditUserProfileScreenState extends State<EditUserProfileScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController birthdateController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -24,6 +25,31 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
   String? selectedRole;
   File? _image;
   String? _imageUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  // Cargar los datos del usuario desde Firestore
+  Future<void> _loadUserData() async {
+    final userDoc = await FirebaseFirestore.instance
+        .collection('user')
+        .doc(
+            widget.userId) // Usar el userId recibido desde la pantalla anterior
+        .get();
+    if (userDoc.exists) {
+      final data = userDoc.data();
+      nameController.text = data?['name'] ?? '';
+      birthdateController.text = data?['birthdate'] ?? '';
+      phoneController.text = data?['phone'] ?? '';
+      addressController.text = data?['address'] ?? '';
+      selectedGender = data?['gender'];
+      selectedRole = data?['role'];
+      _imageUrl = data?['profileImage'];
+    }
+  }
 
   // Función para elegir la imagen del perfil
   Future<void> _pickImage() async {
@@ -55,90 +81,42 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.secondary,
-      appBar: const CustomAppBar(
-        showNotificationButton: true,
-        title: '',
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20),
-              const Center(
-                child: Text(
-                  'Registro de Usuario',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.secondary,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
+  // Función para guardar los datos del usuario editados en Firestore
+  Future<void> _saveUserData(BuildContext context) async {
+    if (nameController.text.isEmpty ||
+        birthdateController.text.isEmpty ||
+        phoneController.text.isEmpty ||
+        addressController.text.isEmpty ||
+        selectedGender == null) {
+      _showErrorDialog(context);
+    } else {
+      try {
+        final user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          String? imageUrl = await _uploadImage();
+          //String uid = user.uid;
 
-              // Foto de perfil
-              Center(
-                child: GestureDetector(
-                  onTap: _pickImage,
-                  child: CircleAvatar(
-                    radius: 60,
-                    backgroundImage: _image != null
-                        ? FileImage(_image!)
-                        : const AssetImage('assets/usuario.png')
-                            as ImageProvider,
-                    backgroundColor: AppColors.secondary,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
+          // Guardar los datos en Firestore
+          await FirebaseFirestore.instance
+              .collection('user')
+              .doc(widget.userId)
+              .set({
+            'name': nameController.text,
+            'birthdate': birthdateController.text,
+            'phone': '+569 ${phoneController.text}',
+            'address': addressController.text,
+            'gender': selectedGender,
+            'role': selectedRole,
+            'profileImage':
+                imageUrl ?? _imageUrl, // Guardamos la URL de la imagen
+          }, SetOptions(merge: true)); // Merge para no sobrescribir otros datos
 
-              // Campos de información de usuario como TextFields
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Column(
-                  children: [
-                    _buildEditableTextField(
-                        context, 'Nombre y Apellido', nameController,
-                        isName: true),
-                    _buildDateField(context),
-                    _buildGenderDropdown(),
-                    _buildRoleDropdown(),
-                    _buildPhoneField(),
-                    _buildEditableTextField(
-                        context, 'Dirección', addressController),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Botón de guardar datos
-              Center(
-                child: ElevatedButton(
-                  onPressed: () => _saveUserData(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 30, vertical: 15),
-                  ),
-                  child: const Text(
-                    'Registrar Usuario',
-                    style: TextStyle(fontSize: 16, color: AppColors.secondary),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: const BottomNavBarUser(),
-    );
+          _showConfirmationDialog(context);
+        }
+      } catch (e) {
+        print("Error saving user data: $e");
+      }
+    }
   }
 
   // Widget para mostrar un campo editable como TextField
@@ -281,40 +259,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
     );
   }
 
-  // Función para guardar datos del usuario en Firestore
-  Future<void> _saveUserData(BuildContext context) async {
-    if (nameController.text.isEmpty ||
-        birthdateController.text.isEmpty ||
-        phoneController.text.isEmpty ||
-        addressController.text.isEmpty ||
-        selectedGender == null) {
-      _showErrorDialog(context);
-    } else {
-      try {
-        final user = FirebaseAuth.instance.currentUser;
-        if (user != null) {
-          String? imageUrl = await _uploadImage();
-          String uid = user.uid;
-
-          // Guardar los datos en Firestore
-          await FirebaseFirestore.instance.collection('user').doc(uid).set({
-            'name': nameController.text,
-            'birthdate': birthdateController.text,
-            'phone': '+569 ${phoneController.text}',
-            'address': addressController.text,
-            'gender': selectedGender,
-            'role': selectedRole,
-            'profileImage': imageUrl, // Guardamos la URL de la imagen
-          }, SetOptions(merge: true)); // Merge para no sobrescribir otros datos
-
-          _showConfirmationDialog(context);
-        }
-      } catch (e) {
-        print("Error saving user data: $e");
-      }
-    }
-  }
-
+  // Función para mostrar diálogo de confirmación
   void _showConfirmationDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -322,7 +267,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
         return AlertDialog(
           backgroundColor: AppColors.primary,
           content: const Text(
-            'Usuario registrado correctamente.',
+            'Perfil actualizado correctamente.',
             style: TextStyle(
               color: AppColors.secondary,
             ),
@@ -336,7 +281,11 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
                 ),
               ),
               onPressed: () {
-                Navigator.pushNamed(context, "/estadisticas");
+                // Cierra el diálogo
+                Navigator.pop(context);
+
+                // Opcional: navega a la pantalla de perfil después
+                //Navigator.pushNamed(context, "/perfil");
               },
             ),
           ],
@@ -345,6 +294,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
     );
   }
 
+  // Función para mostrar diálogo de error
   void _showErrorDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -372,6 +322,102 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
           ],
         );
       },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.secondary,
+      appBar: const CustomAppBar(
+        showNotificationButton: true,
+        title: '',
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20),
+              const Center(
+                child: Text(
+                  'Editar Perfil de Usuario',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.secondary,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Foto de perfil
+              Center(
+                child: GestureDetector(
+                  onTap: _pickImage,
+                  child: CircleAvatar(
+                    radius: 60,
+                    backgroundImage: _image != null
+                        ? FileImage(_image!)
+                        : _imageUrl != null
+                            ? NetworkImage(_imageUrl!)
+                            : const AssetImage('assets/usuario.png')
+                                as ImageProvider,
+                    backgroundColor: AppColors.secondary,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Campos de información de usuario como TextFields
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Column(
+                  children: [
+                    _buildEditableTextField(
+                        context, 'Nombre y Apellido', nameController,
+                        isName: true),
+                    _buildDateField(context),
+                    _buildGenderDropdown(),
+                    _buildRoleDropdown(),
+                    _buildPhoneField(),
+                    _buildEditableTextField(
+                        context, 'Dirección', addressController),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Botón de Guardar
+              Center(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 15, horizontal: 50),
+                  ),
+                  onPressed: () {
+                    _saveUserData(context);
+                  },
+                  child: const Text(
+                    'Guardar Cambios',
+                    style: TextStyle(
+                      color: AppColors.secondary,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: const BottomNavBarUser(),
     );
   }
 }

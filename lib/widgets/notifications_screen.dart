@@ -1,190 +1,230 @@
 import 'package:flutter/material.dart';
-import 'package:paraflorseer/themes/app_colors.dart';
-import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
-import 'package:paraflorseer/widgets/custom_appbar_back.dart';
-//import 'package:paraflorseer/widgets/custom_app_bar.dart';
-//import 'package:paraflorseer/widgets/custom_appbar_logo.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart'; // Para la manipulación de fechas
+import 'dart:async';
+import 'package:paraflorseer/themes/app_colors.dart'; // Colores personalizados de la app
+import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart'; // Barra de navegación inferior
+import 'package:paraflorseer/widgets/custom_appbar_back.dart'; // Barra superior personalizada con botón de retroceso
+import 'package:http/http.dart' as http; // Para realizar solicitudes HTTP
 
-class NotificationsScreen extends StatelessWidget {
+// Pantalla principal de notificaciones
+class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Colors.white,
-      appBar: CustomAppbarBack(), // Uso del AppBar personalizado
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(
-              16.0), // Ajuste de padding para margen de contenido
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Notificaciones',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              SizedBox(height: 20), // Espacio debajo del título
+  _NotificationsScreenState createState() => _NotificationsScreenState();
+}
 
-              // Lista de notificaciones
-              NotificationTile(
-                title: 'Cita confirmada',
-                message:
-                    'Tu cita de Reiki ha sido confirmada para el 10 de octubre a las 10:00 AM.',
-              ),
-              NotificationTile(
-                title: 'Promoción de octubre',
-                message:
-                    '¡Aprovecha nuestra promoción de masaje craneal con 20% de descuento!',
-              ),
-              NotificationTile(
-                title: 'Recordatorio',
-                message:
-                    'Tu sesión de Yoga está programada para mañana a las 9:00 AM.',
-              ),
-              NotificationTile(
-                title: 'Nueva terapia disponible',
-                message:
-                    'Hemos agregado la terapia de Reflexología en nuestro catálogo.',
-              ),
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: BottomNavBarUser(),
-    );
+class _NotificationsScreenState extends State<NotificationsScreen> {
+  List<Map<String, dynamic>> citas = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCitas();
   }
 
-  Widget _buildBottomIcon(BuildContext context,
-      {required IconData icon,
-      required String label,
-      String? routeName,
-      VoidCallback? onTap}) {
-    return InkWell(
-      onTap: onTap ??
-          () {
-            if (routeName != null) {
-              Navigator.pushNamed(context, routeName);
-            }
-          },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: Colors.white),
-          Text(
-            label,
-            style: const TextStyle(color: Colors.white, fontSize: 8.7),
-          ),
-        ],
-      ),
-    );
+  Future<void> _fetchCitas() async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final reservasSnapshot = await FirebaseFirestore.instance
+            .collection('user')
+            .doc(user.uid)
+            .collection('Reservas')
+            .get();
+
+        List<Map<String, dynamic>> nuevasCitas = [];
+        for (var doc in reservasSnapshot.docs) {
+          final data = doc.data();
+          if (data['day'] != null && data['time'] != null) {
+            nuevasCitas.add({
+              ...data,
+              'docId': doc.id,
+              'daysRemaining': _calculateDaysRemaining(data['day']),
+            });
+          }
+        }
+
+        setState(() {
+          citas = nuevasCitas;
+        });
+
+        _scheduleNotifications();
+      }
+    } catch (e) {
+      print("Error al obtener las citas: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content:
+                Text("No se pudieron cargar las citas. Intente nuevamente.")),
+      );
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
-  // Función para mostrar el menú modal flotante
-  void _showMenuModal(BuildContext context) {
-    showModalBottomSheet(
+  int _calculateDaysRemaining(String dateString) {
+    DateTime citaDate = DateFormat('dd/MM/yyyy').parse(dateString);
+    DateTime today = DateTime.now();
+    return citaDate.difference(today).inDays;
+  }
+
+  // Función para programar notificaciones
+  void _scheduleNotifications() {
+    for (var cita in citas) {
+      int daysRemaining = cita['daysRemaining'];
+      if (daysRemaining == 7 || daysRemaining == 2) {
+        Future.delayed(Duration(seconds: 1), () {
+          _showNotification(cita, daysRemaining);
+          _sendEmailReminder(cita); // Enviar recordatorio por correo
+        });
+      }
+    }
+  }
+
+  // Función para mostrar la notificación en pantalla
+  void _showNotification(Map<String, dynamic> cita, int daysRemaining) {
+    showDialog(
       context: context,
-      backgroundColor: AppColors.secondary,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
-      ),
-      builder: (BuildContext context) {
-        return FractionallySizedBox(
-          widthFactor: 0.9, // Ajusta el ancho del menú flotante
-          alignment: Alignment
-              .centerLeft, // Ubica el menú en la esquina inferior derecha
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize
-                  .min, // Esto ajusta el menú para que se muestre completo
-              children: [
-                const Text(
-                  'Menú',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.person),
-                  title: const Text('Perfil'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, '/profile');
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.settings),
-                  title: const Text('Configuración'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, '/settings');
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.notifications),
-                  title: const Text('Notificaciones'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, '/notifications');
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.help),
-                  title: const Text('Ayuda'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, '/help');
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.logout),
-                  title: const Text('Cerrar Sesión'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, '/login');
-                  },
-                ),
-              ],
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Recordatorio de Cita'),
+          content: Text(
+              'Faltan $daysRemaining días para tu cita de ${cita['service_name']} con ${cita['therapist']}'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Entendido'),
             ),
-          ),
+          ],
         );
       },
     );
   }
+
+  // Función para enviar el recordatorio por correo electrónico
+  Future<void> _sendEmailReminder(Map<String, dynamic> cita) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final email = user.email;
+      final url = Uri.parse(
+          'https://your-backend-url/send-email'); // URL del backend para enviar el correo
+
+      try {
+        final response = await http.post(url, body: {
+          'email': email,
+          'subject': 'Recordatorio de Cita',
+          'message':
+              'Faltan 7 días para tu cita de ${cita['service_name']} con ${cita['therapist']} en la fecha ${cita['day']}.',
+        });
+
+        if (response.statusCode == 200) {
+          print('Correo enviado con éxito');
+        } else {
+          print('Error al enviar el correo');
+        }
+      } catch (e) {
+        print('Error en la solicitud HTTP: $e');
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.secondary,
+      appBar: CustomAppbarBack(),
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : citas.isEmpty
+              ? const Center(child: Text('Usted No tiene citas próximas.'))
+              : SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Notificaciones',
+                            style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black)),
+                        SizedBox(height: 20),
+                        ...citas
+                            .asMap()
+                            .map((index, cita) {
+                              // Alternar colores entre primario y secundario
+                              Color backgroundColor = index.isEven
+                                  ? AppColors.primary
+                                  : Colors.white;
+                              Color textColor = backgroundColor == Colors.white
+                                  ? Colors.black
+                                  : Colors.white;
+                              return MapEntry(
+                                index,
+                                NotificationTile(
+                                  backgroundColor: backgroundColor,
+                                  textColor: textColor,
+                                  title: 'Cita confirmada',
+                                  serviceName: cita['service_name'],
+                                  message:
+                                      'Tu cita de ${cita['service_name']} con ${cita['therapist']} es el ${cita['day']} a las ${cita['time']}.',
+                                  onTap: () {
+                                    _showNotification(
+                                        cita, cita['daysRemaining']);
+                                  },
+                                ),
+                              );
+                            })
+                            .values
+                            .toList(),
+                      ],
+                    ),
+                  ),
+                ),
+      bottomNavigationBar: BottomNavBarUser(),
+    );
+  }
 }
 
-// Widget para representar una notificación individual
 class NotificationTile extends StatelessWidget {
+  final Color backgroundColor;
+  final Color textColor;
   final String title;
+  final String serviceName; // Para el nombre de la terapia
   final String message;
+  final VoidCallback onTap;
 
   const NotificationTile({
     super.key,
+    required this.backgroundColor,
+    required this.textColor,
     required this.title,
+    required this.serviceName, // Recibimos el nombre de la terapia
     required this.message,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin:
-          const EdgeInsets.symmetric(vertical: 10), // Espacio entre tarjetas
+      color: backgroundColor,
+      margin: const EdgeInsets.symmetric(vertical: 10),
       child: ListTile(
-        leading:
-            const Icon(Icons.notifications_active, color: AppColors.primary),
-        title: Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        subtitle: Text(message),
+        leading: const Icon(Icons.notifications_active,
+            color: Colors.black), // Cambié el color a negro
+        title: Text(title,
+            style: TextStyle(fontWeight: FontWeight.bold, color: textColor)),
+        subtitle: Text(serviceName, style: TextStyle(color: textColor)),
+        onTap: onTap,
       ),
     );
   }
