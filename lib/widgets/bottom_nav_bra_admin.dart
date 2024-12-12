@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 //import 'package:paraflorseer/screens/user_profile_screen.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 
-class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({super.key});
+class BottomNavBarAdmin extends StatelessWidget {
+  const BottomNavBarAdmin({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,17 +15,17 @@ class BottomNavBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildBottomIcon(context,
-              icon: Icons.home, label: 'Home', routeName: '/welcome_screen'),
+              icon: Icons.home, label: 'Home', routeName: '/estadisticas'),
           _buildBottomIcon(context,
-              icon: Icons.calendar_today,
-              label: 'Mis Citas',
-              routeName: '/mis_citas_screen'),
+              icon: Icons.delete_outline_sharp,
+              label: 'Eliminar Usuario',
+              routeName: '/deleteUser'),
           _buildBottomIcon(context,
-              icon: Icons.medical_services,
-              label: 'Ficha Médica',
-              routeName: '/mi_ficha_screen'),
+              icon: Icons.bar_chart,
+              label: 'Estadisticas',
+              routeName: '/estadisticas'),
           _buildBottomIcon(context,
-              icon: Icons.chat, label: 'Soporte', routeName: '/soporte'),
+              icon: Icons.chat, label: 'Soporte', routeName: '/soporte_admin'),
           _buildBottomIcon(context, icon: Icons.menu, label: 'Menú', onTap: () {
             _showMenuModal(context);
           }),
@@ -84,7 +84,7 @@ class BottomNavBar extends StatelessWidget {
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.pushNamed(
-                        context, '/user'); // Ruta actualizada aquí
+                        context, '/user_admin'); // Ruta actualizada aquí
                   },
                 ),
                 ListTile(
@@ -92,15 +92,7 @@ class BottomNavBar extends StatelessWidget {
                   title: const Text('Terminos y condiciones'),
                   onTap: () {
                     Navigator.pop(context);
-                    Navigator.pushNamed(context, '/terminos_condiciones');
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.notifications),
-                  title: const Text('Notificaciones'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, '/notifications');
+                    Navigator.pushNamed(context, '/terminos_admin');
                   },
                 ),
                 ListTile(

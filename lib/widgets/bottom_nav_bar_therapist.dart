@@ -14,11 +14,8 @@ class BottomNavBarTherapist extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildBottomIcon(
-            context,
-            icon: Icons.home,
-            label: 'Home',
-          ),
+          _buildBottomIcon(context,
+              icon: Icons.home, label: 'Home', routeName: '/therapist'),
           _buildBottomIcon(context,
               icon: Icons.calendar_today, label: 'Mis Citas'),
           _buildBottomIcon(context,

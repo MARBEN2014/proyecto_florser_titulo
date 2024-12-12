@@ -103,16 +103,14 @@ class BottomNavBarUser extends StatelessWidget {
                     Navigator.pushNamed(context, '/notifications');
                   },
                 ),
-
-                // ListTile(
-                //   leading: const Icon(Icons.insert_chart),
-                //   title: const Text('Estadisticas'),
-                //   onTap: () {
-                //     Navigator.pop(context);
-                //     Navigator.pushNamed(context, '/estadisticas');
-                //   },
-                // ),
-
+                ListTile(
+                  leading: const Icon(Icons.work_history),
+                  title: const Text('Historial de citas'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/history');
+                  },
+                ),
                 ListTile(
                   leading: const Icon(Icons.logout),
                   title: const Text('Cerrar sesion'),

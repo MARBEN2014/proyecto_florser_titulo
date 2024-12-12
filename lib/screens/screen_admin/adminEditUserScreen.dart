@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:paraflorseer/themes/app_colors.dart';
+import 'package:paraflorseer/widgets/bottom_nav_bra_admin.dart';
 import 'package:paraflorseer/widgets/custom_app_bar.dart';
 import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
 
@@ -417,7 +418,7 @@ class _EditUserProfileScreenState extends State<EditUserProfileScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: const BottomNavBarUser(),
+      bottomNavigationBar: const BottomNavBarAdmin(),
     );
   }
 }

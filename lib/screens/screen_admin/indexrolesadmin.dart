@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
+import 'package:paraflorseer/widgets/bottom_nav_bra_admin.dart';
 import 'package:paraflorseer/widgets/custom_appbar_back.dart'; // Import del AppBar personalizado
 
 class IndexRolesAdmin extends StatelessWidget {
@@ -57,7 +58,7 @@ class IndexRolesAdmin extends StatelessWidget {
         ),
       ),
       bottomNavigationBar:
-          const BottomNavBarUser(), // Uso del Bottom Navigation Bar
+          const BottomNavBarAdmin(), // Uso del Bottom Navigation Bar
     );
   }
 }

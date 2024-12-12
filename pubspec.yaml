@@ -62,7 +62,8 @@ dev_dependencies:
   email_validator: ^2.0.1
   mockito: ^5.4.0 
   bloc_test: ^9.0.4
-  firebase_auth_mocks: any
+  firebase_auth_mocks: ^0.14.1
+  #test: ^1.25.12
   
 
 flutter_launcher_icons:

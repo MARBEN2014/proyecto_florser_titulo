@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:paraflorseer/screens/screen_admin/adminEditUserScreen.dart';
+import 'package:paraflorseer/widgets/bottom_nav_bra_admin.dart';
 import 'package:paraflorseer/widgets/custom_appbar_back.dart';
+import 'package:paraflorseer/widgets/custom_appbar_logo.dart';
 
 class AdminFindUserScreen extends StatefulWidget {
   const AdminFindUserScreen({super.key});
@@ -38,7 +40,7 @@ class _AdminFindUserScreenState extends State<AdminFindUserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppbarBack(),
+      appBar: const CustomAppBarLoggedOut(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -107,6 +109,7 @@ class _AdminFindUserScreenState extends State<AdminFindUserScreen> {
           ],
         ),
       ),
+      bottomNavigationBar: const BottomNavBarAdmin(),
     );
   }
 }

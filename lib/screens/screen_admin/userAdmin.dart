@@ -7,24 +7,52 @@ import 'dart:io';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/widgets/bottom_nav_bra_admin.dart';
 import 'package:paraflorseer/widgets/custom_app_bar.dart';
-import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
 
-class RegisterUserScreen extends StatefulWidget {
-  const RegisterUserScreen({super.key, required String userId});
+class UserProfileScreenAdmin extends StatefulWidget {
+  const UserProfileScreenAdmin({super.key, required String userId});
 
   @override
-  _RegisterUserScreenState createState() => _RegisterUserScreenState();
+  _UserProfileScreenAdminState createState() => _UserProfileScreenAdminState();
 }
 
-class _RegisterUserScreenState extends State<RegisterUserScreen> {
+class _UserProfileScreenAdminState extends State<UserProfileScreenAdmin> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController birthdateController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   String? selectedGender;
-  String? selectedRole;
   File? _image;
   String? _imageUrl;
+  String? name;
+
+  // Función para obtener los datos del usuario desde Firestore
+  Future<void> fetchUserData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final uid = user.uid;
+      final userDoc =
+          await FirebaseFirestore.instance.collection('user').doc(uid).get();
+      final data = userDoc.data();
+
+      if (data != null) {
+        setState(() {
+          name = data['name']; // Guardamos el nombre para mostrar
+          nameController.text = data['name'] ?? '';
+          birthdateController.text = data['birthdate'] ?? '';
+          phoneController.text = data['phone']?.substring(5) ?? '';
+          addressController.text = data['address'] ?? '';
+          selectedGender = data['gender'];
+          _imageUrl = data['profileImage'];
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData(); // Cargar datos al iniciar la pantalla
+  }
 
   // Función para elegir la imagen del perfil
   Future<void> _pickImage() async {
@@ -73,7 +101,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
               const SizedBox(height: 20),
               const Center(
                 child: Text(
-                  'Registro de Usuario',
+                  'Perfil de Usuario',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -81,6 +109,20 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
                   ),
                 ),
               ),
+              const SizedBox(height: 10),
+
+              // Mostrar el nombre del usuario
+              Center(
+                child: Text(
+                  name != null ? 'Hola, $name' : 'Hola, Usuario',
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+
               const SizedBox(height: 20),
 
               // Foto de perfil
@@ -109,7 +151,6 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
                         isName: true),
                     _buildDateField(context),
                     _buildGenderDropdown(),
-                    _buildRoleDropdown(),
                     _buildPhoneField(),
                     _buildEditableTextField(
                         context, 'Dirección', addressController),
@@ -128,7 +169,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
                         horizontal: 30, vertical: 15),
                   ),
                   child: const Text(
-                    'Registrar Usuario',
+                    'Guardar Datos',
                     style: TextStyle(fontSize: 16, color: AppColors.secondary),
                   ),
                 ),
@@ -143,6 +184,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
   }
 
   // Widget para mostrar un campo editable como TextField
+
   Widget _buildEditableTextField(
       BuildContext context, String label, TextEditingController controller,
       {bool isName = false}) {
@@ -160,6 +202,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
             isName ? TextCapitalization.words : TextCapitalization.none,
         onChanged: (value) {
           if (isName) {
+            // Separar el nombre y el apellido automáticamente si es necesario
             List<String> names = value.split(' ');
             for (int i = 0; i < names.length; i++) {
               if (names[i].isNotEmpty) {
@@ -170,8 +213,10 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
             String formattedValue =
                 names.join(' '); // Juntar el nombre con espacio
 
+            // Actualizar el texto del controlador con el formato adecuado
             controller.text = formattedValue;
 
+            // Mover el cursor al final del texto
             controller.selection = TextSelection.fromPosition(
                 TextPosition(offset: controller.text.length));
           }
@@ -180,6 +225,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
     );
   }
 
+  // Widget para la fecha de nacimiento
   Widget _buildDateField(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -208,6 +254,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
     );
   }
 
+  // Widget para el menú desplegable de género
   Widget _buildGenderDropdown() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -234,36 +281,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
     );
   }
 
-  Widget _buildRoleDropdown() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: DropdownButtonFormField<String>(
-        value: selectedRole,
-        items: [
-          {'label': 'Usuario', 'value': 'user'},
-          {'label': 'Administrador', 'value': 'admin'},
-          {'label': 'Terapeuta', 'value': 'therapist'}
-        ]
-            .map((role) => DropdownMenuItem<String>(
-                  child: Text(role['label']!), // Muestra el nombre en español
-                  value: role['value'], // Guarda el valor en inglés
-                ))
-            .toList(),
-        onChanged: (value) {
-          setState(() {
-            selectedRole = value;
-          });
-        },
-        decoration: InputDecoration(
-          labelText: 'Rol',
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(25.0),
-          ),
-        ),
-      ),
-    );
-  }
-
+  // Campo de teléfono con código fijo 569
   Widget _buildPhoneField() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -304,9 +322,11 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
             'phone': '+569 ${phoneController.text}',
             'address': addressController.text,
             'gender': selectedGender,
-            'role': selectedRole,
             'profileImage': imageUrl, // Guardamos la URL de la imagen
-          }, SetOptions(merge: true)); // Merge para no sobrescribir otros datos
+            'tokens': [], // Campo tokens como array vacío
+          }, SetOptions(merge: true));
+
+          // Merge para no sobrescribir otros datos
 
           _showConfirmationDialog(context);
         }
@@ -316,29 +336,36 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
     }
   }
 
+  // Diálogo de confirmación de datos guardados
   void _showConfirmationDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: AppColors.primary,
-          content: const Text(
-            'Usuario registrado correctamente.',
-            style: TextStyle(
-              color: AppColors.secondary,
+          content: Container(
+            width: 60,
+            height: 60,
+            padding: const EdgeInsets.only(top: 20),
+            child: const Center(
+              child: Text(
+                'Datos guardados correctamente.',
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
-          actions: <Widget>[
+          actions: [
             TextButton(
-              child: const Text(
-                'Cerrar',
-                style: TextStyle(
-                  color: AppColors.secondary,
-                ),
-              ),
               onPressed: () {
-                Navigator.pushNamed(context, "/estadisticas");
+                Navigator.of(context).pop();
+                Navigator.pushReplacementNamed(context, '/estadisticas');
               },
+              child: const Text(
+                'Aceptar',
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
             ),
           ],
         );
@@ -346,29 +373,35 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
     );
   }
 
+  // Diálogo de error si falta un campo por completar
   void _showErrorDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: AppColors.secondary,
-          content: const Text(
-            'Debes completar todos los campos.',
-            style: TextStyle(
-              color: AppColors.secondary,
+          backgroundColor: AppColors.primary,
+          content: Container(
+            width: 60,
+            height: 60,
+            padding: const EdgeInsets.only(top: 20),
+            child: const Center(
+              child: Text(
+                'Por favor complete todos los campos.',
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
-          actions: <Widget>[
+          actions: [
             TextButton(
-              child: const Text(
-                'Cerrar',
-                style: TextStyle(
-                  color: AppColors.primary,
-                ),
-              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
+              child: const Text(
+                'Aceptar',
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
             ),
           ],
         );
