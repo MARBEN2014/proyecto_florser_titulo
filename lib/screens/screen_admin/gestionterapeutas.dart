@@ -50,7 +50,7 @@ class GestionTerapeutasScreen extends StatelessWidget {
             // Recorremos los documentos y contamos los roles
             for (var doc in snapshot.data!.docs) {
               String role = doc['role'];
-              String name = doc['name'];
+              //String name = doc['name'];
               String id = doc.id; // Se obtiene el ID del documento
 
               if (role == 'user') {

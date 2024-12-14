@@ -16,12 +16,13 @@ class LocalNotification {
     const initializationSettingsAndroid = AndroidInitializationSettings(
         'logoapp'); // este es el icono que se quieremostrar cuando llegue la notificaio local
 
-    // // para inicualizar con Ios
-    // const initializationSettingsDarwin = DarwinInitializationSettings(
-    //   onDidReceiveLocalNotification: iosShowNotification);
+    // para inicualizar con Ios
+    const initializationSettingsDarwin = DarwinInitializationSettings();
+    //onDidReceiveLocalNotification: iosShowNotification
 
-    const initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid);
+    const initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid,
+        iOS: initializationSettingsDarwin);
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
@@ -51,6 +52,10 @@ class LocalNotification {
 
     // esto es lo que pide el local notifications y el metodo que permite mostrarla estos pararmetros se crean en
     // static void showLocalNotification
-    flutterLocalNotificationsPlugin.show(id, title, body, notificationDetails);
+    flutterLocalNotificationsPlugin.show(
+        1,
+        'Notificaión desde FlorSer',
+        'tu cita fue agendad con exito , visita la sección "Mis citas para más Detalles"',
+        notificationDetails);
   }
 }

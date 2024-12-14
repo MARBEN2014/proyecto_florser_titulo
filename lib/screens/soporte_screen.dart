@@ -37,8 +37,9 @@ class SoporteScreen extends StatelessWidget {
               const SizedBox(height: 10),
               const Text('Teléfono: +56 9 1234 5678',
                   style: TextStyle(fontSize: 16)),
-              const SizedBox(height: 10),
-              const Text('Dirección: Calle Ejemplo 123, Santiago',
+              const SizedBox(height: 40),
+              const Text(
+                  'Dirección: Calle tucapel 435 ,         Población Sicem,                                      La Calera V región',
                   style: TextStyle(fontSize: 16)),
               const SizedBox(height: 40),
               GestureDetector(

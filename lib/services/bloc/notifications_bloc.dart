@@ -45,11 +45,11 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
     // Saber si fue aceptada o no la autorización de las notificaciones
     settings.authorizationStatus;
-    _getToken(); // Privada para que solo se pueda llamar desde acá
+    getToken(); // Privada para que solo se pueda llamar desde acá
   }
 
   // Método para obtener el token con una nueva
-  void _getToken() async {
+  void getToken() async {
     final settings = await messaging.getNotificationSettings();
     if (settings.authorizationStatus != AuthorizationStatus.authorized) return;
     // Si no está autorizado para recibir notificaciones no se devuelve el token

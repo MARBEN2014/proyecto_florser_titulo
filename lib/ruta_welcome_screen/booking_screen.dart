@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart'; // Importa Firestore para
 import 'package:firebase_auth/firebase_auth.dart'; // Importa Firebase Auth para autenticar al usuario.
 import 'package:flutter/material.dart'; // Importa el paquete de Flutter para UI.
 import 'package:paraflorseer/screens/welcome_screen.dart'; // Pantalla de bienvenida para redirigir al usuario tras reservar.
+import 'package:paraflorseer/services/bloc/localNotification/local_notification.dart';
 import 'package:table_calendar/table_calendar.dart'; // Calendario interactivo para seleccionar fechas.
 import 'package:paraflorseer/themes/app_colors.dart'; // Colores personalizados de la app.
 import 'package:paraflorseer/themes/app_text_styles.dart'; // Estilos de texto personalizados.
@@ -43,7 +44,7 @@ class _BookingScreenState extends State<BookingScreen> {
     _getUserDetails();
     _firstAvailableDay = _now;
     _lastAvailableDay =
-        _now.add(const Duration(days: 28)); // 28 días disponibles
+        _now.add(const Duration(days: 28)); // 28 días disponible
   }
 
   Future<void> _getUserDetails() async {
@@ -316,7 +317,13 @@ class _BookingScreenState extends State<BookingScreen> {
             // Botón de reservar
             Center(
               child: ElevatedButton(
-                onPressed: _saveBookingToUserSubcollection,
+                onPressed: () {
+                  // Llamamos a la primera función
+                  _saveBookingToUserSubcollection();
+
+                  // Llamamos a la segunda función
+                  LocalNotification.showLocalNotification(id: 1);
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
@@ -328,7 +335,7 @@ class _BookingScreenState extends State<BookingScreen> {
                 ),
                 child: const Text('Confirmar cita'),
               ),
-            ),
+            )
           ],
         ),
       ),

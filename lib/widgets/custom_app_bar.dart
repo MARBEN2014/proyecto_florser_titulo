@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:paraflorseer/services/bloc/localNotification/local_notification.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+// Importa la clase LocalNotification
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar(
@@ -41,6 +45,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           color: AppColors.primary,
           onPressed: () {
+            // Llamas a la función de notificación desde la clase LocalNotification
+            //LocalNotification.showLocalNotification(id: 1);
+
             Navigator.pushNamed(context,
                 '/notifications'); // Navegar a la pantalla de notificaciones
           },
