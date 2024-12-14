@@ -1,5 +1,20 @@
 # FlorZen App
-![Logo de FlorSer](assets/logo.png)
+![Logo de FlorSer](assets/logo.png) 
+
+## Imagenes de la app en porceso de agendamiento
+
+<p align="center">
+  <img src="assets/perfil1.png" width="150">
+   <img src="assets/perfil2.png" width="150">
+  <img src="assets/perfil3.png" width="150">
+  <img src="assets/perfil4.png" width="150">
+  <img src="assets/perfil5.png" width="150">
+  <img src="assets/perfil6.png" width="150">
+  <img src="assets/perfil7.png" width="150">
+</p>
+
+ 
+
 
 
 ## Descripción Breve
