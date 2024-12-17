@@ -3,7 +3,7 @@ export 'login_screen.dart';
 export 'register_screen.dart';
 export 'welcome_screen.dart';
 export 'recovery_screen.dart';
-export 'screen_user/index_screen.dart';
+export 'index_screen.dart';
 export 'base_screen.dart';
 export 'mi_ficha_screen.dart';
 export 'mis_citas_screen.dart';

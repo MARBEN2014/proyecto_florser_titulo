@@ -5,7 +5,7 @@ import 'package:paraflorseer/utils/obtenerUserandNAme.dart';
 import 'package:paraflorseer/widgets/custom_app_bar.dart';
 import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
-import 'package:paraflorseer/screens/welcome_screen.dart';
+import 'package:paraflorseer/screens/screen_user/welcome_screen.dart';
 import 'package:intl/intl.dart';
 
 class MisCitasScreen extends StatefulWidget {

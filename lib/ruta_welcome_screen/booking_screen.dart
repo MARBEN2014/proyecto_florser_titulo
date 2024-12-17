@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart'; // Importa Firestore para interactuar con la base de datos.
 import 'package:firebase_auth/firebase_auth.dart'; // Importa Firebase Auth para autenticar al usuario.
 import 'package:flutter/material.dart'; // Importa el paquete de Flutter para UI.
-import 'package:paraflorseer/screens/welcome_screen.dart'; // Pantalla de bienvenida para redirigir al usuario tras reservar.
+import 'package:paraflorseer/screens/screen_user/welcome_screen.dart'; // Pantalla de bienvenida para redirigir al usuario tras reservar.
 import 'package:paraflorseer/services/bloc/localNotification/local_notification.dart';
 import 'package:table_calendar/table_calendar.dart'; // Calendario interactivo para seleccionar fechas.
 import 'package:paraflorseer/themes/app_colors.dart'; // Colores personalizados de la app.
@@ -153,7 +153,7 @@ class _BookingScreenState extends State<BookingScreen> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
+                  backgroundColor: AppColors.secondary,
                   foregroundColor: AppColors.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
@@ -252,6 +252,15 @@ class _BookingScreenState extends State<BookingScreen> {
               lastDay: _lastAvailableDay,
               selectedDayPredicate: (day) => isSameDay(selectedDate, day),
               onDaySelected: (selectedDay, focusedDay) {
+                // Verificar si el día seleccionado es uno de los deshabilitados
+                if ((selectedDay.day == 24 && selectedDay.month == 12) ||
+                    (selectedDay.day == 25 && selectedDay.month == 12) ||
+                    (selectedDay.day == 31 && selectedDay.month == 12) ||
+                    (selectedDay.day == 1 && selectedDay.month == 1)) {
+                  // No permitir seleccionar esos días
+                  return;
+                }
+
                 // No permitir seleccionar sábado o domingo
                 if (selectedDay.weekday != DateTime.saturday &&
                     selectedDay.weekday != DateTime.sunday) {
@@ -266,6 +275,28 @@ class _BookingScreenState extends State<BookingScreen> {
                   if (day.weekday == DateTime.saturday ||
                       day.weekday == DateTime.sunday) {
                     return null; // No se mostrará nada en estos días
+                  }
+
+                  // Deshabilitar 24, 25 de diciembre y 31 de diciembre, 1 de enero
+                  if ((day.day == 24 && day.month == 12) ||
+                      (day.day == 25 && day.month == 12) ||
+                      (day.day == 31 && day.month == 12) ||
+                      (day.day == 1 && day.month == 1)) {
+                    return Container(
+                      margin: const EdgeInsets.all(4.0),
+                      decoration: BoxDecoration(
+                        color: Colors.grey, // Día deshabilitado, con color gris
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '${day.day}',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    );
                   }
 
                   // Mostrar días disponibles de lunes a viernes
@@ -293,6 +324,7 @@ class _BookingScreenState extends State<BookingScreen> {
                 },
               ),
             ),
+
             const SizedBox(height: 20),
 
             // Selección de hora

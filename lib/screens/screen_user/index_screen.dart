@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:paraflorseer/screens/login_screen.dart';
+import 'package:paraflorseer/screens/screen_user/login_screen.dart';
 //import 'package:paraflorseer/themes/app_theme.dart'; // Importa el archivo de tema
 import 'package:paraflorseer/themes/app_colors.dart'; // Importa colores
 import 'package:paraflorseer/themes/app_text_styles.dart'; // Importa estilos de texto

@@ -14,6 +14,7 @@ import 'package:paraflorseer/screens/screen_admin/soporteadmin.dart';
 import 'package:paraflorseer/screens/screen_admin/terminosAdmin.dart';
 import 'package:paraflorseer/screens/screen_admin/userAdmin.dart';
 import 'package:paraflorseer/screens/screen_therapist.dart/datos_importantes.dart';
+import 'package:paraflorseer/screens/screen_therapist.dart/histoyforuser.dart';
 import 'package:paraflorseer/screens/screen_therapist.dart/horas_terapeutas_screen.dart';
 import 'package:paraflorseer/screens/screen_therapist.dart/terminos%20_condiciones_therapist.dart';
 import 'package:paraflorseer/screens/screen_therapist.dart/userprofile_therapist.dart';
@@ -21,10 +22,10 @@ import 'package:paraflorseer/screens/screen_user/historyScreen.dart';
 //import 'package:paraflorseer/screens/estadisticas.dart';
 //import 'package:paraflorseer/ruta_welcome_screen/agendar_screen.dart';
 //import 'package:paraflorseer/screens/register2_screen.dart';
-import 'package:paraflorseer/screens/screens.dart';
+import 'package:paraflorseer/screens/screen_user/screens.dart';
 import 'package:paraflorseer/screens/screen_therapist.dart/soporte_screen_therapist.dart';
 import 'package:paraflorseer/screens/screen_admin/stadistic_screen.dart';
-import 'package:paraflorseer/screens/terminos_condiciones.dart';
+import 'package:paraflorseer/screens/screen_user/terminos_condiciones.dart';
 import 'package:paraflorseer/screens/screen_therapist.dart/therapist_screen.dart';
 import 'package:paraflorseer/widgets/notifications_screen.dart';
 
@@ -74,6 +75,7 @@ class AppRoutes {
       '/terminos_admin': (context) => TerminosAdmin(),
       '/user_admin': (context) => UserProfileScreenAdmin(userId: ''),
       '/history': (context) => HistorialCitasScreen(),
+      '/history_user': (context) => HistoryForUserScreen(),
 
       //'/estadisticas': (context) => const DemandStatsScreen(),
 
