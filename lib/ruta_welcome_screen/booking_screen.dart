@@ -144,6 +144,8 @@ class _BookingScreenState extends State<BookingScreen> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
+                  // Llamamos a la segunda función
+                  LocalNotification.showLocalNotification(id: 1);
                   Navigator.of(context).pop();
                   Navigator.pushReplacement(
                     context,
@@ -354,7 +356,7 @@ class _BookingScreenState extends State<BookingScreen> {
                   _saveBookingToUserSubcollection();
 
                   // Llamamos a la segunda función
-                  LocalNotification.showLocalNotification(id: 1);
+                  // LocalNotification.showLocalNotification(id: 1);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,

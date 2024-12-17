@@ -4,17 +4,59 @@
 ## Imagenes de la app en porceso de agendamiento
 
 <p align="center">
+  <img src="assets/perfil.png" width="150">
   <img src="assets/perfil1.png" width="150">
-   <img src="assets/perfil2.png" width="150">
+  <img src="assets/perfil2.png" width="150">
   <img src="assets/perfil3.png" width="150">
   <img src="assets/perfil4.png" width="150">
   <img src="assets/perfil5.png" width="150">
-  <img src="assets/perfil6.png" width="150">
-  <img src="assets/perfil7.png" width="150">
 </p>
 
- 
+## Imagenes de la app perfil de usuario
 
+<p align="center">
+  <img src="assets/user1.png" width="150">
+  <img src="assets/user2.png" width="150">
+  <img src="assets/user3.png" width="150">
+  <img src="assets/user4.png" width="150">
+  <img src="assets/user5.png" width="150">
+  <img src="assets/user6.png" width="150">
+</p>
+
+
+## Imagenes de la app perfil de usuario administrador
+
+<p align="center">
+  <img src="assets/admin1.png" width="150">
+  <img src="assets/admin2.png" width="150">
+  <img src="assets/admin3.png" width="150">
+  <img src="assets/admin4.png" width="150">
+  <img src="assets/admin5.png" width="150">
+  <img src="assets/admin6.png" width="150">
+</p>
+
+## Imagenes de la app perfil de usuario Terapeuta
+
+<p align="center">
+  <img src="assets/terap1.png" width="150">
+  <img src="assets/terap2.png" width="150">
+  <img src="assets/terap3.png" width="150">
+  <img src="assets/terap4.png" width="150">
+  <img src="assets/terap5.png" width="150">
+  <img src="assets/terap6.png" width="150">
+</p>
+ 
+## Imagenes de la app notificaciones 
+
+<p align="center">
+  <img src="assets/notif1.png" width="150">
+  <img src="assets/notif2.png" width="150">
+  <img src="assets/notif3.png" width="150">
+  <img src="assets/notif4.png" width="150">
+  <img src="assets/notif5.png" width="150">
+  <img src="assets/notif6.png" width="150">
+</p>
+ 
 
 
 ## Descripción Breve
