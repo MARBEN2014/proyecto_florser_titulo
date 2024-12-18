@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
 import 'package:paraflorseer/widgets/custom_app_bar.dart';
 
-import '../../descripcions_servicios/descriptions _test.dart';
+import '../../test/descriptions _test.dart';
 
 class MiFichaScreen extends StatefulWidget {
   const MiFichaScreen({Key? key}) : super(key: key);

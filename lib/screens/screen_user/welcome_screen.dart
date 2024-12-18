@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paraflorseer/preferencias/pref_usuarios.dart';
-import 'package:paraflorseer/services/bloc/notifications_bloc.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/themes/app_text_styles.dart';
 import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';

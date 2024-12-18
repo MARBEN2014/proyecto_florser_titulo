@@ -7,7 +7,6 @@ import 'dart:io';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/widgets/bottom_nav_bra_admin.dart';
 import 'package:paraflorseer/widgets/custom_app_bar.dart';
-import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
 
 class RegisterUserScreen extends StatefulWidget {
   const RegisterUserScreen({super.key, required String userId});

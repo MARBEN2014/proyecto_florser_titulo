@@ -48,9 +48,7 @@ class _HistoryForUserScreenState extends State<HistoryForUserScreen> {
       return [];
     }
 
-    return historySnapshot.docs
-        .map((doc) => doc.data() as Map<String, dynamic>)
-        .toList();
+    return historySnapshot.docs.map((doc) => doc.data()).toList();
   }
 
   @override

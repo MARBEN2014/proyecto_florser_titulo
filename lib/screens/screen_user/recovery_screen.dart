@@ -120,13 +120,12 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
               ),
               const SizedBox(height: 20),
 
-              // Campo de correo electrónico mejorado
+              // Campo de correo electrónico mejorado visualmente
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 40, vertical: 25),
                 child: SizedBox(
-                  width: double
-                      .infinity, // Para que ocupe todo el ancho disponible
+                  width: double.infinity,
                   child: Focus(
                     onFocusChange: (hasFocus) {
                       setState(() {
@@ -135,9 +134,19 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
                     },
                     child: Container(
                       decoration: BoxDecoration(
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(25),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            spreadRadius: 3,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3), // Sombras hacia abajo
+                          ),
+                        ],
                         border: Border.all(
-                          color: _isFocused ? AppColors.primary : Colors.black,
+                          color: _isFocused ? AppColors.primary : Colors.grey,
+                          width: 1.5,
                         ),
                       ),
                       child: Padding(
@@ -146,15 +155,22 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
                         child: TextField(
                           controller: _emailController,
                           decoration: InputDecoration(
-                            labelText: 'correo',
+                            labelText: 'Correo electrónico',
                             labelStyle: TextStyle(
-                              color: _isFocused ? AppColors.text : Colors.black,
-                              fontSize: 20,
+                              color:
+                                  _isFocused ? AppColors.primary : Colors.black,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400,
                             ),
                             border: InputBorder.none,
                             floatingLabelBehavior: FloatingLabelBehavior.always,
+                            prefixIcon: Icon(
+                              Icons.email,
+                              color:
+                                  _isFocused ? AppColors.primary : Colors.grey,
+                            ),
                           ),
-                          style: TextStyle(fontSize: 20),
+                          style: const TextStyle(fontSize: 18),
                           keyboardType: TextInputType.emailAddress,
                         ),
                       ),
@@ -184,7 +200,11 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
                 child: SizedBox(
                   width: 250,
                   child: ElevatedButton(
-                    onPressed: _sendRecoveryEmail,
+                    onPressed: () {
+                      // Envía el correo de recuperación y redirige a la pantalla de actualización
+                      _sendRecoveryEmail();
+                      Navigator.pushNamed(context, '/login');
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       padding: const EdgeInsets.symmetric(vertical: 15),

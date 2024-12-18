@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:paraflorseer/screens/screen_admin/adminEditUserScreen.dart';
 import 'package:paraflorseer/widgets/bottom_nav_bra_admin.dart';
-import 'package:paraflorseer/widgets/custom_appbar_back.dart';
 import 'package:paraflorseer/widgets/custom_appbar_logo.dart';
 
 class AdminFindUserScreen extends StatefulWidget {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paraflorseer/screens/screen_admin/TherapyRankingScreen.dart';
 import 'package:paraflorseer/screens/screen_admin/adminDeleteUser.dart';
-import 'package:paraflorseer/screens/screen_admin/adminEditUserScreen.dart';
 import 'package:paraflorseer/screens/screen_admin/adminsearchUserScreen.dart';
 import 'package:paraflorseer/screens/screen_admin/createUserscreen.dart';
 import 'package:paraflorseer/screens/screen_admin/gestionterapeutas.dart';
@@ -27,6 +26,7 @@ import 'package:paraflorseer/screens/screen_therapist.dart/soporte_screen_therap
 import 'package:paraflorseer/screens/screen_admin/stadistic_screen.dart';
 import 'package:paraflorseer/screens/screen_user/terminos_condiciones.dart';
 import 'package:paraflorseer/screens/screen_therapist.dart/therapist_screen.dart';
+//import 'package:paraflorseer/screens/screen_user/updatepasswordScreen.dart';
 import 'package:paraflorseer/widgets/notifications_screen.dart';
 
 //import 'package:paraflorseer/widgets/widgets.dart';
@@ -76,6 +76,7 @@ class AppRoutes {
       '/user_admin': (context) => UserProfileScreenAdmin(userId: ''),
       '/history': (context) => HistorialCitasScreen(),
       '/history_user': (context) => HistoryForUserScreen(),
+      //'/actualizar_pass': (context) => UpdatePasswordScreen(),
 
       //'/estadisticas': (context) => const DemandStatsScreen(),
 

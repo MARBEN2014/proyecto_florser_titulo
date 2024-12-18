@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:paraflorseer/services/bloc/localNotification/local_notification.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 //import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 

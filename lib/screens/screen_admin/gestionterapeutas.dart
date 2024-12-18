@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:paraflorseer/screens/screen_admin/userlistscreen.dart';
 import 'package:paraflorseer/widgets/bottom_nav_bra_admin.dart';
 import 'package:paraflorseer/widgets/custom_app_bar.dart'; // Import del AppBar personalizado
-import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart'; // Import del Bottom Navigation Bar
+// Import del Bottom Navigation Bar
 import 'package:paraflorseer/widgets/refresh.dart'; // Import del widget de refresco
 //import 'package:firebase_core/firebase_core.dart';
 //import 'user_list_screen.dart'; // Importa la nueva pantalla de usuarios
