@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/widgets/custom_app_bar.dart'; // Import del AppBar personalizado
 import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart'; // Import del Bottom Navigation Bar
+import 'package:paraflorseer/widgets/custom_appbar_welcome.dart';
 import 'package:paraflorseer/widgets/refresh.dart'; // Import del widget de refresco
 
 class TherapistsPhoneScreen extends StatelessWidget {
@@ -51,10 +52,7 @@ class TherapistsPhoneScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBar(
-        showNotificationButton: true,
-        title: 'Fonos para Terapeutas',
-      ), // Uso del AppBar personalizado
+      appBar: const CustomAppBarWelcome(), // Uso del AppBar personalizado
       body: RefreshableWidget(
         onRefresh: _handleRefresh, // Asigna la función de refresco
         child: SingleChildScrollView(

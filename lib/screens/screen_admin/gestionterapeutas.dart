@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:paraflorseer/screens/screen_admin/userlistscreen.dart';
 import 'package:paraflorseer/widgets/bottom_nav_bra_admin.dart';
 import 'package:paraflorseer/widgets/custom_app_bar.dart'; // Import del AppBar personalizado
+import 'package:paraflorseer/widgets/custom_appbar_welcome.dart';
 // Import del Bottom Navigation Bar
 import 'package:paraflorseer/widgets/refresh.dart'; // Import del widget de refresco
 //import 'package:firebase_core/firebase_core.dart';
@@ -21,10 +22,7 @@ class GestionTerapeutasScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBar(
-        showNotificationButton: true,
-        title: 'Gestión de Terapeutas',
-      ), // Uso del AppBar personalizado
+      appBar: const CustomAppBarWelcome(), // Uso del AppBar personalizado
       body: RefreshableWidget(
         onRefresh: _handleRefresh, // Asigna la función de refresco
         child: StreamBuilder<QuerySnapshot>(

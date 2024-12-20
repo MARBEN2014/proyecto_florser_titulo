@@ -1,8 +1,8 @@
 // Importaciones necesarias para el funcionamiento del archivo
 import 'package:flutter/material.dart';
 import 'package:paraflorseer/screens/screen_therapist.dart/serviciosdeFIreestore.dart';
+import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/utils/firestore_service.dart';
-//import 'package:paraflorseer/widgets/custom_appbar_back.dart';
 import 'package:paraflorseer/widgets/custom_appbar_welcome.dart';
 import 'package:paraflorseer/widgets/refresh.dart';
 
@@ -37,12 +37,12 @@ class _ProgresoDeCitasScreenState extends State<ProgresoDeCitasScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar:
-          const CustomAppBarWelcome(), // Barra de navegación personalizada con botón de regreso
+      backgroundColor: AppColors.secondary,
+      appBar: const CustomAppBarWelcome(), // Barra de navegación personalizada
       body: RefreshableWidget(
         onRefresh: _handleRefresh,
         child: FutureBuilder<Map<String, Map<String, int>>>(
+          // Construcción de FutureBuilder para la carga de datos
           future: _rankingFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -113,9 +113,26 @@ class _ProgresoDeCitasScreenState extends State<ProgresoDeCitasScreen> {
           children: [
             _buildHeader(),
             const SizedBox(height: 16),
-            _buildTherapyStats(ranking),
+            // Primer gráfico: Reservas por Terapia
+            _buildStatGrid(
+              title: 'Reservas por Terapia',
+              data: ranking.map((key, value) {
+                final total = value.values.fold(0, (sum, count) => sum + count);
+                return MapEntry(key, total);
+              }),
+              color: AppColors.text, // Color para terapias
+              backgroundColor:
+                  AppColors.therapyBackground, // Fondo específico para terapias
+            ),
             const SizedBox(height: 16),
-            _buildTherapistStats(ranking),
+            // Segundo gráfico: Reservas por Terapeuta
+            _buildStatGrid(
+              title: 'Reservas por Terapeuta',
+              data: _aggregateTherapistData(ranking),
+              color: AppColors.text, // Color para terapeutas
+              backgroundColor: AppColors
+                  .therapistBackground, // Fondo específico para terapeutas
+            ),
           ],
         ),
       ),
@@ -136,35 +153,13 @@ class _ProgresoDeCitasScreenState extends State<ProgresoDeCitasScreen> {
     );
   }
 
-  /// Sección que muestra estadísticas de reservas por terapia
-  Widget _buildTherapyStats(Map<String, Map<String, int>> ranking) {
-    return _buildStatSection(
-      title: 'Reservas por Terapia',
-      data: ranking.map((key, value) {
-        final total = value.values.fold(0, (sum, count) => sum + count);
-        return MapEntry(key, total);
-      }),
-    );
-  }
-
-  /// Sección que muestra estadísticas de reservas por terapeuta
-  Widget _buildTherapistStats(Map<String, Map<String, int>> ranking) {
-    final therapistData = <String, int>{};
-    ranking.forEach((_, therapists) {
-      therapists.forEach((therapist, count) {
-        therapistData[therapist] = (therapistData[therapist] ?? 0) + count;
-      });
-    });
-
-    return _buildStatSection(
-      title: 'Reservas por Terapeuta',
-      data: therapistData,
-    );
-  }
-
-  /// Construcción genérica de una sección de estadísticas
-  Widget _buildStatSection(
-      {required String title, required Map<String, int> data}) {
+  /// Construcción de una cuadrícula de estadísticas con título
+  Widget _buildStatGrid({
+    required String title,
+    required Map<String, int> data,
+    required Color color, // Nuevo parámetro para especificar color
+    required Color backgroundColor, // Fondo específico para las tarjetas
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -173,23 +168,68 @@ class _ProgresoDeCitasScreenState extends State<ProgresoDeCitasScreen> {
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
-        ...data.entries.map((entry) {
-          final percentage =
-              (entry.value / data.values.reduce((a, b) => a + b) * 100).toInt();
-          return Card(
-            margin: const EdgeInsets.symmetric(vertical: 8),
-            child: ListTile(
-              leading: CircularProgressIndicator(
-                value: percentage / 100,
-                backgroundColor: Colors.grey[200],
-                color: Theme.of(context).primaryColor,
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            childAspectRatio: 1.0,
+          ),
+          itemCount: data.length,
+          itemBuilder: (context, index) {
+            final entry = data.entries.elementAt(index);
+            final percentage =
+                (entry.value / data.values.reduce((a, b) => a + b) * 100)
+                    .toInt();
+            return Card(
+              elevation: 8, // Reducido para un estilo más sutil
+              color: backgroundColor, // Color de fondo de la tarjeta específico
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(
+                    12), // Bordes redondeados para una apariencia más suave
               ),
-              title: Text(entry.key),
-              subtitle: Text('${entry.value} reservas ($percentage%)'),
-            ),
-          );
-        }),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      entry.key,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    CircularProgressIndicator(
+                      value: percentage / 100,
+                      backgroundColor: AppColors.primary,
+                      color: color, // Color aplicado aquí
+                    ),
+                    const SizedBox(height: 8),
+                    Text('$percentage%', style: TextStyle(color: color)),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
       ],
     );
+  }
+
+  /// Agrega los datos de reservas por terapeuta en una sola estructura
+  Map<String, int> _aggregateTherapistData(
+      Map<String, Map<String, int>> ranking) {
+    final therapistData = <String, int>{};
+    ranking.forEach((_, therapists) {
+      therapists.forEach((therapist, count) {
+        therapistData[therapist] = (therapistData[therapist] ?? 0) + count;
+      });
+    });
+    return therapistData;
   }
 }
