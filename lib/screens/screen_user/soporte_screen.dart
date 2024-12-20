@@ -16,52 +16,55 @@ class SoporteScreen extends StatelessWidget {
           showNotificationButton: false,
           title: '',
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 60.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 40),
-              const Text(
-                'Soporte',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 40),
+                const Text(
+                  'Soporte',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primary,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 40),
-              const Text('Correo: contacto@florser.cl',
-                  style: TextStyle(fontSize: 16)),
-              const SizedBox(height: 10),
-              const Text('Teléfono: +56 9 1234 5678',
-                  style: TextStyle(fontSize: 16)),
-              const SizedBox(height: 40),
-              const Text(
-                  'Dirección: Calle tucapel 435 ,         Población Sicem,                                      La Calera V región',
-                  style: TextStyle(fontSize: 16)),
-              const SizedBox(height: 40),
-              GestureDetector(
-                onTap: _launchWhatsApp, // Al presionar, llama a _launchWhatsApp
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset(
-                      'assets/whatsapp_icon.png',
-                      height: 70,
-                      width: 70,
-                      fit: BoxFit.cover,
-                    ),
-                    const SizedBox(height: 40),
-                    const Text(
-                      'Contactar por WhatsApp',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
+                const SizedBox(height: 40),
+                const Text('Correo: contacto@florser.cl',
+                    style: TextStyle(fontSize: 16)),
+                const SizedBox(height: 10),
+                const Text('Teléfono: +56 9 1234 5678',
+                    style: TextStyle(fontSize: 16)),
+                const SizedBox(height: 40),
+                const Text(
+                    'Dirección: Calle tucapel 435 ,Población Sicem,La Calera V región',
+                    style: TextStyle(fontSize: 16)),
+                const SizedBox(height: 40),
+                GestureDetector(
+                  onTap:
+                      _launchWhatsApp, // Al presionar, llama a _launchWhatsApp
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        'assets/whatsapp_icon.png',
+                        height: 70,
+                        width: 70,
+                        fit: BoxFit.cover,
+                      ),
+                      const SizedBox(height: 40),
+                      const Text(
+                        'Contactar por WhatsApp',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         bottomNavigationBar: const BottomNavBarUser());

@@ -1,12 +1,10 @@
-// Importamos los paquetes necesarios
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/utils/firestore_service.dart';
-import 'package:paraflorseer/widgets/custom_appbar_back.dart';
-//import 'package:paraflorseer/widgets/custom_app_bar.dart';
-//import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
-//import 'package:paraflorseer/widgets/custom_appbar_logo.dart';
+
+import 'package:paraflorseer/widgets/custom_appbar_welcome.dart';
+
 import 'package:paraflorseer/widgets/refresh.dart';
 
 class TherapyRankingScreen extends StatefulWidget {
@@ -38,7 +36,7 @@ class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppbarBack(),
+      appBar: const CustomAppBarWelcome(),
       body: RefreshableWidget(
         onRefresh: _handleRefresh,
         child: FutureBuilder<Map<String, Map<String, int>>>(
@@ -368,28 +366,6 @@ class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
       ),
     );
   }
-
-  // // Función para mostrar las terapias sin reservas
-  // Widget _buildTherapiesWithoutReservations() {
-  //   return therapiesWithoutReservations.isEmpty
-  //       ? Container()
-  //       : Padding(
-  //           padding: const EdgeInsets.all(20.0),
-  //           child: ExpansionTile(
-  //             title: const Text(
-  //               'Terapias sin reservas:',
-  //               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-  //             ),
-  //             children: therapiesWithoutReservations.keys
-  //                 .map((therapy) => ListTile(
-  //                       leading: const Icon(Icons.circle,
-  //                           size: 10, color: Colors.red),
-  //                       title: Text(therapy),
-  //                     ))
-  //                 .toList(),
-  //           ),
-  //         );
-  // }
 
   // Función para mostrar los terapeutas sin reservas
   Widget _buildTherapistsWithoutReservations() {

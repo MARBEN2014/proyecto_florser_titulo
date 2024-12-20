@@ -8,7 +8,19 @@ class CustomAppBarWelcome extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: false, // Remueve el icono de back
+      leading: IconButton(
+        icon: const Padding(
+          padding: EdgeInsets.only(left: 20.0), // Aplica padding solo al icono
+          child: Icon(
+            Icons.arrow_back,
+            size: 35,
+          ),
+        ),
+        color: AppColors.primary, // Ajusta el color del icono
+        onPressed: () {
+          Navigator.pop(context); // Navegar atrás
+        },
+      ),
       title: Image.asset(
         'assets/logo.png',
         height: 90,

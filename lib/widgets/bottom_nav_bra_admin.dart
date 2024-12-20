@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-//import 'package:paraflorseer/screens/user_profile_screen.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 
 class BottomNavBarAdmin extends StatelessWidget {
@@ -68,50 +67,51 @@ class BottomNavBarAdmin extends StatelessWidget {
         return FractionallySizedBox(
           widthFactor: 0.9,
           alignment: Alignment.centerLeft,
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('Menú',
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black)),
-                ListTile(
-                  leading: const Icon(Icons.person),
-                  title: const Text('Perfil'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(
-                        context, '/user_admin'); // Ruta actualizada aquí
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.edit_document),
-                  title: const Text('Terminos y condiciones'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, '/terminos_admin');
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.insert_chart),
-                  title: const Text('Estadisticas'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, '/estadisticas');
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.logout),
-                  title: const Text('Cerrar sesion'),
-                  onTap: () async {
-                    await FirebaseAuth.instance.signOut();
-                    Navigator.popAndPushNamed(context, '/login');
-                  },
-                ),
-              ],
+          child: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('Menú',
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black)),
+                  ListTile(
+                    leading: const Icon(Icons.person),
+                    title: const Text('Perfil'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/user_admin');
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.edit_document),
+                    title: const Text('Terminos y condiciones'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/terminos_admin');
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.insert_chart),
+                    title: const Text('Estadisticas'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/estadisticas');
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.logout),
+                    title: const Text('Cerrar sesion'),
+                    onTap: () async {
+                      await FirebaseAuth.instance.signOut();
+                      Navigator.popAndPushNamed(context, '/login');
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         );

@@ -7,7 +7,8 @@ import 'package:paraflorseer/preferencias/pref_usuarios.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/utils/auth.dart';
 import 'package:paraflorseer/utils/snackbar.dart';
-import 'package:paraflorseer/widgets/custom_appbar_back.dart';
+//import 'package:paraflorseer/widgets/custom_appbar_back.dart';
+import 'package:paraflorseer/widgets/custom_appbar_welcome.dart';
 //import 'package:paraflorseer/widgets/custom_appbar_logo.dart';
 
 class CreateUserScreen extends StatefulWidget {
@@ -34,7 +35,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppbarBack(),
+      appBar: const CustomAppBarWelcome(),
       body: RefreshIndicator(
         onRefresh: _refreshScreen,
         child: SingleChildScrollView(

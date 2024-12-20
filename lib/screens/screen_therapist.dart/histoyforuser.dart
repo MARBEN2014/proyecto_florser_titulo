@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/widgets/bottom_nav_bar_therapist.dart';
-import 'package:paraflorseer/widgets/custom_appbar_back.dart';
+
+import 'package:paraflorseer/widgets/custom_appbar_welcome.dart';
 
 class HistoryForUserScreen extends StatefulWidget {
   const HistoryForUserScreen({super.key});
@@ -54,7 +55,7 @@ class _HistoryForUserScreenState extends State<HistoryForUserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppbarBack(),
+      appBar: const CustomAppBarWelcome(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

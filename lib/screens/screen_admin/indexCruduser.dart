@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 //import 'package:paraflorseer/widgets/custom_app_bar.dart'; // Import del AppBar personalizado
 import 'package:paraflorseer/widgets/bottom_nav_bra_admin.dart';
-import 'package:paraflorseer/widgets/custom_appbar_back.dart'; // Import del Bottom Navigation Bar
+//import 'package:paraflorseer/widgets/custom_appbar_back.dart';
+import 'package:paraflorseer/widgets/custom_appbar_welcome.dart'; // Import del Bottom Navigation Bar
 
 class IndexCrudUser extends StatelessWidget {
   const IndexCrudUser({super.key});
@@ -11,7 +12,7 @@ class IndexCrudUser extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppbarBack(),
+      appBar: const CustomAppBarWelcome(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start, // Alineación al principio

@@ -7,7 +7,8 @@ import 'dart:io';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/widgets/bottom_nav_bra_admin.dart';
 
-import 'package:paraflorseer/widgets/custom_appbar_back.dart';
+//import 'package:paraflorseer/widgets/custom_appbar_back.dart';
+import 'package:paraflorseer/widgets/custom_appbar_welcome.dart';
 
 class EditUserProfileScreen extends StatefulWidget {
   final String userId;
@@ -330,7 +331,7 @@ class _EditUserProfileScreenState extends State<EditUserProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.secondary,
-      appBar: const CustomAppbarBack(),
+      appBar: const CustomAppBarWelcome(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

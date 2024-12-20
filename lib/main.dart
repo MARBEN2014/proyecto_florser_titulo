@@ -23,7 +23,8 @@ void main() async {
 // manejar la inicializacion de las notificaiones en segundo plano
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 // manejar la inicualizacion de las  notificaciones
-  await LocalNotification.initializeLocalNotifications();
+  await LocalNotification.initializeLocalNotifications(
+      onNotificationTap: () {});
 
   runApp(MultiBlocProvider(
     providers: [

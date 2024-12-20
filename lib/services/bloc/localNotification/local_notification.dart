@@ -1,7 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class LocalNotification {
-  //solicitar permisos de notificaiones locales
+  // Solicitar permisos de notificaciones locales
   static Future<void> requestPermissionLocalNotifications() async {
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     await flutterLocalNotificationsPlugin
@@ -10,15 +10,15 @@ class LocalNotification {
         ?.requestExactAlarmsPermission();
   }
 
-  //metodo de inicializacion de notificaiones locales
-  static Future<void> initializeLocalNotifications() async {
+  // Método de inicialización de notificaciones locales
+  static Future<void> initializeLocalNotifications(
+      {required void Function() onNotificationTap}) async {
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     const initializationSettingsAndroid = AndroidInitializationSettings(
-        'logoapp'); // este es el icono que se quieremostrar cuando llegue la notificaio local
+        'logoapp'); // Este es el icono que se quiere mostrar cuando llegue la notificación local
 
-    // para inicualizar con Ios
+    // Para inicializar con iOS
     const initializationSettingsDarwin = DarwinInitializationSettings();
-    //onDidReceiveLocalNotification: iosShowNotification
 
     const initializationSettings = InitializationSettings(
         android: initializationSettingsAndroid,
@@ -27,13 +27,13 @@ class LocalNotification {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-// Metodo para inicilaizar IOs
+  // Método para inicializar iOS
   static void iosShowNotification(
       int id, String? title, String? body, String? data) {
     showLocalNotification(id: id, title: title, body: body, data: data);
   }
 
-  // crear mostrar la notificaion
+  // Crear y mostrar la notificación
   static void showLocalNotification({
     required int id,
     String? title,
@@ -50,12 +50,38 @@ class LocalNotification {
 
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-    // esto es lo que pide el local notifications y el metodo que permite mostrarla estos pararmetros se crean en
-    // static void showLocalNotification
+    // Mostrar la notificación con el id único
     flutterLocalNotificationsPlugin.show(
-        1,
-        'Notificaión desde FlorSer',
-        'tu cita fue agendad con exito , visita la sección "Mis citas para más Detalles"',
+        id, // Usamos id dinámico para mostrar diferentes notificaciones
+        title ?? 'Notificación desde FlorSer',
+        body ??
+            'Tu cita fue agendada con éxito, visita la sección "Mis citas" para más detalles.',
         notificationDetails);
+  }
+
+  // Ejemplo de cómo usar múltiples mensajes
+  static void showAppointmentNotification() {
+    showLocalNotification(
+      id: 1, // Este es un id único para la notificación de cita
+      title: '¡Cita confirmada!',
+      body:
+          'Tu cita con el terapeuta ha sido confirmada. Visita "Mis citas" para más detalles.',
+    );
+  }
+
+  static void showReminderNotification() {
+    showLocalNotification(
+      id: 2, // Otro id único para recordatorios
+      title: 'Recordatorio de cita',
+      body: 'No olvides tu cita mañana a las 10:00 AM. ¡Te esperamos!',
+    );
+  }
+
+  static void showPromoNotification() {
+    showLocalNotification(
+      id: 3, // Id para una notificación de promoción
+      title: '¡Promoción Especial!',
+      body: '¡Descuento del 20% en tu próxima terapia! Solo por esta semana.',
+    );
   }
 }

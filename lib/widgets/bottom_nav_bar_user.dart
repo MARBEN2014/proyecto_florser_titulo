@@ -20,10 +20,12 @@ class BottomNavBarUser extends StatelessWidget {
               icon: Icons.calendar_today,
               label: 'Mis Citas',
               routeName: '/mis_citas_screen'),
-          _buildBottomIcon(context,
-              icon: Icons.medical_services,
-              label: 'Ficha Médica',
-              routeName: '/mi_ficha_screen'),
+
+          // _buildBottomIcon(context,
+          //     icon: Icons.medical_services,
+          //     label: 'Ficha Médica',
+          //     routeName: '/mi_ficha_screen'),
+
           _buildBottomIcon(context,
               icon: Icons.chat, label: 'Soporte', routeName: '/soporte'),
           _buildBottomIcon(context, icon: Icons.menu, label: 'Menú', onTap: () {
@@ -68,58 +70,60 @@ class BottomNavBarUser extends StatelessWidget {
         return FractionallySizedBox(
           widthFactor: 0.9,
           alignment: Alignment.centerLeft,
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('Menú',
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black)),
-                ListTile(
-                  leading: const Icon(Icons.person),
-                  title: const Text('Perfil'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(
-                        context, '/user'); // Ruta actualizada aquí
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.edit_document),
-                  title: const Text('Terminos y condiciones'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, '/terminos_condiciones');
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.notifications),
-                  title: const Text('Notificaciones'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, '/notifications');
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.work_history),
-                  title: const Text('Historial de citas'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, '/history');
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.logout),
-                  title: const Text('Cerrar sesion'),
-                  onTap: () async {
-                    await FirebaseAuth.instance.signOut();
-                    Navigator.popAndPushNamed(context, '/login');
-                  },
-                ),
-              ],
+          child: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('Menú',
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black)),
+                  ListTile(
+                    leading: const Icon(Icons.person),
+                    title: const Text('Perfil'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(
+                          context, '/user'); // Ruta actualizada aquí
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.edit_document),
+                    title: const Text('Terminos y condiciones'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/terminos_condiciones');
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.notifications),
+                    title: const Text('Notificaciones'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/notifications');
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.work_history),
+                    title: const Text('Historial de citas'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/history');
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.logout),
+                    title: const Text('Cerrar sesion'),
+                    onTap: () async {
+                      await FirebaseAuth.instance.signOut();
+                      Navigator.popAndPushNamed(context, '/login');
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         );

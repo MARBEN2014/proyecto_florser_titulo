@@ -144,8 +144,14 @@ class _BookingScreenState extends State<BookingScreen> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  // Llamamos a la segunda función
-                  LocalNotification.showLocalNotification(id: 1);
+                  // Llamamos  ala funcion de mostrarla noitifcacion en el mmneto de agendar la cita
+                  LocalNotification.showLocalNotification(
+                    id: 1,
+                    title: 'Cita Confirmada',
+                    body:
+                        'Tu cita con $selectedTherapist fue confirmada para el ${selectedDate?.day}/${selectedDate?.month}/${selectedDate?.year} a las $selectedTime.',
+                  );
+
                   Navigator.of(context).pop();
                   Navigator.pushReplacement(
                     context,

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/widgets/bottom_nav_bra_admin.dart';
-import 'package:paraflorseer/widgets/custom_appbar_back.dart'; // Import del AppBar personalizado
+//import 'package:paraflorseer/widgets/custom_appbar_back.dart';
+import 'package:paraflorseer/widgets/custom_appbar_welcome.dart'; // Import del AppBar personalizado
 
 class IndexRolesAdmin extends StatelessWidget {
   const IndexRolesAdmin({super.key});
@@ -10,7 +11,8 @@ class IndexRolesAdmin extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppbarBack(), // Usamos el AppBar con la flecha atrás
+      appBar:
+          const CustomAppBarWelcome(), // Usamos el AppBar con la flecha atrás
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment
@@ -25,7 +27,7 @@ class IndexRolesAdmin extends StatelessWidget {
                 // Acción al presionar el botón Gestión de Terapeutas
                 Navigator.pushNamed(context, '/gestion_terapeutas');
               },
-              child: const Text('Cantidad de usarios por rol'),
+              child: const Text('Cantidad de roles por Usuarios'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor:

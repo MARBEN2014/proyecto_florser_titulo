@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:paraflorseer/widgets/custom_appbar_back.dart';
+
+import 'package:paraflorseer/widgets/custom_appbar_welcome.dart';
 
 class UserListScreen extends StatelessWidget {
   final String title;
@@ -11,7 +12,7 @@ class UserListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbarBack(),
+      appBar: CustomAppBarWelcome(),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('user')

@@ -4,6 +4,7 @@ import 'package:paraflorseer/preferencias/pref_usuarios.dart';
 import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/themes/app_text_styles.dart';
 import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
+import 'package:paraflorseer/widgets/custom_appbarInicio.dart';
 import 'package:paraflorseer/widgets/custom_appbar_welcome.dart';
 //import 'package:flutter/widgets.dart';
 import 'package:paraflorseer/widgets/refresh.dart';
@@ -163,7 +164,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBarWelcome(),
+      appBar: const CustomAppBarInicio(),
       body: RefreshableWidget(
         // Aquí usamos el widget de refresco
         onRefresh: _refreshData, // Función que se ejecuta al refrescar

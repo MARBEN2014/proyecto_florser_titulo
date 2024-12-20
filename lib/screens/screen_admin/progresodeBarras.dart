@@ -2,7 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:paraflorseer/screens/screen_therapist.dart/serviciosdeFIreestore.dart';
 import 'package:paraflorseer/utils/firestore_service.dart';
-import 'package:paraflorseer/widgets/custom_appbar_back.dart';
+//import 'package:paraflorseer/widgets/custom_appbar_back.dart';
+import 'package:paraflorseer/widgets/custom_appbar_welcome.dart';
 import 'package:paraflorseer/widgets/refresh.dart';
 
 /// Pantalla que muestra el progreso de citas (estadísticas de terapias y terapeutas)
@@ -38,7 +39,7 @@ class _ProgresoDeCitasScreenState extends State<ProgresoDeCitasScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar:
-          const CustomAppbarBack(), // Barra de navegación personalizada con botón de regreso
+          const CustomAppBarWelcome(), // Barra de navegación personalizada con botón de regreso
       body: RefreshableWidget(
         onRefresh: _handleRefresh,
         child: FutureBuilder<Map<String, Map<String, int>>>(
