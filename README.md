@@ -113,5 +113,6 @@ FlorZen App es una aplicación desarrollada para optimizar la gestión de terapi
    ## Recurso Adicional
 
 Para obtener el instructivo y el archivo de instalación del APK siguiente enlace:  
-[Descarga el instructivo del APk, del siguiente enlace](https://drive.google.com/file/d/13mQx_J0BR-GJ9Q7jo51S9vtCiJUfbMoe/view?usp=sharing)
-[Descargar el archivo APK, del siguiente enlace](https://drive.google.com/file/d/1Psvxd9tFcOfUOP1pPDnhJrBDEIx-b4Gk/view?usp=sharing)
+-[Descarga el instructivo del APk, del siguiente enlace](https://drive.google.com/file/d/13mQx_J0BR-GJ9Q7jo51S9vtCiJUfbMoe/view?usp=sharing)
+
+-[Descargar el archivo APK, del siguiente enlace](https://drive.google.com/file/d/1y3dQrblIfaLEwicr-CYi7EA5kG3Lu_HQ/view?usp=sharing )
