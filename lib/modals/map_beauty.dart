@@ -1,6 +1,6 @@
 Map<String, Map<String, dynamic>> servicesData = {
   'Limpieza facial': {
-    'therapists': ['Camila González'],
+    'therapists': ['Camila Gonzalez'],
     'availableTimes': ['10:00', '12:00', '16:00 '],
     'availableDays': ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'],
     'price': 20000,
@@ -12,14 +12,14 @@ Map<String, Map<String, dynamic>> servicesData = {
     'price': 30000,
   },
   'Kapping': {
-    'therapists': ['Maricela López'],
+    'therapists': ['Maricela Lopez'],
     'availableTimes': ['13:00', '15:00', '16:00'],
     'availableDays': ['Miércoles', 'Jueves', 'Viernes'],
     'price': 20000,
   },
 
   'Tatuaje Punto a Punto': {
-    'therapists': ['María González'],
+    'therapists': ['Maria Gonzalez'],
     'availableTimes': ['10:00', '15:00'],
     'availableDays': ['Lunes', 'Jueves'],
     'price': 20000,
@@ -31,9 +31,7 @@ Map<String, Map<String, dynamic>> servicesData = {
     'price': 20000,
   },
   'Extención de uñas Polygel': {
-    'therapists': [
-      'Ana López',
-    ],
+    'therapists': ['Ana Lopez'],
     'availableTimes': ['13:00', '17:00', '19:00'],
     'availableDays': ['Miércoles', 'Jueves', 'Viernes'],
     'price': 25000,

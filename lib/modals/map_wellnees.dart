@@ -15,17 +15,14 @@ Map<String, Map<String, dynamic>> servicesData = {
       '12:00',
       '15:00',
     ],
-    'availableDays': [
-      'Martes',
-      'Jueves',
-      'Viernes',
-    ],
+    'availableDays': ['Martes', 'Jueves', 'Viernes'],
     'price': 15000,
   },
   'Masaje de Relajación': {
     'therapists': ['Nathaly Nuñez'],
     'availableTimes': ['13:00', '15:00', '18:00'],
     'availableDays': ['Miércoles', 'Jueves', 'Viernes'],
+    'price': 17000,
   },
 
   'Masaje con Piedras Calientes': {

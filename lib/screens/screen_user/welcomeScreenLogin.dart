@@ -5,37 +5,29 @@ import 'package:paraflorseer/themes/app_colors.dart';
 import 'package:paraflorseer/themes/app_text_styles.dart';
 import 'package:paraflorseer/widgets/bottom_nav_bar_user.dart';
 import 'package:paraflorseer/widgets/custom_appbarInicio.dart';
-//import 'package:paraflorseer/widgets/custom_appbar_welcome.dart';
-//import 'package:flutter/widgets.dart';
 import 'package:paraflorseer/widgets/refresh.dart';
 
-class WelcomeScreen extends StatefulWidget {
-  const WelcomeScreen({super.key});
+class WelcomeScreenLogin extends StatefulWidget {
+  const WelcomeScreenLogin({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _WelcomeScreenState createState() => _WelcomeScreenState();
+  _WelcomeScreenLoginState createState() => _WelcomeScreenLoginState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
-  int _currentIndex = 0; // Para rastrear la imagen actual del carrusel
+class _WelcomeScreenLoginState extends State<WelcomeScreenLogin> {
+  int _currentIndex = 0;
 
-  // Método para refrescar los datos
   Future<void> _refreshData() async {
     await Future.delayed(const Duration(seconds: 1));
-    // Aquí puedes incluir lógica para refrescar el contenido
   }
 
-  // Método que crea un Container con imagen y descripciones
   Widget _buildImageContainer(
       String imageUrl, List<String> descriptions, String routeName) {
-    bool isNetworkImage =
-        imageUrl.startsWith('http'); // Verificar si es una URL de red
+    bool isNetworkImage = imageUrl.startsWith('http');
 
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(
-            context, routeName); // Navegar a la pantalla correspondiente
+        Navigator.pushNamed(context, routeName);
       },
       child: Column(
         children: [
@@ -45,8 +37,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: isNetworkImage
-                    ? NetworkImage(imageUrl) // Imagen de red
-                    : AssetImage(imageUrl) as ImageProvider, // Imagen local
+                    ? NetworkImage(imageUrl)
+                    : AssetImage(imageUrl) as ImageProvider,
                 fit: BoxFit.cover,
               ),
               borderRadius: BorderRadius.circular(10),
@@ -98,12 +90,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // context
-    //     .read<NotificationsBloc>()
-    //     .requestPermission(); // con esta linea se le pide si autoriza las notificaciones o no
-    // Lista de imágenes (incluye una imagen local en assets)
     var prefs = PreferenciasUsuarios();
-    prefs.ultimaPagina = 'welcome_screen';
+    prefs.ultimaPagina = 'welcome_screen_login';
 
     print('TOKEN:' +
         prefs
@@ -117,7 +105,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       'https://img.freepik.com/premium-photo/stack-towels-with-flowers-flower-top_715950-20070.jpg?w=360',
     ];
 
-    // Lista de descripciones
     final List<List<String>> descriptions = [
       [
         "Atención personalizada",
@@ -142,7 +129,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       ["Relajación total", "Cuidado personalizado", "Innovación constante"],
     ];
 
-    // Lista de textos para mostrar arriba del carrusel
     final List<String> carouselTexts = [
       "BIENESTAR",
       "GUÍA",
@@ -151,7 +137,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       "LIMPIEZA",
     ];
 
-    // Lista de rutas de navegación para cada imagen
     final List<String> routeNames = [
       '/wellness_screen',
       '/guide_screen',
@@ -166,14 +151,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       backgroundColor: Colors.white,
       appBar: const CustomAppBarInicio(),
       body: RefreshableWidget(
-        // Aquí usamos el widget de refresco
-        onRefresh: _refreshData, // Función que se ejecuta al refrescar
+        onRefresh: _refreshData,
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(height: 20),
-              // Texto que cambia con el carrusel
               Text(
                 carouselTexts[_currentIndex],
                 style: AppTextStyles.bodyTextStyle.copyWith(
@@ -184,7 +167,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 10),
-              //Carrusel de imágenes utilizando el método _buildImageContainer
               CarouselSlider.builder(
                 itemCount: imgList.length,
                 itemBuilder: (BuildContext context, int index, int realIndex) {
@@ -205,76 +187,29 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
               const SizedBox(height: 1),
 
-              // Botón de Iniciar Sesión
-              SizedBox(
-                width: buttonWidth,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/login');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 50, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                  ),
-                  child: Text(
-                    'Iniciar Sesión',
-                    style: AppTextStyles.bodyTextStyle.copyWith(
-                      color: AppColors.secondary,
-                    ),
-                  ),
-                ),
-              ),
-
-              // const SizedBox(height: 20),
-              // GestureDetector(
-              //   onTap: () {
-              //     Navigator.pushNamed(context, '/recovery_screen');
-              //   },
-              //   child: Text(
-              //     '¿Olvidaste tu contraseña?',
-              //     style: AppTextStyles.bodyTextStyle.copyWith(
-              //       color: AppColors.text,
-              //       fontWeight: FontWeight.bold,
+              // SizedBox(
+              //   width: buttonWidth,
+              //   child: ElevatedButton(
+              //     onPressed: () {
+              //       Navigator.pushNamed(context, '/login');
+              //     },
+              //     style: ElevatedButton.styleFrom(
+              //       backgroundColor: AppColors.primary,
+              //       padding: const EdgeInsets.symmetric(
+              //           horizontal: 50, vertical: 10),
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(25),
+              //       ),
+              //     ),
+              //     child: Text(
+              //       'Iniciar Sesión',
+              //       style: AppTextStyles.bodyTextStyle.copyWith(
+              //         color: AppColors.secondary,
+              //       ),
               //     ),
               //   ),
+
               // ),
-              // const SizedBox(height: 15),
-              // RichText(
-              //   textAlign: TextAlign.center,
-              //   text: TextSpan(
-              //     children: [
-              //       TextSpan(
-              //         text: 'Si no eres usuario, ',
-              //         style: AppTextStyles.bodyTextStyle.copyWith(
-              //           color: Colors.black,
-              //           fontWeight: FontWeight.bold,
-              //           fontSize: 14,
-              //         ),
-              //       ),
-              //       WidgetSpan(
-              //         alignment: PlaceholderAlignment.middle,
-              //         child: GestureDetector(
-              //           onTap: () {
-              //             Navigator.pushNamed(context, '/register');
-              //           },
-              //           child: Text(
-              //             'regístrate',
-              //             style: AppTextStyles.bodyTextStyle.copyWith(
-              //               color: AppColors.primary,
-              //               fontSize: 16,
-              //               fontWeight: FontWeight.bold,
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              // const SizedBox(height: 10),
             ],
           ),
         ),

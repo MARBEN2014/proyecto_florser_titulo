@@ -26,6 +26,7 @@ import 'package:paraflorseer/screens/screen_therapist.dart/soporte_screen_therap
 import 'package:paraflorseer/screens/screen_admin/stadistic_screen.dart';
 import 'package:paraflorseer/screens/screen_user/terminos_condiciones.dart';
 import 'package:paraflorseer/screens/screen_therapist.dart/therapist_screen.dart';
+import 'package:paraflorseer/screens/screen_user/welcomeScreenLogin.dart';
 //import 'package:paraflorseer/screens/screen_user/updatepasswordScreen.dart';
 import 'package:paraflorseer/widgets/notifications_screen.dart';
 
@@ -76,6 +77,7 @@ class AppRoutes {
       '/user_admin': (context) => UserProfileScreenAdmin(userId: ''),
       '/history': (context) => HistorialCitasScreen(),
       '/history_user': (context) => HistoryForUserScreen(),
+      '/welcomeLogin': (context) => WelcomeScreenLogin(),
       //'/actualizar_pass': (context) => UpdatePasswordScreen(),
 
       //'/estadisticas': (context) => const DemandStatsScreen(),

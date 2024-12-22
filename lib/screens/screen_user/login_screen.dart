@@ -172,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             break;
                                           case 'user':
                                             Navigator.pushReplacementNamed(
-                                                context, '/welcome_screen');
+                                                context, '/welcomeLogin');
                                             break;
                                           default:
                                             showSnackBar(context,

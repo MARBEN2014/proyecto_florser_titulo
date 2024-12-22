@@ -4,7 +4,7 @@ class PreferenciasUsuarios {
   // inicializar la instancia
   static late SharedPreferences _prefs;
 
-//inicualizar las preferencas
+//inicializar las preferencas
   static Future init() async {
     _prefs = await SharedPreferences.getInstance();
   }
