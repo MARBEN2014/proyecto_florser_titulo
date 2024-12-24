@@ -116,3 +116,5 @@ Para obtener el instructivo y el archivo de instalación del APK siguiente enlac
 -[Descarga el instructivo del APk, del siguiente enlace](https://drive.google.com/file/d/13mQx_J0BR-GJ9Q7jo51S9vtCiJUfbMoe/view?usp=sharing)
 
 -[Descargar el archivo APK, del siguiente enlace](https://drive.google.com/file/d/1y3dQrblIfaLEwicr-CYi7EA5kG3Lu_HQ/view?usp=sharing )
+
+-[Video de presentación, en el cual se demuestran las funcionalidades de la Aplicación]( https://drive.google.com/file/d/10_eZTi9I4t77u-0VNUu0prpiPniaWOrf/view?usp=sharing)
