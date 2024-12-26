@@ -1,7 +1,7 @@
 // test/custom_body_wellness_test.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:paraflorseer/body_service/custom_body_wellness.dart';
+import 'package:paraflorseer/1%20MODELO/body_service/custom_body_wellness.dart';
 
 void main() {
   testWidgets(
