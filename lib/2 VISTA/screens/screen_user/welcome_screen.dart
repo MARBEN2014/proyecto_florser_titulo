@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:paraflorseer/2%20VISTA/widgets/custom_appbar_logo.dart';
 import 'package:paraflorseer/3%20CONTROLADOR/preferencias/pref_usuarios.dart';
 import 'package:paraflorseer/2%20VISTA/themes/app_colors.dart';
 import 'package:paraflorseer/2%20VISTA/themes/app_text_styles.dart';
 import 'package:paraflorseer/2%20VISTA/widgets/bottom_nav_bar_user.dart';
 import 'package:paraflorseer/2%20VISTA/widgets/custom_appbarInicio.dart';
-//import 'package:paraflorseer/widgets/custom_appbar_welcome.dart';
-//import 'package:flutter/widgets.dart';
 import 'package:paraflorseer/2%20VISTA/widgets/refresh.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -98,16 +97,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // context
-    //     .read<NotificationsBloc>()
-    //     .requestPermission(); // con esta linea se le pide si autoriza las notificaciones o no
-    // Lista de imágenes (incluye una imagen local en assets)
     var prefs = PreferenciasUsuarios();
     prefs.ultimaPagina = 'welcome_screen';
 
     print('TOKEN:' +
         prefs
-            .token); // PRINT PARA MOSTRAR EL TOKEN DEL USUSRIO QUE ESTA LOGEADO EN AL app
+            .token); // PRINT PARA MOSTRAR EL TOKEN DEL USUSUARIO QUE ESTA LOGEADO EN LA APP
 
     final List<String> imgList = [
       'https://sesdermaskincenter.es/wp-content/uploads/2023/03/Lifting-Japones-Tratamiento-facial-2.jpg',
@@ -117,7 +112,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       'https://img.freepik.com/premium-photo/stack-towels-with-flowers-flower-top_715950-20070.jpg?w=360',
     ];
 
-    // Lista de descripciones
     final List<List<String>> descriptions = [
       [
         "Atención personalizada",
@@ -142,7 +136,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       ["Relajación total", "Cuidado personalizado", "Innovación constante"],
     ];
 
-    // Lista de textos para mostrar arriba del carrusel
     final List<String> carouselTexts = [
       "BIENESTAR",
       "GUÍA",
@@ -151,7 +144,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       "LIMPIEZA",
     ];
 
-    // Lista de rutas de navegación para cada imagen
     final List<String> routeNames = [
       '/wellness_screen',
       '/guide_screen',
@@ -162,124 +154,81 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
     final double buttonWidth = MediaQuery.of(context).size.width * 0.6;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: const CustomAppBarInicio(),
-      body: RefreshableWidget(
-        // Aquí usamos el widget de refresco
-        onRefresh: _refreshData, // Función que se ejecuta al refrescar
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(height: 20),
-              // Texto que cambia con el carrusel
-              Text(
-                carouselTexts[_currentIndex],
-                style: AppTextStyles.bodyTextStyle.copyWith(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 10),
-              //Carrusel de imágenes utilizando el método _buildImageContainer
-              CarouselSlider.builder(
-                itemCount: imgList.length,
-                itemBuilder: (BuildContext context, int index, int realIndex) {
-                  return _buildImageContainer(
-                      imgList[index], descriptions[index], routeNames[index]);
-                },
-                options: CarouselOptions(
-                  height: 320,
-                  autoPlay: true,
-                  enlargeCenterPage: true,
-                  aspectRatio: 16 / 9,
-                  onPageChanged: (index, reason) {
-                    setState(() {
-                      _currentIndex = index;
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(height: 1),
-
-              // Botón de Iniciar Sesión
-              SizedBox(
-                width: buttonWidth,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/login');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 50, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
+    return WillPopScope(
+      onWillPop: () async => false, // Denegar la navegación hacia atrás
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: const CustomAppBarLoggedOut(),
+        body: RefreshableWidget(
+          // Aquí usamos el widget de refresco
+          onRefresh: _refreshData, // Función que se ejecuta al refrescar
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 20),
+                // Texto que cambia con el carrusel
+                Text(
+                  carouselTexts[_currentIndex],
+                  style: AppTextStyles.bodyTextStyle.copyWith(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
                   ),
-                  child: Text(
-                    'Iniciar Sesión',
-                    style: AppTextStyles.bodyTextStyle.copyWith(
-                      color: AppColors.secondary,
-                    ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 10),
+                //Carrusel de imágenes utilizando el método _buildImageContainer
+                CarouselSlider.builder(
+                  itemCount: imgList.length,
+                  itemBuilder:
+                      (BuildContext context, int index, int realIndex) {
+                    return _buildImageContainer(
+                        imgList[index], descriptions[index], routeNames[index]);
+                  },
+                  options: CarouselOptions(
+                    height: 320,
+                    autoPlay: true,
+                    enlargeCenterPage: true,
+                    aspectRatio: 16 / 9,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        _currentIndex = index;
+                      });
+                    },
                   ),
                 ),
-              ),
+                const SizedBox(height: 1),
 
-              // const SizedBox(height: 20),
-              // GestureDetector(
-              //   onTap: () {
-              //     Navigator.pushNamed(context, '/recovery_screen');
-              //   },
-              //   child: Text(
-              //     '¿Olvidaste tu contraseña?',
-              //     style: AppTextStyles.bodyTextStyle.copyWith(
-              //       color: AppColors.text,
-              //       fontWeight: FontWeight.bold,
-              //     ),
-              //   ),
-              // ),
-              // const SizedBox(height: 15),
-              // RichText(
-              //   textAlign: TextAlign.center,
-              //   text: TextSpan(
-              //     children: [
-              //       TextSpan(
-              //         text: 'Si no eres usuario, ',
-              //         style: AppTextStyles.bodyTextStyle.copyWith(
-              //           color: Colors.black,
-              //           fontWeight: FontWeight.bold,
-              //           fontSize: 14,
-              //         ),
-              //       ),
-              //       WidgetSpan(
-              //         alignment: PlaceholderAlignment.middle,
-              //         child: GestureDetector(
-              //           onTap: () {
-              //             Navigator.pushNamed(context, '/register');
-              //           },
-              //           child: Text(
-              //             'regístrate',
-              //             style: AppTextStyles.bodyTextStyle.copyWith(
-              //               color: AppColors.primary,
-              //               fontSize: 16,
-              //               fontWeight: FontWeight.bold,
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              // const SizedBox(height: 10),
-            ],
+                // Botón de Iniciar Sesión
+                SizedBox(
+                  width: buttonWidth,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/login');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50, vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                    ),
+                    child: Text(
+                      'Iniciar Sesión',
+                      style: AppTextStyles.bodyTextStyle.copyWith(
+                        color: AppColors.secondary,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
+        bottomNavigationBar: const BottomNavBarUser(),
       ),
-      bottomNavigationBar: const BottomNavBarUser(),
     );
   }
 }

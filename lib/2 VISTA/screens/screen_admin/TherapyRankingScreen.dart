@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
@@ -5,6 +7,8 @@ import 'package:paraflorseer/2%20VISTA/themes/app_colors.dart';
 import 'package:paraflorseer/2%20VISTA/widgets/custom_appbar_welcome.dart';
 import 'package:paraflorseer/2%20VISTA/widgets/refresh.dart';
 import 'package:paraflorseer/3%20CONTROLADOR/utils/firestore_service.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:screenshot/screenshot.dart';
 
 class TherapyRankingScreen extends StatefulWidget {
   const TherapyRankingScreen({super.key});
@@ -14,6 +18,7 @@ class TherapyRankingScreen extends StatefulWidget {
 }
 
 class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
+  ScreenshotController screenshotController = ScreenshotController();
   Future<Map<String, Map<String, int>>>? _rankingFuture;
   Map<String, int> therapiesWithoutReservations = {};
   Map<String, int> therapistsWithoutReservations = {};
@@ -48,14 +53,14 @@ class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String currentMonthYear = DateFormat('MMMM yyyy')
-        .format(DateTime.now()); // Obtener mes y año actual
-    String periodText =
-        'Período: $currentMonthYear'; // Añadir el texto "Período"
+    String currentMonthYear = DateFormat('MMMM yyyy').format(DateTime.now());
+    String periodText = 'Período: $currentMonthYear';
 
     return Scaffold(
       backgroundColor: AppColors.secondary,
-      appBar: const CustomAppBarWelcome(),
+      appBar: (MediaQuery.of(context).orientation == Orientation.portrait)
+          ? const CustomAppBarWelcome() // Mostrar AppBar solo en orientación vertical
+          : null, // No mostrar AppBar en orientación horizontal
       body: RefreshableWidget(
         onRefresh: _handleRefresh,
         child: FutureBuilder<Map<String, Map<String, int>>>(
@@ -101,8 +106,6 @@ class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
                   _buildTherapiesWithLessThan10Chart(therapiesWithLessThan10),
                   const SizedBox(height: 60),
                   _buildTherapistChart(therapistData),
-                  const SizedBox(height: 60),
-                  // Nuevo gráfico
                   const SizedBox(height: 60),
                   _buildSummaryBox(therapyData, therapistData),
                   _buildTherapistsWithoutReservations(),
@@ -194,7 +197,7 @@ class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
     });
   }
 
-// Función para identificar los terapeutas que no tienen reservas
+  // Función para identificar los terapeutas que no tienen reservas
   void _identifyTherapistsWithoutReservations(
       Map<String, Map<String, int>> ranking) {
     therapistsWithoutReservations.clear();
@@ -208,25 +211,39 @@ class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
     });
   }
 
-  // Función para construir la gráfica de terapias
+  // Método para construir la gráfica de terapias con botón
   Widget _buildTherapyChart(Map<String, int> data) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Terapias con mas agendamientos',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-          const SizedBox(height: 16),
-          data.isEmpty
-              ? _buildEmptyList('No hay terapias con citas agendadas.')
-              : _buildBarChart(data),
-        ],
+      child: Screenshot(
+        controller: screenshotController,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Terapias con más agendamientos',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            const SizedBox(height: 16),
+            data.isEmpty
+                ? _buildEmptyList('No hay terapias con citas agendadas.')
+                : Column(
+                    children: [
+                      _buildBarChart(data),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () async {
+                          await _downloadChart("therapy_chart");
+                        },
+                        child: const Text('Descargar'),
+                      ),
+                    ],
+                  ),
+          ],
+        ),
       ),
     );
   }
 
-  // Función para construir el gráfico de terapias con menos de 10 reservas
+  // Método para construir la gráfica de terapias con menos de 10 reservas con botón
   Widget _buildTherapiesWithLessThan10Chart(Map<String, int> data) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -238,13 +255,25 @@ class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
           const SizedBox(height: 16),
           data.isEmpty
               ? _buildEmptyList('No hay terapias con menos de 10 reservas.')
-              : _buildBarChart(data),
+              : Column(
+                  children: [
+                    _buildBarChart(data),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Acción al presionar "Descargar"
+                        _downloadChart("less_than_10_chart");
+                      },
+                      child: const Text('Descargar'),
+                    ),
+                  ],
+                ),
         ],
       ),
     );
   }
 
-  // Función para construir la gráfica de terapeutas
+  // Método para construir la gráfica de terapeutas con botón
   Widget _buildTherapistChart(Map<String, int> data) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -256,10 +285,44 @@ class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
           const SizedBox(height: 16),
           data.isEmpty
               ? _buildEmptyList('No hay terapeutas con citas agendadas.')
-              : _buildBarChart(data),
+              : Column(
+                  children: [
+                    _buildBarChart(data),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Acción al presionar "Descargar"
+                        _downloadChart("therapist_chart");
+                      },
+                      child: const Text('Descargar'),
+                    ),
+                  ],
+                ),
         ],
       ),
     );
+  }
+
+  // Método para manejar la acción de descarga
+  Future<void> _downloadChart(String chartName) async {
+    try {
+      final image = await screenshotController.capture();
+      if (image != null) {
+        final directory = await getExternalStorageDirectory();
+        final path = "${directory!.path}/$chartName.png";
+        final file = File(path);
+        await file.writeAsBytes(image);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gráfico descargado exitosamente: $path')),
+        );
+      } else {
+        throw "Error al capturar la imagen";
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al descargar el gráfico: $e')),
+      );
+    }
   }
 
   // Muestra el cuadro de texto vacío cuando no hay datos en las listas de terapias o terapeutas
@@ -279,6 +342,16 @@ class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
   }
 
   // metodo para crear el graficos
+
+  String _abbreviateName(String name) {
+    List<String> parts = name.split(' ');
+    if (parts.length > 1) {
+      return '${parts[0]} ${parts[1][0]}.';
+    }
+    return name; // Devuelve el nombre original si no se puede abreviar
+  }
+
+  // Método para crear el gráfico con detalles expandibles
   Widget _buildBarChart(Map<String, int> data) {
     List<BarChartGroupData> barGroups = [];
     int index = 0;
@@ -316,7 +389,7 @@ class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                      color: AppColors.text,
                     ),
                   );
                 },
@@ -327,21 +400,27 @@ class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
                 showTitles: true,
                 getTitlesWidget: (value, meta) {
                   String label = data.keys.elementAt(value.toInt());
-
+                  String abbreviatedLabel =
+                      _abbreviateName(label); // Usar nombre abreviado
+                  int count =
+                      data[label]!; // Obtener la cantidad correspondiente
                   return Padding(
-                    padding: const EdgeInsets.only(
-                      left: 8.0,
-                      right: 30.0,
-                      top: 8.0,
-                    ),
+                    padding:
+                        const EdgeInsets.only(left: 8.0, right: 30.0, top: 8.0),
                     child: Transform.rotate(
                       angle: -0.4854, // Rotación de 45 grados en radianes
-                      child: Text(
-                        label, // Mostrar el texto completo
-                        style: const TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.text,
+                      child: GestureDetector(
+                        onTap: () {
+                          _showDetails(label,
+                              count); // Llama a la función para mostrar detalles
+                        },
+                        child: Text(
+                          abbreviatedLabel, // Mostrar el texto abreviado
+                          style: const TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.text,
+                          ),
                         ),
                       ),
                     ),
@@ -354,6 +433,32 @@ class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
           gridData: FlGridData(show: true),
         ),
       ),
+    );
+  }
+
+  // Método para mostrar detalles de la barra seleccionada
+  void _showDetails(String label, int count) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Detalles de $label'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                  'Dato seleccionado: $label: tiene: $count reservas'), // Mostrar cantidad
+              // Puedes agregar más widgets aquí para mostrar información adicional
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cerrar'),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -379,7 +484,7 @@ class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
-                color: Colors.white,
+                color: AppColors.secondary,
               ),
             ),
             const SizedBox(height: 16),
@@ -388,7 +493,7 @@ class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
-                color: Colors.white,
+                color: AppColors.secondary,
               ),
             ),
             Text(
@@ -396,7 +501,7 @@ class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
-                color: Colors.white,
+                color: AppColors.secondary,
               ),
             ),
             const SizedBox(height: 16),
