@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart'; // Importa Firestore para interactuar con la base de datos.
 import 'package:firebase_auth/firebase_auth.dart'; // Importa Firebase Auth para autenticar al usuario.
 import 'package:flutter/material.dart'; // Importa el paquete de Flutter para UI.
-import 'package:paraflorseer/2%20VISTA/screens/screen_user/welcome_screen.dart'; // Pantalla de bienvenida para redirigir al usuario tras reservar.
+import 'package:paraflorseer/2%20VISTA/screens/screen_user/welcomeScreenLogin.dart';
+//import 'package:paraflorseer/2%20VISTA/screens/screen_user/welcome_screen.dart'; // Pantalla de bienvenida para redirigir al usuario tras reservar.
 import 'package:paraflorseer/3%20CONTROLADOR/services/bloc/localNotification/local_notification.dart';
 import 'package:table_calendar/table_calendar.dart'; // Calendario interactivo para seleccionar fechas.
 import 'package:paraflorseer/2%20VISTA/themes/app_colors.dart'; // Colores personalizados de la app.
@@ -156,7 +157,7 @@ class _BookingScreenState extends State<BookingScreen> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const WelcomeScreen(),
+                      builder: (context) => const WelcomeScreenLogin(),
                     ),
                   );
                 },

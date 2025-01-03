@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:paraflorseer/2%20VISTA/themes/app_colors.dart';
-//import 'package:paraflorseer/widgets/custom_app_bar.dart'; // Import del AppBar personalizado
 // Import del Bottom Navigation Bar
 import 'package:paraflorseer/2%20VISTA/widgets/bottom_nav_bra_admin.dart';
-//import 'package:paraflorseer/widgets/custom_appbar_back.dart';
 import 'package:paraflorseer/2%20VISTA/widgets/custom_appbar_logo.dart';
 import 'package:paraflorseer/2%20VISTA/widgets/refresh.dart'; // Import del widget de refresco
 
@@ -31,125 +29,120 @@ class EstadisticasScreen extends StatelessWidget {
         body: RefreshableWidget(
           onRefresh: _handleRefresh, // Asigna la función de refresco
           child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 60), // Espacio inicial
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Column(
-                    children: [
-                      // Texto "Página de administrador"
-                      const Text(
-                        'Página de administrador',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black, // Color negro para el texto
-                        ),
-                      ),
-                      const SizedBox(
-                          height: 20), // Espaciado entre el texto y el botón
-
-                      ElevatedButton(
-                        onPressed: () {
-                          // Navega a la página de ranking
-                          Navigator.pushNamed(context, '/indexCruduser');
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 45),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                        ),
-                        child: const Text(
-                          'Gestión de Usuario',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: AppColors.secondary,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20), // Espaciado uniforme
-
-                      ElevatedButton(
-                        onPressed: () {
-                          // Navega a la página de estadísticas
-                          Navigator.pushNamed(context, '/ranking');
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 45),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                        ),
-                        child: const Text(
-                          'Estadísticas',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: AppColors.secondary,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20), // Espaciado uniforme
-
-                      ElevatedButton(
-                        onPressed: () {
-                          // Navega al historial de citas
-                          Navigator.pushNamed(context, '/gestion_roles');
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          foregroundColor: AppColors.secondary,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 45),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                        ),
-                        child: const Text(
-                          'Gestión de roles',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: AppColors.secondary,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20), // Espaciado uniforme
-
-                      ElevatedButton(
-                        onPressed: () {
-                          // Navega al historial de citas
-                          Navigator.pushNamed(context, '/Progreso de citas');
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          foregroundColor: AppColors.secondary,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 45),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                        ),
-                        child: const Text(
-                          'información de citas',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: AppColors.secondary,
-                          ),
-                        ),
-                      ),
-                    ],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                children: [
+                  const SizedBox(height: 60), // Espacio inicial
+                  const Text(
+                    'Página de Administrador',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black, // Color negro para el texto
+                    ),
                   ),
-                ),
-                const SizedBox(height: 150), // Espacio final
-              ],
+                  const SizedBox(
+                      height: 20), // Espaciado entre el texto y los botones
+
+                  // GridView con dos columnas para los botones
+                  GridView.builder(
+                    shrinkWrap: true, // Para que no ocupe espacio innecesario
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // Dos columnas
+                      crossAxisSpacing:
+                          20.0, // Espacio horizontal entre botones
+                      mainAxisSpacing: 20.0, // Espacio vertical entre botones
+                      childAspectRatio: 2.5, // Ajuste el tamaño de los botones
+                    ),
+                    itemCount: 4, // Número total de botones
+                    itemBuilder: (context, index) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          // Navegar a la página correspondiente según el botón
+                          switch (index) {
+                            case 0:
+                              Navigator.pushNamed(context, '/indexCruduser');
+                              break;
+                            case 1:
+                              Navigator.pushNamed(context, '/menuEstadisticas');
+                              break;
+                            case 2:
+                              Navigator.pushNamed(context, '/gestion_roles');
+                              break;
+                            case 3:
+                              Navigator.pushNamed(
+                                  context, '/Progreso de citas');
+                              break;
+                            // case 4:
+                            //   Navigator.pushNamed(context, '/agendamiento');
+                            //   break;
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: AppColors.secondary,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 30),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          textStyle: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.secondary,
+                          ),
+                        ),
+                        child: Text(
+                          [
+                            'Gestión de Usuario',
+                            'Estadísticas',
+                            'Gestión de roles',
+                            'Información de citas',
+                            'Horas Agendadas'
+                          ][index],
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: AppColors.secondary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+
+                  // Sección que centra el último botón "Horas Agendadas"
+                  const SizedBox(height: 40),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/agendamiento');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: AppColors.secondary,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 40),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                    ),
+                    child: const Text(
+                      'Horas Agendadas',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: AppColors.secondary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 150), // Espacio final
+                ],
+              ),
             ),
           ),
         ),

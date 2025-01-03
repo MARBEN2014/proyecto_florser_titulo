@@ -38,7 +38,9 @@ class _ProgresoDeCitasScreenState extends State<ProgresoDeCitasScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.secondary,
-      appBar: const CustomAppBarWelcome(), // Barra de navegación personalizada
+      appBar: (MediaQuery.of(context).orientation == Orientation.portrait)
+          ? const CustomAppBarWelcome() // Mostrar AppBar solo en orientación vertical
+          : null, // No mostrar AppBar en orientación horizontal // Barra de navegación personalizada
       body: RefreshableWidget(
         onRefresh: _handleRefresh,
         child: FutureBuilder<Map<String, Map<String, int>>>(
@@ -115,7 +117,7 @@ class _ProgresoDeCitasScreenState extends State<ProgresoDeCitasScreen> {
             const SizedBox(height: 16),
             // Primer gráfico: Reservas por Terapia
             _buildStatGrid(
-              title: 'Reservas por Terapia',
+              title: 'Reservas por Terapias',
               data: ranking.map((key, value) {
                 final total = value.values.fold(0, (sum, count) => sum + count);
                 return MapEntry(key, total);
@@ -127,7 +129,7 @@ class _ProgresoDeCitasScreenState extends State<ProgresoDeCitasScreen> {
             const SizedBox(height: 16),
             // Segundo gráfico: Reservas por Terapeuta
             _buildStatGrid(
-              title: 'Reservas por Terapeuta',
+              title: 'Reservas por Terapeutas',
               data: _aggregateTherapistData(ranking),
               color: AppColors.text, // Color para terapeutas
               backgroundColor: AppColors

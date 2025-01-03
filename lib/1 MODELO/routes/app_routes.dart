@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:paraflorseer/2%20VISTA/screens/screen_admin/MenuEstadisticas.dart';
 import 'package:paraflorseer/2%20VISTA/screens/screen_admin/TherapyRankingScreen.dart';
 import 'package:paraflorseer/2%20VISTA/screens/screen_admin/adminDeleteUser.dart';
 import 'package:paraflorseer/2%20VISTA/screens/screen_admin/adminsearchUserScreen.dart';
+import 'package:paraflorseer/2%20VISTA/screens/screen_admin/agendamiento.dart';
 import 'package:paraflorseer/2%20VISTA/screens/screen_admin/createUserscreen.dart';
+import 'package:paraflorseer/2%20VISTA/screens/screen_admin/estadisticasDeTeraputas.dart';
 import 'package:paraflorseer/2%20VISTA/screens/screen_admin/gestionterapeutas.dart';
 import 'package:paraflorseer/2%20VISTA/screens/screen_admin/indexCruduser.dart';
 import 'package:paraflorseer/2%20VISTA/screens/screen_admin/indexrolesadmin.dart';
@@ -10,6 +13,8 @@ import 'package:paraflorseer/2%20VISTA/screens/screen_admin/phonescreen.dart';
 import 'package:paraflorseer/2%20VISTA/screens/screen_admin/progresodeBarras.dart';
 import 'package:paraflorseer/2%20VISTA/screens/screen_admin/registeruser_screen.dart';
 import 'package:paraflorseer/2%20VISTA/screens/screen_admin/soporteadmin.dart';
+import 'package:paraflorseer/2%20VISTA/screens/screen_admin/terapiasMasSolicitadas.dart';
+import 'package:paraflorseer/2%20VISTA/screens/screen_admin/terapiasMenosSolicitadas.dart';
 import 'package:paraflorseer/2%20VISTA/screens/screen_admin/terminosAdmin.dart';
 import 'package:paraflorseer/2%20VISTA/screens/screen_admin/userAdmin.dart';
 import 'package:paraflorseer/2%20VISTA/screens/screen_therapist.dart/datos_importantes.dart';
@@ -78,6 +83,12 @@ class AppRoutes {
       '/history': (context) => HistorialCitasScreen(),
       '/history_user': (context) => HistoryForUserScreen(),
       '/welcomeLogin': (context) => WelcomeScreenLogin(),
+      '/menuEstadisticas': (context) => MenuEstadisticasScreen(),
+      '/masSolicitadas': (context) => MostRequestedTherapiesScreen(),
+      '/menosSolicitadas': (context) => LeastRequestedTherapiesScreen(),
+      '/EstadisticasTerapeuta': (context) => EstadisticasDeTerapeutasScreen(),
+      '/agendamiento': (context) => AgendaScreen(),
+
       //'/actualizar_pass': (context) => UpdatePasswordScreen(),
 
       //'/estadisticas': (context) => const DemandStatsScreen(),

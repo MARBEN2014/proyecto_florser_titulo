@@ -80,8 +80,8 @@ FlorZen App es una aplicación desarrollada para optimizar la gestión de terapi
 3. **Mensajería y Notificaciones:** Implementación de notificaciones push (en desarrollo).
 
 ## Backend y Pruebas
-- **Backend:** Levantado en Node.js para gestionar las notificaciones y otros servicios.
-- **Pruebas:** Realizadas con Postman para verificar el envío de notificaciones y servicios relacionados.
+- **Backend:** Levantado en Node.js para gestionar las notificaciones.
+- **Pruebas:** Realizadas con Postman para verificar el envío de notificaciones.
 
 ## Pasos para Ejecutar la Aplicación
 1. **Clonar el Repositorio**
@@ -115,6 +115,6 @@ FlorZen App es una aplicación desarrollada para optimizar la gestión de terapi
 Para obtener el instructivo y el archivo de instalación del APK siguiente enlace:  
 -[Descarga el instructivo del APk, del siguiente enlace](https://drive.google.com/file/d/13mQx_J0BR-GJ9Q7jo51S9vtCiJUfbMoe/view?usp=sharing)
 
--[Descargar el archivo APK, del siguiente enlace](https://drive.google.com/file/d/1teHUlrnDASsdtTatX-O9aiiTPmQWtVvD/view?usp=sharing)
+-[Descargar el archivo APK, del siguiente enlace](https://drive.google.com/file/d/1v17c_sxICeG7HlZWgd8a-Z1i189RHdSY/view?usp=sharing)
 
 -[Video de presentación, en el cual se demuestran las funcionalidades de la Aplicación]( https://drive.google.com/file/d/10_eZTi9I4t77u-0VNUu0prpiPniaWOrf/view?usp=sharing)

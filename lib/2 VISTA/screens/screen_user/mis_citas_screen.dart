@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:paraflorseer/2%20VISTA/screens/screen_user/welcomeScreenLogin.dart';
 import 'package:paraflorseer/3%20CONTROLADOR/utils/obtenerUserandNAme.dart';
 import 'package:paraflorseer/2%20VISTA/widgets/custom_app_bar.dart';
 import 'package:paraflorseer/2%20VISTA/widgets/bottom_nav_bar_user.dart';
 import 'package:paraflorseer/2%20VISTA/themes/app_colors.dart';
-import 'package:paraflorseer/2%20VISTA/screens/screen_user/welcome_screen.dart';
+//import 'package:paraflorseer/2%20VISTA/screens/screen_user/welcome_screen.dart';
 import 'package:intl/intl.dart';
 
 class MisCitasScreen extends StatefulWidget {
@@ -253,7 +254,7 @@ class _MisCitasScreenState extends State<MisCitasScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const WelcomeScreen()),
+                              builder: (context) => const WelcomeScreenLogin()),
                         );
                       }
                     : _fetchReservas,

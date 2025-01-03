@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
@@ -7,22 +5,18 @@ import 'package:paraflorseer/2%20VISTA/themes/app_colors.dart';
 import 'package:paraflorseer/2%20VISTA/widgets/custom_appbar_welcome.dart';
 import 'package:paraflorseer/2%20VISTA/widgets/refresh.dart';
 import 'package:paraflorseer/3%20CONTROLADOR/utils/firestore_service.dart';
-//import 'package:path_provider/path_provider.dart';
-//import 'package:permission_handler/permission_handler.dart';
-//import 'package:screenshot/screenshot.dart';
 
-class TherapyRankingScreen extends StatefulWidget {
-  const TherapyRankingScreen({super.key});
+class LeastRequestedTherapiesScreen extends StatefulWidget {
+  const LeastRequestedTherapiesScreen({super.key});
 
   @override
-  _TherapyRankingScreenState createState() => _TherapyRankingScreenState();
+  _LeastRequestedTherapiesScreen createState() =>
+      _LeastRequestedTherapiesScreen();
 }
 
-class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
-  //ScreenshotController screenshotController = ScreenshotController();
+class _LeastRequestedTherapiesScreen
+    extends State<LeastRequestedTherapiesScreen> {
   Future<Map<String, Map<String, int>>>? _rankingFuture;
-  Map<String, int> therapiesWithoutReservations = {};
-  Map<String, int> therapistsWithoutReservations = {};
 
   @override
   void initState() {
@@ -76,12 +70,6 @@ class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
             }
 
             final ranking = snapshot.data!;
-            final therapyData = _getTherapyData(ranking);
-            final therapistData = _getTherapistData(ranking);
-
-            // Identificamos terapias y terapeutas sin reservas
-            _identifyTherapiesWithoutReservations(ranking);
-            _identifyTherapistsWithoutReservations(ranking);
 
             // Filtramos terapias con menos de 10 reservas
             final therapiesWithLessThan10 =
@@ -102,14 +90,9 @@ class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
                       ),
                     ),
                   ),
-                  _buildTherapyChart(therapyData),
-                  const SizedBox(height: 60),
+
                   _buildTherapiesWithLessThan10Chart(therapiesWithLessThan10),
                   const SizedBox(height: 60),
-                  _buildTherapistChart(therapistData),
-                  const SizedBox(height: 60),
-                  _buildSummaryBox(therapyData, therapistData),
-                  _buildTherapistsWithoutReservations(),
                 ],
               ),
             );
@@ -157,90 +140,6 @@ class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
 
   // Obtiene los datos del ranking de las terapias (total de reservas por terapia)
 
-  Map<String, int> _getTherapyData(Map<String, Map<String, int>> ranking) {
-    Map<String, int> therapyData = {};
-    ranking.forEach((therapy, therapists) {
-      int totalReservations =
-          therapists.values.fold(0, (sum, count) => sum + count);
-      // Solo se agregan terapias con al menos 1 cita
-      if (totalReservations > 10) {
-        therapyData[therapy] = totalReservations;
-      }
-    });
-    return therapyData;
-  }
-
-  // Obtiene los datos del ranking de los terapeutas (total de reservas por terapeuta)
-  Map<String, int> _getTherapistData(Map<String, Map<String, int>> ranking) {
-    Map<String, int> therapistData = {};
-    ranking.forEach((therapy, therapists) {
-      therapists.forEach((therapist, count) {
-        // Solo se agregan terapeutas con al menos 1 cita
-        if (count > 0) {
-          therapistData[therapist] = (therapistData[therapist] ?? 0) + count;
-        }
-      });
-    });
-    return therapistData;
-  }
-
-  // Función para identificar las terapias que no tienen reservas
-  void _identifyTherapiesWithoutReservations(
-      Map<String, Map<String, int>> ranking) {
-    therapiesWithoutReservations.clear();
-    ranking.forEach((therapy, therapists) {
-      int totalReservations =
-          therapists.values.fold(0, (sum, count) => sum + count);
-      // Solo agregamos terapias con 0 reservas
-      if (totalReservations == 0) {
-        therapiesWithoutReservations[therapy] = 0;
-      }
-    });
-  }
-
-  // Función para identificar los terapeutas que no tienen reservas
-  void _identifyTherapistsWithoutReservations(
-      Map<String, Map<String, int>> ranking) {
-    therapistsWithoutReservations.clear();
-    ranking.forEach((therapy, therapists) {
-      therapists.forEach((therapist, count) {
-        // Solo agregamos terapeutas con 0 reservas
-        if (count == 0) {
-          therapistsWithoutReservations[therapist] = 0;
-        }
-      });
-    });
-  }
-
-  // Método para construir la gráfica de terapias con botón
-  Widget _buildTherapyChart(Map<String, int> data) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Terapias con más agendamientos',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-          const SizedBox(height: 16),
-          data.isEmpty
-              ? _buildEmptyList('No hay terapias con citas agendadas.')
-              : Column(
-                  children: [
-                    _buildBarChart(data),
-                    const SizedBox(height: 16),
-                    // ElevatedButton(
-                    //   onPressed: () async {
-                    //     await _downloadChart("therapy_chart");
-                    //   },
-                    //   child: const Text('Descargar'),
-                    // ),
-                  ],
-                ),
-        ],
-      ),
-    );
-  }
-
   // Método para construir la gráfica de terapias con menos de 10 reservas con botón
   Widget _buildTherapiesWithLessThan10Chart(Map<String, int> data) {
     return Padding(
@@ -270,84 +169,6 @@ class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
       ),
     );
   }
-
-  // Método para construir la gráfica de terapeutas con botón
-  Widget _buildTherapistChart(Map<String, int> data) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Estadísticas de Terapeutas',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-          const SizedBox(height: 16),
-          data.isEmpty
-              ? _buildEmptyList('No hay terapeutas con citas agendadas.')
-              : Column(
-                  children: [
-                    _buildBarChart(data),
-                    const SizedBox(height: 16),
-                    // ElevatedButton(
-                    //   onPressed: () {
-                    //     // Acción al presionar "Descargar"
-                    //    // _downloadChart("therapist_chart");
-                    //   },
-                    //   child: const Text('Descargar'),
-                    // ),
-                  ],
-                ),
-        ],
-      ),
-    );
-  }
-
-  // Future<void> requestStoragePermission() async {
-  //   // Verifica si el permiso ya ha sido concedido
-  //   final status = await Permission.storage.status;
-  //   if (!status.isGranted) {
-  //     // Si no se ha concedido el permiso, lo solicitamos
-  //     final result = await Permission.storage.request();
-  //     if (!result.isGranted) {
-  //       // Si el permiso sigue sin ser concedido, mostramos un mensaje al usuario
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(
-  //             content: Text(
-  //                 'Se necesita permiso de almacenamiento para continuar.')),
-  //       );
-  //       throw "Permiso de almacenamiento denegado";
-  //     }
-  //   }
-  // }
-
-  // Future<void> _downloadChart(String chartName) async {
-  //   try {
-  //     // Solicitar permiso de almacenamiento antes de intentar guardar el archivo
-  //     await requestStoragePermission();
-
-  //     final image = await screenshotController.capture();
-  //     if (image != null) {
-  //       // Obtener la ruta de almacenamiento externa
-  //       final directory = await getExternalStorageDirectory();
-  //       final path = "${directory!.path}/$chartName.png";
-  //       final file = File(path);
-
-  //       // Guardar la imagen en la ruta especificada
-  //       await file.writeAsBytes(image);
-
-  //       // Notificar al usuario que la descarga fue exitosa
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text('Gráfico descargado exitosamente: $path')),
-  //       );
-  //     } else {
-  //       throw "Error al capturar la imagen";
-  //     }
-  //   } catch (e) {
-  //     // Si ocurre un error, notificamos al usuario
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Error al descargar el gráfico: $e')),
-  //     );
-  //   }
-  // }
 
   // Muestra el cuadro de texto vacío cuando no hay datos en las listas de terapias o terapeutas
   Widget _buildEmptyList(String message) {
@@ -484,83 +305,5 @@ class _TherapyRankingScreenState extends State<TherapyRankingScreen> {
         );
       },
     );
-  }
-
-  // Función para mostrar el cuadro resumen de las terapias y terapeutas
-  Widget _buildSummaryBox(
-      Map<String, int> therapyData, Map<String, int> therapistData) {
-    int totalTherapiesWithReservations = therapyData.length;
-    int totalTherapistsWithReservations = therapistData.length;
-
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: AppColors.primary,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Resumen General',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-                color: AppColors.secondary,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Total de terapias con reservas: $totalTherapiesWithReservations',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                color: AppColors.secondary,
-              ),
-            ),
-            Text(
-              'Total de terapeutas con reservas: $totalTherapistsWithReservations',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                color: AppColors.secondary,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Terapeutas sin reservas: ${therapistsWithoutReservations.keys.length}',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                color: Colors.redAccent,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Función para mostrar los terapeutas sin reservas
-  Widget _buildTherapistsWithoutReservations() {
-    return therapistsWithoutReservations.isEmpty
-        ? Container()
-        : Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: ExpansionTile(
-              title: const Text(
-                'Terapeutas sin reservas:',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-              ),
-              children: therapistsWithoutReservations.keys
-                  .map((therapist) => ListTile(
-                        leading: const Icon(Icons.person_outline),
-                        title: Text(therapist),
-                      ))
-                  .toList(),
-            ),
-          );
   }
 }

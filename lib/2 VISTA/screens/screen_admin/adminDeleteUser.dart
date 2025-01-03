@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:paraflorseer/2%20VISTA/widgets/bottom_nav_bra_admin.dart';
-import 'package:paraflorseer/2%20VISTA/widgets/custom_appbar_logo.dart';
+
+import 'package:paraflorseer/2%20VISTA/widgets/custom_appbar_welcome.dart';
 
 class AdminDeleteUserScreen extends StatefulWidget {
   const AdminDeleteUserScreen({super.key});
@@ -70,7 +71,7 @@ class _AdminDeleteUserScreenState extends State<AdminDeleteUserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBarLoggedOut(),
+      appBar: const CustomAppBarWelcome(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
